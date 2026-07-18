@@ -1,0 +1,23 @@
+# Secrets — never commit real credentials (SEC-01)
+.env
+.env.*
+!.env.example
+
+# Dependencies (DEV-01) — always run `npm install` after cloning instead
+node_modules/
+
+# Database (DB-03) — the running DB is local state, not source code
+db/*.db
+db/*.db-journal
+db/*.db-wal
+db/*.db-shm
+
+# Uploaded product images (user content, not source)
+public/images/products/*
+!public/images/products/.gitkeep
+
+# OS / editor noise
+.DS_Store
+Thumbs.db
+*.log
+npm-debug.log*

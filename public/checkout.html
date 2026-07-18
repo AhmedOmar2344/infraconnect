@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27%3E%3Crect width=%27100%27 height=%27100%27 rx=%2718%27 fill=%27%231a56db%27/%3E%3Ctext x=%2750%27 y=%2766%27 font-size=%2748%27 font-family=%27Arial,sans-serif%27 font-weight=%27bold%27 fill=%27white%27 text-anchor=%27middle%27%3EIC%3C/text%3E%3C/svg%3E">
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Checkout — InfraConnect</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Inter:wght@300;400;500;600;700&family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="/css/main.css"/>
+<style>
+.co-layout{display:grid;grid-template-columns:1fr 360px;gap:28px;align-items:start;}
+.co-card{background:white;border:1px solid #e2e8f0;border-radius:16px;padding:32px;box-shadow:0 1px 4px rgba(0,0,0,0.05);margin-bottom:18px;}
+.co-section-h{font-family:'Plus Jakarta Sans',sans-serif;font-size:16px;font-weight:700;margin-bottom:18px;display:flex;align-items:center;gap:10px;color:#0f172a;}
+.co-num{width:28px;height:28px;border-radius:50%;background:#1a56db;color:white;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.order-card{background:white;border:1px solid #e2e8f0;border-radius:14px;padding:22px;box-shadow:0 4px 12px rgba(0,0,0,0.06);position:sticky;top:82px;}
+.oi-row{display:flex;justify-content:space-between;align-items:flex-start;padding:9px 0;border-bottom:1px solid #f1f5f9;font-size:13px;gap:10px;}
+.oi-row:last-of-type{border-bottom:none;}
+.oi-name{color:#475569;flex:1;line-height:1.4;}
+.oi-qty{color:#94a3b8;white-space:nowrap;}
+.oi-price{font-weight:600;color:#0f172a;white-space:nowrap;}
+.co-total-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;}
+.co-total-label{font-weight:700;color:#0f172a;font-size:14px;}
+.co-total-val{font-family:'Plus Jakarta Sans',sans-serif;font-size:18px;font-weight:800;color:#1a56db;}
+.trust-list{list-style:none;display:flex;flex-direction:column;gap:9px;margin-top:14px;padding-top:14px;border-top:1px solid #f1f5f9;}
+.trust-list li{display:flex;align-items:center;gap:8px;font-size:12px;color:#64748b;}
+.trust-list li svg{width:13px;height:13px;stroke:#1a56db;fill:none;stroke-width:2;flex-shrink:0;}
+@media(max-width:900px){.co-layout{grid-template-columns:1fr;}.order-card{position:static;}}
+</style>
+</head>
+<body>
+<div id="toast-container"></div>
+
+<nav class="navbar">
+  <a href="/" class="nav-logo"><div class="nav-logo-icon"><svg viewBox="0 0 24 24"><path d="M3 18 Q3 4 19 5" stroke="white" fill="none" stroke-width="2"/><path d="M3 18 Q5 10 17 12" stroke="white" fill="none" stroke-width="2"/><path d="M3 18 Q8 14 15 16" stroke="white" fill="none" stroke-width="2"/><circle cx="19" cy="5" r="1.5" fill="white"/><circle cx="17" cy="12" r="1.5" fill="white"/><circle cx="15" cy="16" r="1.5" fill="white"/></svg></div><span class="nav-logo-text">INFRA<span>CONNECT</span></span></a>
+  <ul class="nav-links"><li><a href="/" data-i18n="nav_home">Home</a></li><li><a href="/store" data-i18n="nav_store">Store</a></li><li><a href="/cart">Cart</a></li></ul>
+  <div class="nav-right">
+    <a href="/account" id="navAccountBtn" class="cart-btn" title="My Account"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></a><a href="/cart" class="cart-btn"><svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg><span class="cart-badge" id="cartBadge">0</span></a>
+    <a href="/request-service" class="btn-outline-nav" data-i18n="nav_request_service">Request Service</a>
+    <a href="/#contact" class="btn btn-primary nav-cta-wrap" data-i18n="nav_get_in_touch">Get in Touch</a>
+    <button id="ic-lang-switch-slot" type="button" class="ic-nav-lang-btn"></button>
+    <button class="hamburger" onclick="document.querySelector('.mobile-nav').classList.toggle('open')"><svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
+  </div>
+</nav>
+<div class="mobile-nav"><a href="/" data-i18n="nav_home">Home</a><a href="/store" data-i18n="nav_store">Store</a><a href="/cart">Cart</a></div>
+
+<div class="page-hero"><div class="page-hero-inner">
+  <div class="breadcrumb"><a href="/" data-i18n="nav_home">Home</a><span>›</span><a href="/store" data-i18n="nav_store">Store</a><span>›</span><a href="/cart">Cart</a><span>›</span><span>Checkout</span></div>
+  <h1>Checkout</h1>
+</div></div>
+
+<div class="page-content">
+  <!-- STEPS -->
+  <div style="display:flex;gap:0;margin-bottom:28px;background:#f1f5f9;border-radius:10px;padding:4px;max-width:400px;">
+    <div style="flex:1;text-align:center;padding:8px;border-radius:8px;font-size:12px;font-weight:600;color:#16a34a;">✓ Cart</div>
+    <div style="flex:1;text-align:center;padding:8px;border-radius:8px;font-size:12px;font-weight:700;color:#1a56db;background:white;box-shadow:0 1px 3px rgba(0,0,0,0.08);">Details</div>
+    <div style="flex:1;text-align:center;padding:8px;font-size:12px;color:#94a3b8;font-weight:500;">Confirmation</div>
+  </div>
+
+  <div class="co-layout">
+    <div>
+      <div class="co-card">
+        <div class="co-section-h"><div class="co-num">1</div>Contact Information</div>
+        <div class="grid-2">
+          <div class="form-group"><label>First Name *</label><input id="co-fn" placeholder="Ahmed"/></div>
+          <div class="form-group"><label>Last Name</label><input id="co-ln" placeholder="Hassan"/></div>
+        </div>
+        <div class="grid-2">
+          <div class="form-group"><label>Email *</label><input type="email" id="co-em" placeholder="you@company.com"/></div>
+          <div class="form-group"><label>Phone *</label><input type="tel" id="co-ph" placeholder="+971 XX XXX XXXX"/></div>
+        </div>
+        <div class="form-group"><label>Company Name</label><input id="co-co" placeholder="Your company (optional)"/></div>
+      </div>
+
+      <div class="co-card">
+        <div class="co-section-h"><div class="co-num">2</div>Requirements & Delivery</div>
+        <div class="form-group"><label>Delivery Location</label><input id="co-loc" placeholder="City, Country (e.g. Cairo, Egypt)"/></div>
+        <div class="form-group"><label>Service Type</label>
+          <select id="co-svc">
+            <option value="">Select service type...</option>
+            <option>Supply only</option>
+            <option>Supply + Installation</option>
+            <option>Supply + Installation + Support</option>
+            <option>Managed service</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Additional Notes</label><textarea id="co-notes" placeholder="Delivery timeline, site details, special requirements..."></textarea></div>
+      </div>
+
+      <button class="btn btn-primary btn-full btn-lg" onclick="submitOrder()" style="font-size:15px;" id="submitOrderBtn">
+        Submit Order Request →
+      </button>
+      <p style="text-align:center;font-size:12px;color:#94a3b8;margin-top:10px;">
+        Our team will contact you within 24 hours with pricing and availability confirmation.
+      </p>
+    </div>
+
+    <!-- ORDER SUMMARY -->
+    <div class="order-card">
+      <div style="font-family:'Plus Jakarta Sans',sans-serif;font-size:16px;font-weight:700;margin-bottom:16px;color:#0f172a;">Order Summary</div>
+      <div id="coItems"></div>
+      <div style="border-top:2px solid #e2e8f0;margin:12px 0;"></div>
+      <div id="coTotals"></div>
+
+      <!-- PROMO CODE -->
+      <div style="margin:14px 0;padding-top:14px;border-top:1px solid #e2e8f0;">
+        <div id="promoInputRow" style="display:flex;gap:8px;">
+          <input id="promoCodeInput" placeholder="Promo code" style="flex:1;padding:9px 12px;border:1.5px solid #e2e8f0;border-radius:8px;font-size:13px;text-transform:uppercase;" onkeydown="if(event.key==='Enter'){event.preventDefault();applyPromoCode();}"/>
+          <button class="btn btn-outline" style="padding:9px 16px;font-size:13px;white-space:nowrap;" onclick="applyPromoCode()" id="promoApplyBtn">Apply</button>
+        </div>
+        <div id="promoAppliedRow" style="display:none;align-items:center;justify-content:space-between;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:8px 12px;font-size:13px;">
+          <span style="color:#16a34a;font-weight:600;">✓ <span id="promoAppliedCode"></span> applied</span>
+          <button onclick="removePromoCode()" style="background:none;border:none;color:#94a3b8;font-size:12px;cursor:pointer;text-decoration:underline;">Remove</button>
+        </div>
+        <div id="promoMsg" style="font-size:12px;margin-top:6px;"></div>
+      </div>
+
+      <ul class="trust-list">
+        <li><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Secure order request</li>
+        <li><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Response within 24 hours</li>
+        <li><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Dedicated account manager</li>
+        <li><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Authorized vendor partner</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="footer-grid" style="max-width:1280px;margin:0 auto;"><div class="footer-brand"><p>&copy; 2025 InfraConnect. All rights reserved.</p></div></div>
+</footer>
+
+<script src="/js/cart.js"></script>
+<script src="/js/api.js"></script>
+<script>
+function loadSummary() {
+  const cart = getCart();
+  if (!cart.length) { window.location.href = '/cart'; return; }
+
+  // Checkout requires a signed-in account — sends them to sign in/create
+  // one first, then back here automatically once they're done. This is a
+  // deliberate tradeoff (previously guest checkout was allowed) — it means
+  // every order is now tied to a real account for order history and
+  // support, at the cost of one extra step before checking out.
+  if (!localStorage.getItem('ic_customer_token')) {
+    window.location.href = '/account?redirect=checkout';
+    return;
+  }
+  prefillFromAccount();
+
+  // Company Name / Service Type only make sense for business-context
+  // purchases — hidden entirely when every item in the cart is from a
+  // non-Enterprise category, so a home-user buying a single accessory
+  // isn't asked business questions that don't apply to them. Matches on
+  // "enterprise" appearing in the category name — adjust this check if
+  // your actual category names differ.
+  const isEnterprisePurchase = cart.some(i => (i.category || '').toLowerCase().includes('enterprise'));
+  const companyField = document.getElementById('co-co')?.closest('.form-group');
+  const serviceField = document.getElementById('co-svc')?.closest('.form-group');
+  if (!isEnterprisePurchase) {
+    if (companyField) companyField.style.display = 'none';
+    if (serviceField) serviceField.style.display = 'none';
+  }
+
+  // Items list
+  document.getElementById('coItems').innerHTML = cart.map(i => `
+    <div class="oi-row">
+      <span class="oi-name">${i.name}</span>
+      <span class="oi-qty">×${i.qty}</span>
+      <span class="oi-price">${i.priceAmount>0 ? fmtPrice(i.priceAmount*i.qty,i.currency) : '<span style="color:#94a3b8;font-size:11px;">On Request</span>'}</span>
+    </div>`).join('');
+
+  // Group by currency — but separate installment vs full-pay items
+  const byCur = {};
+  const instItems = [];   // items with installment plan chosen
+  const fullItems = [];   // items paying in full
+  const requestItems2 = cart.filter(i => !i.priceAmount || i.priceAmount === 0);
+
+  cart.filter(i => i.priceAmount > 0).forEach(i => {
+    if (i.chosen_months > 0) instItems.push(i);
+    else fullItems.push(i);
+  });
+
+  // Full-pay totals per currency
+  fullItems.forEach(i => {
+    const cur = i.currency || 'USD';
+    if (!byCur[cur]) byCur[cur] = { sub: 0, items: [] };
+    byCur[cur].sub += i.priceAmount * i.qty;
+    byCur[cur].items.push(i);
+  });
+
+  let html = '';
+
+  // Installment items — show per item with chosen plan
+  if (instItems.length > 0) {
+    html += `<div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:10px;padding:14px;margin-bottom:12px;">`;
+    html += `<div style="font-size:12px;font-weight:700;color:#1a56db;margin-bottom:10px;">💳 Installment Plans</div>`;
+    instItems.forEach(i => {
+      const vr = getVAT(i.currency || 'USD');
+      const totalWithVat = i.priceAmount * (1 + vr);
+      const monthly = totalWithVat / i.chosen_months;
+      html += `
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;padding:8px 0;border-bottom:1px solid #dbeafe;gap:10px;">
+        <div style="flex:1;">
+          <div style="font-size:13px;font-weight:600;color:#0f172a;">${i.name} ×${i.qty}</div>
+          <div style="font-size:11px;color:#3b82f6;margin-top:2px;">${i.chosen_months} monthly payments · ${vatLabel(i.currency||'USD')}</div>
+        </div>
+        <div style="text-align:right;flex-shrink:0;">
+          <div style="font-size:14px;font-weight:800;color:#1a56db;">${fmtPrice(monthly,i.currency)}<span style="font-size:10px;font-weight:500;">/mo</span></div>
+          <div style="font-size:10px;color:#94a3b8;">Total: ${fmtPrice(totalWithVat,i.currency)}</div>
+        </div>
+      </div>`;
+    });
+    // Monthly total per currency for installment items
+    const instByCur = {};
+    instItems.forEach(i => {
+      const cur = i.currency || 'USD';
+      const vr = getVAT(cur);
+      const monthly = (i.priceAmount * (1 + vr)) / i.chosen_months;
+      if (!instByCur[cur]) instByCur[cur] = 0;
+      instByCur[cur] += monthly;
+    });
+    Object.entries(instByCur).forEach(([cur, monthlyTotal]) => {
+      html += `<div style="display:flex;justify-content:space-between;align-items:center;padding-top:10px;"><span style="font-size:13px;font-weight:700;color:#0f172a;">Monthly Total (${cur})</span><span style="font-size:18px;font-weight:800;color:#1a56db;">${fmtPrice(monthlyTotal,cur)}/mo</span></div>`;
+    });
+    html += `</div>`;
+  }
+
+  // Full-pay items
+  window.__fullPaySubtotalsByCur = {}; // exposed for applyPromoCode() to validate against
+  if (Object.keys(byCur).length > 0) {
+    Object.entries(byCur).forEach(([cur, data]) => {
+      window.__fullPaySubtotalsByCur[cur] = data.sub;
+      const vr = getVAT(cur);
+      const vat = data.sub * vr;
+      let total = data.sub + vat;
+      const discount = (window.__appliedVoucher?.discounts_by_currency || {})[cur] || 0;
+      html += `
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:#94a3b8;margin:8px 0 4px;">${cur} — Full Payment</div>
+      <div class="oi-row"><span class="oi-name">Subtotal</span><span class="oi-price">${fmtPrice(data.sub,cur)}</span></div>
+      <div class="oi-row"><span class="oi-name">${vatLabel(cur)}</span><span class="oi-price">${fmtPrice(vat,cur)}</span></div>`;
+      if (discount > 0) {
+        total -= discount;
+        html += `<div class="oi-row"><span class="oi-name" style="color:#16a34a;">Discount (${window.__appliedVoucher.code})</span><span class="oi-price" style="color:#16a34a;">-${fmtPrice(discount,cur)}</span></div>`;
+      }
+      html += `<div class="co-total-row"><span class="co-total-label">Total (${cur})</span><span class="co-total-val">${fmtPrice(total,cur)}</span></div>`;
+    });
+  }
+
+  const requestCount = requestItems2.length;
+  if (requestCount > 0) {
+    html += `<div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:10px 12px;font-size:12px;color:#166534;margin-top:10px;">📋 ${requestCount} item${requestCount>1?'s':''} need custom quote — included in request</div>`;
+  }
+
+  document.getElementById('coTotals').innerHTML = html;
+}
+
+// ── PROMO CODE ────────────────────────────────────────────────────────────
+async function applyPromoCode() {
+  const codeInput = document.getElementById('promoCodeInput');
+  const code = codeInput.value.trim();
+  const msg = document.getElementById('promoMsg');
+  if (!code) { msg.textContent = 'Enter a code first.'; msg.style.color = '#dc2626'; return; }
+
+  const amounts = window.__fullPaySubtotalsByCur || {};
+  if (!Object.keys(amounts).length) {
+    msg.textContent = 'Promo codes apply to full-payment items only.';
+    msg.style.color = '#dc2626';
+    return;
+  }
+
+  const btn = document.getElementById('promoApplyBtn');
+  btn.disabled = true; btn.textContent = 'Checking...';
+  const result = await apiPost('/api/vouchers/validate', { code, amounts_by_currency: amounts });
+  btn.disabled = false; btn.textContent = 'Apply';
+
+  if (!result || !result.valid) {
+    msg.textContent = result?.error || 'Could not validate this code.';
+    msg.style.color = '#dc2626';
+    return;
+  }
+  window.__appliedVoucher = result;
+  msg.textContent = '';
+  document.getElementById('promoInputRow').style.display = 'none';
+  document.getElementById('promoAppliedRow').style.display = 'flex';
+  document.getElementById('promoAppliedCode').textContent = result.code;
+  loadSummary(); // re-render totals with the discount applied
+}
+
+function removePromoCode() {
+  window.__appliedVoucher = null;
+  document.getElementById('promoInputRow').style.display = 'flex';
+  document.getElementById('promoAppliedRow').style.display = 'none';
+  document.getElementById('promoCodeInput').value = '';
+  document.getElementById('promoMsg').textContent = '';
+  loadSummary();
+}
+
+let orderSubmitting = false;
+async function submitOrder() {
+  if (orderSubmitting) return; // already processing this exact click sequence
+
+  const fn = document.getElementById('co-fn').value.trim();
+  const em = document.getElementById('co-em').value.trim();
+  const ph = document.getElementById('co-ph').value.trim();
+  if (!fn || !em || !ph) { showToast('Please fill in First Name, Email and Phone.', 'error'); return; }
+
+  const cart = getCart();
+  if (!cart.length) { showToast('Cart is empty.', 'error'); return; }
+
+  // Lock the button the moment validation passes — this is the actual fix
+  // for duplicate orders (and therefore duplicate stock decrements) caused
+  // by a double-click or a slow network making someone click again.
+  orderSubmitting = true;
+  const btn = document.getElementById('submitOrderBtn');
+  const originalBtnText = btn.textContent;
+  btn.disabled = true;
+  btn.style.opacity = '.6';
+  btn.style.cursor = 'not-allowed';
+  btn.textContent = 'Submitting...';
+
+  // Build summary with prices per currency
+  const byCur = {};
+  cart.filter(i => i.priceAmount > 0).forEach(i => {
+    const cur = i.currency || 'USD';
+    byCur[cur] = (byCur[cur] || 0) + i.priceAmount * i.qty;
+  });
+  // Build total label including installments
+  const fullByCur = {};
+  const instByCurLabel = {};
+  cart.filter(i => i.priceAmount > 0).forEach(i => {
+    const cur = i.currency || 'USD';
+    if (i.chosen_months > 0) {
+      const vr = getVAT(cur);
+      const monthly = (i.priceAmount * (1 + vr)) / i.chosen_months;
+      instByCurLabel[cur] = (instByCurLabel[cur] || 0) + monthly;
+    } else {
+      fullByCur[cur] = (fullByCur[cur] || 0) + i.priceAmount * i.qty;
+    }
+  });
+  const parts = [];
+  Object.entries(fullByCur).forEach(([cur, sub]) => {
+    parts.push(`${fmtPrice(sub*(1+getVAT(cur)),cur)} (${cur} full)`);
+  });
+  Object.entries(instByCurLabel).forEach(([cur, mo]) => {
+    parts.push(`${fmtPrice(mo,cur)}/mo (${cur} installment)`);
+  });
+  const totalLabel = parts.join(' + ') || 'Quote Required';
+
+  const itemsSummary = cart.map(i =>
+    `${i.name} ×${i.qty}${i.priceAmount>0?' ('+fmtPrice(i.priceAmount*i.qty,i.currency)+')':''}`
+  ).join(', ');
+
+  // Full structured line items — used for two different things:
+  //  - the backend pulls {slug, qty} out of this to decrement stock
+  //  - the admin panel renders the rest (name, price, currency) as a real
+  //    table instead of just showing the flat text summary above, which
+  //    was the only thing previously available in the order/quote detail view.
+  const itemsDetail = cart.map(i => ({
+    slug: i.id, qty: i.qty, name: i.name,
+    priceAmount: i.priceAmount, currency: i.currency,
+    lineTotal: i.priceAmount > 0 ? i.priceAmount * i.qty : null
+  }));
+
+  const orderData = {
+    client_name: fn + ' ' + (document.getElementById('co-ln').value || ''),
+    client_email: em, client_phone: ph,
+    client_company: document.getElementById('co-co').value,
+    items: itemsSummary,
+    // Structured line items so the backend can decrement stock_quantity per
+    // product — the `items` string above is only for human-readable
+    // display, it can't be reliably parsed back apart.
+    cart_items: itemsDetail.map(i => ({ slug: i.slug, qty: i.qty })),
+    items_detail: itemsDetail,
+    total_label: totalLabel,
+    subtotal: Object.values(byCur).reduce((s,v)=>s+v, 0),
+    // Voucher: re-validated and recalculated server-side (routes/orders.js)
+    // rather than trusted from here — amounts_by_currency is what that
+    // re-validation checks the min-order-amount and recalculates the
+    // discount against, using the same full-pay-only subtotal shown on screen.
+    voucher_code: window.__appliedVoucher?.code || null,
+    amounts_by_currency: fullByCur,
+    notes: `Location: ${document.getElementById('co-loc').value} | Service: ${document.getElementById('co-svc').value} | Notes: ${document.getElementById('co-notes').value}`
+  };
+
+  let createdOrderId = null;
+  let createdOrderNumber = null;
+  let orderCreationFailed = false;
+  let orderErrorDetail = '';
+  try {
+    // If the customer is logged in, include their token so the order gets
+    // linked to their account (order history) — apiPost() doesn't support
+    // custom headers, so this specific call is done directly rather than
+    // risking a change to that shared helper's behavior on every other
+    // page that uses it.
+    const custToken = localStorage.getItem('ic_customer_token');
+    const orderResponse = await fetch('/api/orders', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', ...(custToken ? { 'Authorization': 'Bearer ' + custToken } : {}) },
+      body: JSON.stringify(orderData)
+    });
+    const orderResult = await orderResponse.json();
+    if (!orderResponse.ok) {
+      // This used to be silently swallowed — fetch() only throws on a
+      // genuine network failure, NOT on a 400/500 response, so a rejected
+      // order was continuing straight through to a "success" confirmation
+      // page with no order actually saved. Surfacing it now instead.
+      console.error('[Checkout] Order creation failed:', orderResponse.status, orderResult?.error);
+      orderCreationFailed = true;
+      orderErrorDetail = orderResult?.error || `Server returned ${orderResponse.status}`;
+    } else {
+      createdOrderId = orderResult?.order?.id || null;
+      createdOrderNumber = orderResult?.order?.order_number || null;
+    }
+  } catch(e) {
+    console.error('[Checkout] Order creation network error:', e.message);
+    orderCreationFailed = true;
+    orderErrorDetail = e.message;
+  }
+
+  if (orderCreationFailed) {
+    // Showing the real error (not a generic message) — this is diagnostic
+    // information, not a permanent UX choice: once the underlying bug is
+    // found and fixed, this can go back to a friendlier generic message.
+    showToast('Order failed: ' + orderErrorDetail, 'error');
+    const btn = document.getElementById('submitOrderBtn');
+    if (btn) { btn.disabled = false; btn.style.opacity = ''; btn.style.cursor = ''; btn.textContent = originalBtnText; }
+    orderSubmitting = false;
+    return; // stop here — do not create the quote or redirect as if this succeeded
+  }
+
+  // Re-save with the server-assigned ID/order number included — the initial
+  // save above only has what the browser knew before submitting, which
+  // doesn't include these (they're generated server-side). Without this,
+  // the confirmation page has no way to reference the actual order record
+  // for things like the invoice download.
+  localStorage.setItem('ic_last_order', JSON.stringify({ ...orderData, cart, order_id: createdOrderId, order_number: createdOrderNumber }));
+
+  try {
+    await apiPost('/api/contact/quote', {
+      first_name: fn, last_name: document.getElementById('co-ln').value,
+      email: em, phone: ph,
+      company: document.getElementById('co-co').value,
+      product_names: cart.map(i=>i.name+'×'+i.qty).join(', '),
+      items_detail: itemsDetail,
+      service: document.getElementById('co-svc').value,
+      message: orderData.notes,
+      order_id: createdOrderId
+    });
+  } catch(e) {
+    console.error('[Checkout] Quote creation failed (order was still saved):', e.message);
+  }
+
+  clearCart();
+  window.location.href = '/confirmation';
+}
+
+async function prefillFromAccount() {
+  const token = localStorage.getItem('ic_customer_token');
+  if (!token) return;
+  try {
+    const r = await fetch('/api/customers/me', { headers: { 'Authorization': 'Bearer ' + token } });
+    if (!r.ok) return; // an expired/invalid token here isn't fatal — checkout just proceeds unfilled
+    const d = await r.json();
+    const c = d.customer;
+    if (!c) return;
+    const nameParts = (c.name || '').trim().split(' ');
+    document.getElementById('co-fn').value = nameParts[0] || '';
+    document.getElementById('co-ln').value = nameParts.slice(1).join(' ') || '';
+    document.getElementById('co-em').value = c.email || '';
+    document.getElementById('co-ph').value = c.phone || '';
+    document.getElementById('co-co').value = c.company || '';
+    if (c.address) document.getElementById('co-loc').value = c.address;
+  } catch (e) { /* prefill is a convenience, not required — checkout still works without it */ }
+}
+
+document.addEventListener('DOMContentLoaded', loadSummary);
+</script>
+
+<!-- ─── FLOATING REQUEST SERVICE BUTTON ───────────────────────────────────────
+     Appears on every page. Opens the request service page on click.
+     On index.html this turns white over the dark hero via adaptFloatBtn().
+     On all other pages it stays blue (light background).
+     ─────────────────────────────────────────────────────────────────────────── -->
+<div class="float-btn" id="floatBtn">
+  <button class="float-main-btn" id="floatMainBtn"
+    onclick="window.location.href='/request-service'"
+    title="Request a Service">
+    <div class="float-pulse"></div>
+    <div class="float-main-btn-text">Request<br/>Service</div>
+  </button>
+</div>
+
+  <script src="/js/i18n.js"></script>
+<script src="/js/chat-widget.js"></script>
+<script src="/js/account-dropdown.js"></script>
+</body>
+</html>

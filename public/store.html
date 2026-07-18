@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27%3E%3Crect width=%27100%27 height=%27100%27 rx=%2718%27 fill=%27%231a56db%27/%3E%3Ctext x=%2750%27 y=%2766%27 font-size=%2748%27 font-family=%27Arial,sans-serif%27 font-weight=%27bold%27 fill=%27white%27 text-anchor=%27middle%27%3EIC%3C/text%3E%3C/svg%3E">
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Store — InfraConnect</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Inter:wght@300;400;500;600;700&family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="/css/main.css"/>
+<style>
+.store-hero{background:linear-gradient(135deg,#0f172a,#1e3a5f);padding:80px 5% 40px;position:relative;overflow:hidden;}
+.store-hero::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4z'/%3E%3C/g%3E%3C/svg%3E");pointer-events:none;}
+.store-hero-inner{max-width:1280px;margin:0 auto;position:relative;z-index:1;}
+.store-hero h1{font-size:clamp(28px,4vw,44px);color:white;margin-bottom:8px;}
+.store-hero p{color:rgba(255,255,255,0.6);font-size:15px;margin-bottom:24px;max-width:500px;}
+.store-hero-search{display:flex;gap:10px;max-width:560px;}
+.store-hero-search input{flex:1;padding:12px 18px;border-radius:10px;border:none;font-size:15px;font-family:var(--font-body);outline:none;}
+.store-hero-search button{background:var(--blue);color:white;border:none;border-radius:10px;padding:12px 24px;font-size:15px;font-weight:600;cursor:pointer;white-space:nowrap;}
+.cat-sections{margin-bottom:8px;}
+.cat-section-title{display:inline-block;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--g400);padding:0 10px 6px;margin-bottom:2px;}
+.store-content{max-width:1280px;margin:0 auto;padding:36px 5%;}
+.store-layout{display:grid;grid-template-columns:220px 1fr;gap:28px;align-items:start;}
+.sidebar{position:sticky;top:82px;}
+.sidebar-card{background:white;border:1px solid var(--g200);border-radius:var(--radius);padding:16px;margin-bottom:14px;box-shadow:var(--shadow-sm);}
+.sidebar-card h4{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--g500);margin-bottom:12px;}
+.filter-item{display:flex;align-items:center;justify-content:space-between;padding:7px 10px;border-radius:7px;cursor:pointer;text-decoration:none;color:var(--g600);font-size:13px;font-weight:500;transition:background 0.12s;}
+.filter-item:hover,.filter-item.active{background:var(--blue-light);color:var(--blue);}
+.filter-item .count{background:var(--g100);color:var(--g400);font-size:10px;font-weight:700;padding:2px 7px;border-radius:8px;}
+.filter-item.active .count{background:rgba(26,86,219,0.12);color:var(--blue);}
+.section-divider{height:1px;background:var(--g100);margin:8px 0;}
+.section-label-small{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--g300);padding:6px 10px 2px;}
+.toolbar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:20px;}
+.toolbar-left{display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+.result-count{font-size:14px;color:var(--g500);}
+.result-count strong{color:var(--g800);}
+.sort-select{padding:7px 12px;border:1.5px solid var(--g200);border-radius:8px;font-size:13px;font-family:var(--font-body);color:var(--g700);background:white;outline:none;cursor:pointer;}
+.view-btns{display:flex;gap:4px;}
+.view-btn{width:32px;height:32px;border:1.5px solid var(--g200);border-radius:7px;background:white;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.15s;}
+.view-btn.active,.view-btn:hover{background:var(--blue);border-color:var(--blue);}
+.view-btn.active svg,.view-btn:hover svg{stroke:white;}
+.view-btn svg{width:15px;height:15px;stroke:var(--g400);fill:none;stroke-width:2;}
+/* LIST VIEW */
+.product-grid.list-view{grid-template-columns:1fr;}
+.product-grid.list-view .product-card{flex-direction:row;}
+.product-grid.list-view .product-card-img{width:180px;aspect-ratio:auto;flex-shrink:0;border-bottom:none;border-right:1px solid var(--g100);}
+.product-grid.list-view .product-card-body{flex:1;}
+@media(max-width:900px){.store-layout{grid-template-columns:1fr;}.sidebar{display:none;}.product-grid.list-view .product-card{flex-direction:column;}.product-grid.list-view .product-card-img{width:100%;border-right:none;border-bottom:1px solid var(--g100);}}
+</style>
+</head>
+<body>
+<div id="toast-container"></div>
+
+<nav class="navbar">
+  <a href="/" class="nav-logo"><div class="nav-logo-icon"><svg viewBox="0 0 24 24"><path d="M3 18 Q3 4 19 5" stroke="white" fill="none" stroke-width="2"/><path d="M3 18 Q5 10 17 12" stroke="white" fill="none" stroke-width="2"/><path d="M3 18 Q8 14 15 16" stroke="white" fill="none" stroke-width="2"/><circle cx="19" cy="5" r="1.5" fill="white"/><circle cx="17" cy="12" r="1.5" fill="white"/><circle cx="15" cy="16" r="1.5" fill="white"/></svg></div><span class="nav-logo-text">INFRA<span>CONNECT</span></span></a>
+  <ul class="nav-links">
+    <li><a href="/" data-i18n="nav_home">Home</a></li><li><a href="/#about" data-i18n="nav_about">About</a></li>
+    <li><a href="/#services" data-i18n="nav_services">Services</a></li><li><a href="/store" class="active" data-i18n="nav_store">Store</a></li>
+    <li><a href="/#projects" data-i18n="nav_projects">Projects</a></li><li><a href="/#contact" data-i18n="nav_contact">Contact</a></li>
+  </ul>
+  <div class="nav-right">
+    <a href="/account" id="navAccountBtn" class="cart-btn" title="My Account"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></a><a href="/cart" class="cart-btn"><svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg><span class="cart-badge" id="cartBadge">0</span></a>
+    <a href="/request-service" class="btn-outline-nav" data-i18n="nav_request_service">Request Service</a>
+      <a href="/#contact" class="btn btn-primary nav-cta-wrap" data-i18n="nav_get_in_touch">Get in Touch</a>
+    <button id="ic-lang-switch-slot" type="button" class="ic-nav-lang-btn"></button>
+    <button class="hamburger" onclick="document.querySelector('.mobile-nav').classList.toggle('open')"><svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
+  </div>
+</nav>
+<div class="mobile-nav"><a href="/" data-i18n="nav_home">Home</a><a href="/#about" data-i18n="nav_about">About</a><a href="/store" data-i18n="nav_store">Store</a><a href="/cart">Cart</a><a href="/#contact" data-i18n="nav_contact">Contact</a></div>
+
+<div class="store-hero">
+  <div class="store-hero-inner">
+    <div class="breadcrumb"><a href="/" data-i18n="nav_home">Home</a><span>›</span><span>Store</span></div>
+    <h1>IT Products &amp; Electronics Store</h1>
+    <p>Enterprise IT infrastructure, laptops, TVs, gaming, accessories and more — all in one place.</p>
+    <div class="store-hero-search">
+      <input type="text" id="heroSearch" placeholder="Search products, brands, categories..." oninput="onSearch(this.value)" onkeydown="if(event.key==='Enter')onSearch(this.value)"/>
+      <button onclick="onSearch(document.getElementById('heroSearch').value)">Search</button>
+    </div>
+  </div>
+</div>
+
+<div class="store-content">
+  <div class="store-layout">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="sidebar-card">
+        <h4>Categories</h4>
+        <a href="javascript:void(0)" class="filter-item active" id="filter-all" onclick="filterCat('',this)">
+          All Products <span class="count" id="count-all">0</span>
+        </a>
+        <div class="section-divider"></div>
+        <div class="section-label-small">Enterprise IT</div>
+        <div id="catEnterprise"></div>
+        <div class="section-divider"></div>
+        <div class="section-label-small">Consumer &amp; Home</div>
+        <div id="catConsumer"></div>
+      </div>
+      <div class="sidebar-card" style="background:var(--blue-light);border-color:rgba(26,86,219,0.2);">
+        <h4 style="color:var(--blue);">Need a Quote?</h4>
+        <p style="font-size:12px;color:var(--g600);margin-bottom:10px;line-height:1.6;">Get tailored pricing for bulk orders or enterprise products.</p>
+        <a href="/#contact" class="btn btn-primary btn-full btn-sm">Request Quote</a>
+      </div>
+    </aside>
+
+    <!-- MAIN -->
+    <main>
+      <div class="toolbar">
+        <div class="toolbar-left">
+          <p class="result-count" id="resultCount">Loading...</p>
+          <select class="sort-select" id="sortSelect" onchange="applySort()">
+            <option value="featured">Featured First</option>
+            <option value="price-asc">Price: Low to High</option>
+            <option value="price-desc">Price: High to Low</option>
+            <option value="name">Name A–Z</option>
+          </select>
+        </div>
+        <div class="view-btns">
+          <button class="view-btn active" id="gridViewBtn" onclick="setView('grid')" title="Grid view">
+            <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+          </button>
+          <button class="view-btn" id="listViewBtn" onclick="setView('list')" title="List view">
+            <svg viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+          </button>
+        </div>
+      </div>
+      <div class="product-grid" id="productGrid"></div>
+      <div id="loadMoreWrap" style="display:none;"></div>
+    </main>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="footer-grid">
+    <div class="footer-brand"><a href="/" class="nav-logo"><div class="nav-logo-icon"><svg viewBox="0 0 24 24"><path d="M3 18 Q3 4 19 5" stroke="white" fill="none" stroke-width="2"/><path d="M3 18 Q5 10 17 12" stroke="white" fill="none" stroke-width="2"/><path d="M3 18 Q8 14 15 16" stroke="white" fill="none" stroke-width="2"/><circle cx="19" cy="5" r="1.5" fill="white"/></svg></div><span class="nav-logo-text" style="color:white">INFRA<span style="color:#93c5fd">CONNECT</span></span></a><p>Your one-stop shop for enterprise IT and consumer electronics in Egypt and the Middle East.</p></div>
+    <div class="footer-col"><h5>Enterprise IT</h5><ul><li><a href="/store?cat=servers-storage">Servers &amp; Storage</a></li><li><a href="/store?cat=networking">Networking</a></li><li><a href="/store?cat=security">Security</a></li><li><a href="/store?cat=wireless">Wireless</a></li></ul></div>
+    <div class="footer-col"><h5>Consumer</h5><ul><li><a href="/store?cat=laptops">Laptops</a></li><li><a href="/store?cat=monitors">Monitors</a></li><li><a href="/store?cat=tvs">TVs</a></li><li><a href="/store?cat=gaming">Gaming</a></li><li><a href="/store?cat=accessories">Accessories</a></li></ul></div>
+    <div class="footer-col"><h5>Help</h5><ul><li><a href="/cart">My Cart</a></li><li><a href="/#contact">Contact Us</a></li><li><a href="/#contact">Request Quote</a></li></ul></div>
+  </div>
+  <div class="footer-bottom"><p>&copy; 2025 InfraConnect. All rights reserved.</p><p>Cairo, Egypt — infraconnect24-7.com</p><p class="footer-legal-links"><a href="/terms.html">Terms of Service</a> &middot; <a href="/privacy.html">Privacy Policy</a></p></div>
+</footer>
+
+<script src="/js/cart.js"></script>
+<script src="/js/api.js"></script>
+<script>
+// Category grouping (Enterprise IT vs Consumer & Home) now comes from
+// each category's category_type field in the database, editable from the
+// admin panel — this used to be a hardcoded list here that silently
+// defaulted every new category to "Consumer" with no way to change it.
+const ICONS = {
+  'Servers & Storage':'<rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/>',
+  'Networking':'<rect x="2" y="7" width="20" height="14" rx="2"/>',
+  'Security':'<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>',
+  'Wireless':'<polyline points="5 12.55 5 5 12 2 19 5 19 12.55"/>',
+  'Cloud & Software':'<path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/>',
+  'UPS & Power':'<path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>',
+  'Laptops':'<rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/>',
+  'Desktops & All-in-One':'<rect x="2" y="3" width="20" height="14" rx="2"/><line x1="12" y1="17" x2="12" y2="21"/>',
+  'Monitors & Screens':'<rect x="2" y="3" width="20" height="14" rx="2"/><polyline points="8 21 12 17 16 21"/>',
+  'TVs':'<rect x="2" y="7" width="20" height="15" rx="2"/><polyline points="17 2 12 7 7 2"/>',
+  'Gaming':'<line x1="6" y1="11" x2="10" y2="11"/><line x1="8" y1="9" x2="8" y2="13"/><line x1="15" y1="12" x2="15.01" y2="12"/><line x1="18" y1="10" x2="18.01" y2="10"/><path d="M17.32 5H6.68a4 4 0 0 0-3.978 3.59 27.98 27.98 0 0 0 .018 7.833C3.372 18.18 5.91 19 7.29 19c.538 0 1.14-.28 1.66-.82L10.5 16.5h3l1.55 1.68c.52.54 1.12.82 1.66.82 1.38 0 3.92-.82 4.57-2.58.15-.4.18-.82.02-1.22A27.98 27.98 0 0 0 21.3 8.59 4 4 0 0 0 17.32 5z"/>',
+  'Accessories':'<path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/>',
+  'Printers & Scanners':'<polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/>',
+  'Phones & Tablets':'<rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/>'
+};
+
+let allProducts = [], filteredProducts = [], currentCat = '', currentSearch = '', currentSort = 'featured', currentView = 'grid';
+let currentPage = 1, totalMatching = 0, isLoadingMore = false;
+const PAGE_SIZE = 60; // a normal e-commerce page size — was previously trying to load everything (300, then everything client-side), which breaks down once any category exceeds that
+
+function getIcon(catName) { return ICONS[catName] || ICONS['Laptops']; }
+
+function renderProducts() {
+  let sorted = [...filteredProducts];
+  if (currentSort === 'price-asc') sorted.sort((a,b) => (a.price_amount||0) - (b.price_amount||0));
+  else if (currentSort === 'price-desc') sorted.sort((a,b) => (b.price_amount||0) - (a.price_amount||0));
+  else if (currentSort === 'name') sorted.sort((a,b) => a.name.localeCompare(b.name));
+  else sorted.sort((a,b) => b.featured - a.featured);
+
+  document.getElementById('resultCount').innerHTML = `<strong>${totalMatching}</strong> products${currentCat ? ' in <em>'+escHtml(currentCat)+'</em>' : ''}${currentSearch ? ' matching "<em>'+escHtml(currentSearch)+'</em>"' : ''}`;
+
+  const grid = document.getElementById('productGrid');
+  if (!sorted.length) {
+    grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1;"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/></svg><h3>No products found</h3><p>Try a different search or category.</p><button class="btn btn-primary" onclick="clearFilters()">Clear Filters</button></div>`;
+    return;
+  }
+  grid.innerHTML = sorted.map(p => {
+    const priceDisplay = p.price || 'Price on Request';
+    const hasPrice = p.price_amount && p.price_amount > 0;
+    const currencyLabel = p.currency === 'EGP' ? 'EGP' : p.currency === 'AED' ? 'AED' : 'USD';
+    const isOutOfStock = p.stock_status === 'out_of_stock';
+    const isLowStock = !isOutOfStock && p.stock_quantity !== null && p.stock_quantity !== undefined && p.stock_quantity > 0 && p.stock_quantity < 5;
+    return `
+    <div class="product-card">
+      <div class="product-card-img" style="${isOutOfStock ? 'opacity:.55;filter:grayscale(.4);' : ''}">
+        <a href="/product?slug=${encodeURIComponent(p.slug)}" style="display:flex;align-items:center;justify-content:center;width:100%;height:100%;">
+          ${p.image ? `<img src="${encodeURI(p.image)}" alt="${escHtml(localized(p,'name'))}" loading="lazy"/>` : `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">${getIcon(p.category_name)}</svg>`}
+        </a>
+        ${isOutOfStock ? `<div class="product-card-badge"><span class="badge" style="background:var(--gray-700, #374151);color:#fff;">${typeof icT==='function'?icT('out_of_stock'):'Out of Stock'}</span></div>`
+          : p.badge ? `<div class="product-card-badge"><span class="badge badge-blue">${escHtml(localized(p,'badge'))}</span></div>` : ''}
+      </div>
+      <div class="product-card-body">
+        <div class="product-card-category">${escHtml(localized({name:p.category_name,name_ar:p.category_name_ar},'name')||'')}</div>
+        <div class="product-card-name"><a href="/product?slug=${encodeURIComponent(p.slug)}" style="color:inherit;text-decoration:none;">${escHtml(localized(p,'name'))}</a></div>
+        <div class="product-card-brand">${escHtml(p.brand||'')}</div>
+        ${isLowStock ? `<div style="font-size:11px;font-weight:700;color:#d97706;margin:2px 0;">${typeof icT==='function'?icT('only_x_left').replace('{n}',p.stock_quantity):`Only ${p.stock_quantity} left!`}</div>` : ''}
+        <ul class="product-card-specs">${(localized(p,'specs')||[]).slice(0,3).map(s=>`<li>${escHtml(s)}</li>`).join('')}</ul>
+        <div class="product-card-footer">
+          <div>
+            <div class="product-card-price" style="font-size:${hasPrice?'16px':'13px'};font-weight:${hasPrice?'700':'500'};color:${hasPrice?'var(--blue)':'var(--g500)'};">${escHtml(priceDisplay)}</div>
+            ${hasPrice ? `<div style="font-size:10px;color:var(--g400);margin-top:1px;">${currencyLabel} + VAT may apply</div>` : ''}
+            ${(p.installments_enabled && p.price_amount > 0 && p.installment_months) ? (() => {
+              const months = p.installment_months === 'all' ? [6,12,18,24] : p.installment_months.split(',').map(Number).filter(Boolean);
+              const vr = p.currency==='EGP'?0.14:p.currency==='AED'?0.05:0.15;
+              const monthly = (p.price_amount*(1+vr)) / Math.max(...months);
+              const sym = p.currency==='EGP'?'EGP ':p.currency==='AED'?'AED ':'$';
+              return `<div style="font-size:11px;color:#16a34a;font-weight:600;margin-top:3px;">💳 From ${sym}${monthly.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}/mo</div>`;
+            })() : ''}
+          </div>
+          <div class="product-card-actions">
+            <a href="/product?slug=${encodeURIComponent(p.slug)}" class="btn-view"><svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>${typeof icT==='function'?icT('btn_view_details'):'Details'}</a>
+            <button class="btn-cart" ${isOutOfStock ? 'disabled style="opacity:.5;cursor:not-allowed;"' : ''}
+              data-slug="${escHtml(p.slug)}"
+              data-name="${escHtml(localized(p,'name'))}"
+              data-category="${escHtml(localized({name:p.category_name,name_ar:p.category_name_ar},'name')||'')}"
+              data-price="${escHtml(priceDisplay)}"
+              data-amount="${p.price_amount||0}"
+              data-currency="${p.currency||'USD'}"
+              data-inst-enabled="${p.installments_enabled||0}"
+              data-inst-months="${p.installment_months||''}"
+              ${isOutOfStock ? '' : `onclick="addToCartById('${p.slug}')"`}>
+              ${isOutOfStock
+                ? (typeof icT==='function'?icT('out_of_stock'):'Out of Stock')
+                : `<svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>${typeof icT==='function'?icT('btn_add'):'Add'}`}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+
+  // Shows only when the backend has more matches than we've loaded so
+  // far — with categories now running into the thousands, loading
+  // everything at once isn't practical, so this loads additional pages
+  // on demand instead.
+  const loadMoreEl = document.getElementById('loadMoreWrap');
+  if (loadMoreEl) {
+    loadMoreEl.style.display = allProducts.length < totalMatching ? 'block' : 'none';
+    loadMoreEl.innerHTML = `<button class="btn btn-outline" onclick="loadMoreProducts()" ${isLoadingMore ? 'disabled' : ''} style="margin:24px auto;display:block;">${isLoadingMore ? 'Loading...' : `Load More (${totalMatching - allProducts.length} remaining)`}</button>`;
+  }
+}
+
+function filterCat(slug, el) {
+  currentCat = slug;
+  document.querySelectorAll('.filter-item').forEach(f => f.classList.remove('active'));
+  if (el) el.classList.add('active');
+  else if (!slug) document.getElementById('filter-all').classList.add('active');
+  updateURL();
+  applyFilters();
+}
+
+function onSearch(q) {
+  currentSearch = q.toLowerCase().trim();
+  updateURL();
+  applyFilters();
+}
+
+function updateURL() {
+  const params = new URLSearchParams();
+  if (currentCat) params.set('cat', currentCat);
+  if (currentSearch) params.set('q', currentSearch);
+  const newURL = window.location.pathname + (params.toString() ? '?' + params.toString() : '');
+  history.replaceState(null, '', newURL);
+}
+
+// This used to filter whatever was already sitting in allProducts (loaded
+// once, capped at 300) — the actual bug: any category whose products
+// weren't in that fixed snapshot showed zero results, no matter how many
+// it really had. Now every filter change asks the database directly via
+// the same category/search params the backend already correctly
+// supports, so this works regardless of catalog size or insert order.
+async function applyFilters() {
+  currentPage = 1;
+  const params = new URLSearchParams({ limit: PAGE_SIZE, page: 1 });
+  if (currentCat) params.set('category', currentCat);
+  if (currentSearch) params.set('search', currentSearch);
+  const data = await apiGet('/api/products?' + params.toString());
+  allProducts = data.products || [];
+  totalMatching = data.total || 0;
+  filteredProducts = allProducts;
+  renderProducts();
+}
+
+async function loadMoreProducts() {
+  if (isLoadingMore) return;
+  isLoadingMore = true;
+  renderProducts(); // shows the disabled/"Loading..." state immediately
+  currentPage++;
+  const params = new URLSearchParams({ limit: PAGE_SIZE, page: currentPage });
+  if (currentCat) params.set('category', currentCat);
+  if (currentSearch) params.set('search', currentSearch);
+  const data = await apiGet('/api/products?' + params.toString());
+  allProducts = allProducts.concat(data.products || []);
+  filteredProducts = allProducts;
+  isLoadingMore = false;
+  renderProducts();
+}
+
+function applySort() {
+  currentSort = document.getElementById('sortSelect').value;
+  renderProducts();
+}
+
+function setView(v) {
+  currentView = v;
+  const grid = document.getElementById('productGrid');
+  grid.classList.toggle('list-view', v === 'list');
+  document.getElementById('gridViewBtn').classList.toggle('active', v === 'grid');
+  document.getElementById('listViewBtn').classList.toggle('active', v === 'list');
+}
+
+function clearFilters() {
+  currentCat = ''; currentSearch = '';
+  document.getElementById('heroSearch').value = '';
+  document.querySelectorAll('.filter-item').forEach(f => f.classList.remove('active'));
+  document.getElementById('filter-all').classList.add('active');
+  history.replaceState(null, '', window.location.pathname);
+  applyFilters();
+}
+
+async function loadStore() {
+  const catData = await apiGet('/api/products/categories');
+  const cats = catData.categories || [];
+
+  // Sums the backend's own accurate per-category counts rather than
+  // counting a loaded snapshot — under the old approach this was just
+  // allProducts.length, which is exactly the number that became
+  // misleading once the catalog grew past what was actually being loaded.
+  const totalAll = cats.reduce((sum, c) => sum + (c.product_count || 0), 0);
+  document.getElementById('count-all').textContent = totalAll;
+
+  const urlCat = new URLSearchParams(window.location.search).get('cat') || '';
+  const urlSearch = new URLSearchParams(window.location.search).get('q') || '';
+  if (urlSearch) { document.getElementById('heroSearch').value = urlSearch; currentSearch = urlSearch.toLowerCase(); }
+  currentCat = urlCat;
+
+  // Build sidebar
+  const entEl = document.getElementById('catEnterprise');
+  const conEl = document.getElementById('catConsumer');
+  cats.forEach(c => {
+    const isActive = currentCat === c.slug;
+    if (isActive) { document.getElementById('filter-all').classList.remove('active'); }
+    const link = `<a href="javascript:void(0)" class="filter-item${isActive?' active':''}" onclick="filterCat('${escHtml(c.slug)}',this)">${escHtml(localized(c,'name'))}<span class="count">${c.product_count}</span></a>`;
+    if (c.category_type === 'enterprise') entEl.innerHTML += link;
+    else conEl.innerHTML += link;
+  });
+
+  applyFilters(); // this now does the actual product fetch, correctly scoped to currentCat/currentSearch from the URL
+}
+
+loadStore();
+</script>
+
+<!-- ─── FLOATING REQUEST SERVICE BUTTON ───────────────────────────────────────
+     Appears on every page. Opens the request service page on click.
+     On index.html this turns white over the dark hero via adaptFloatBtn().
+     On all other pages it stays blue (light background).
+     ─────────────────────────────────────────────────────────────────────────── -->
+<div class="float-btn" id="floatBtn">
+  <button class="float-main-btn" id="floatMainBtn"
+    onclick="window.location.href='/request-service'"
+    title="Request a Service">
+    <div class="float-pulse"></div>
+    <div class="float-main-btn-text">Request<br/>Service</div>
+  </button>
+</div>
+
+  <script src="/js/i18n.js"></script>
+<script src="/js/chat-widget.js"></script>
+<script src="/js/account-dropdown.js"></script>
+</body>
+</html>

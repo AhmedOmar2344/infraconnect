@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27%3E%3Crect width=%27100%27 height=%27100%27 rx=%2718%27 fill=%27%231a56db%27/%3E%3Ctext x=%2750%27 y=%2766%27 font-size=%2748%27 font-family=%27Arial,sans-serif%27 font-weight=%27bold%27 fill=%27white%27 text-anchor=%27middle%27%3EIC%3C/text%3E%3C/svg%3E">
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Request a Service — InfraConnect</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Inter:wght@300;400;500;600;700&family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="/css/main.css"/>
+<style>
+/* Navbar CSS duplicated inline here as a safety net, mirroring the fix in
+   /css/main.css — see account.html for the full explanation of why. */
+.navbar-logo { display:flex; align-items:center; gap:10px; text-decoration:none; }
+.navbar-logo-icon { width:36px; height:36px; background:var(--blue); border-radius:9px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.navbar-logo-icon svg { width:20px; height:20px; }
+.navbar-logo-text { font-family:var(--font-head); font-size:18px; font-weight:800; color:var(--gray-900); white-space:nowrap; }
+.navbar-logo-text span { color:var(--blue); }
+.navbar-links { display:flex; align-items:center; gap:6px; list-style:none; margin:0; padding:0; }
+.navbar-links li { list-style:none; }
+.navbar-links a { color:var(--gray-600); text-decoration:none; font-size:14px; font-weight:500; padding:7px 12px; border-radius:8px; transition:all 0.15s; }
+.navbar-links a:hover { background:var(--blue-light); color:var(--blue); }
+.navbar-actions { display:flex; align-items:center; gap:12px; }
+.btn-nav { display:inline-flex; align-items:center; justify-content:center; padding:9px 22px; border-radius:6px; font-size:14px; font-weight:600; cursor:pointer; text-decoration:none; border:2px solid var(--blue); background:var(--blue); color:#fff; transition:all 0.18s; white-space:nowrap; }
+.btn-nav:hover { background:#1544b0; border-color:#1544b0; }
+@media (max-width:768px) { .navbar-links,.navbar-actions .btn-outline-nav,.navbar-actions .btn-nav{display:none !important;} }
+</style>
+<style>
+.rs-layout { display:grid; grid-template-columns:1fr 400px; gap:40px; align-items:start; }
+.rs-form-card { background:white; border:1px solid var(--gray-200); border-radius:var(--radius-lg); padding:40px; box-shadow:var(--shadow-md); }
+.rs-form-card h2 { font-family:var(--font-head); font-size:24px; font-weight:700; color:var(--gray-900); margin-bottom:6px; }
+.rs-form-card p { font-size:14px; color:var(--gray-500); margin-bottom:28px; line-height:1.7; }
+.rs-sidebar { display:flex; flex-direction:column; gap:16px; }
+.rs-info-card { background:white; border:1px solid var(--gray-200); border-radius:var(--radius-lg); padding:24px; box-shadow:var(--shadow-sm); }
+.rs-info-card h4 { font-family:var(--font-head); font-size:15px; font-weight:700; color:var(--gray-900); margin-bottom:14px; }
+.rs-contact-item { display:flex; align-items:center; gap:12px; padding:10px 0; border-bottom:1px solid var(--gray-100); }
+.rs-contact-item:last-child { border-bottom:none; }
+.rs-contact-icon { width:36px; height:36px; border-radius:9px; background:var(--blue-light); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.rs-contact-icon svg { width:16px; height:16px; stroke:var(--blue); fill:none; stroke-width:2; }
+.rs-contact-label { font-size:11px; color:var(--gray-400); font-weight:600; text-transform:uppercase; letter-spacing:.5px; margin-bottom:2px; }
+.rs-contact-value { font-size:13px; color:var(--gray-800); font-weight:600; }
+.rs-contact-value a { color:var(--blue); text-decoration:none; }
+/* Service selector */
+.service-selector { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:22px; }
+.srv-opt { padding:12px 14px; border:2px solid var(--gray-200); border-radius:10px; background:var(--gray-50); cursor:pointer; transition:all 0.15s; display:flex; align-items:center; gap:10px; }
+.srv-opt:hover { border-color:var(--blue); background:var(--blue-light); }
+.srv-opt.selected { border-color:var(--blue); background:var(--blue-light); }
+.srv-opt input[type=checkbox] { accent-color:var(--blue); width:16px; height:16px; flex-shrink:0; cursor:pointer; }
+.srv-opt-label { font-size:13px; font-weight:600; color:var(--gray-700); line-height:1.3; }
+.srv-opt.selected .srv-opt-label { color:var(--blue); }
+.section-label { font-size:12px; font-weight:700; color:var(--gray-500); text-transform:uppercase; letter-spacing:1px; margin-bottom:10px; display:block; }
+/* Timeline */
+.rs-timeline { display:flex; flex-direction:column; gap:0; }
+.rs-step { display:flex; gap:14px; position:relative; padding-bottom:20px; }
+.rs-step:last-child { padding-bottom:0; }
+.rs-step-dot { width:32px; height:32px; border-radius:50%; background:var(--blue); display:flex; align-items:center; justify-content:center; font-family:var(--font-head); font-size:13px; font-weight:700; color:white; flex-shrink:0; position:relative; z-index:1; }
+.rs-step::before { content:''; position:absolute; left:15px; top:32px; bottom:0; width:2px; background:var(--gray-200); }
+.rs-step:last-child::before { display:none; }
+.rs-step-body h5 { font-size:14px; font-weight:700; color:var(--gray-900); margin-bottom:3px; padding-top:5px; }
+.rs-step-body p { font-size:12px; color:var(--gray-400); line-height:1.6; }
+/* Success */
+.rs-success { text-align:center; padding:40px 20px; display:none; }
+.rs-success-icon { width:80px; height:80px; border-radius:50%; background:#dcfce7; border:3px solid #86efac; display:flex; align-items:center; justify-content:center; margin:0 auto 20px; animation:popIn .5s ease; }
+@keyframes popIn { 0%{transform:scale(0);opacity:0} 70%{transform:scale(1.1)} 100%{transform:scale(1);opacity:1} }
+.rs-success-icon svg { width:36px; height:36px; stroke:#16a34a; fill:none; stroke-width:2.5; }
+.rs-success h3 { font-family:var(--font-head); font-size:26px; font-weight:700; margin-bottom:10px; }
+.rs-success p { color:var(--gray-500); font-size:15px; line-height:1.8; margin-bottom:24px; }
+.rs-priority { display:flex; gap:8px; margin-bottom:22px; }
+.rs-priority-btn { flex:1; padding:10px; border:2px solid var(--gray-200); border-radius:9px; background:var(--gray-50); cursor:pointer; text-align:center; font-size:12px; font-weight:700; color:var(--gray-500); transition:all .15s; font-family:var(--font-body); }
+.rs-priority-btn:hover { border-color:var(--blue); color:var(--blue); }
+.rs-priority-btn.active { border-color:var(--blue); background:var(--blue-light); color:var(--blue); }
+.rs-priority-btn.active.high { border-color:#dc2626; background:#fee2e2; color:#dc2626; }
+.rs-priority-btn.active.med { border-color:#d97706; background:#fef3c7; color:#d97706; }
+.rs-priority-btn.active.low { border-color:#16a34a; background:#dcfce7; color:#16a34a; }
+@media(max-width:900px){.rs-layout{grid-template-columns:1fr;}.service-selector{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<div id="toast-container"></div>
+
+<nav class="navbar">
+  <a href="/" class="nav-logo">
+    <div class="nav-logo-icon"><svg viewBox="0 0 24 24"><path d="M3 18 Q3 4 19 5" stroke="white" fill="none" stroke-width="2"/><path d="M3 18 Q5 10 17 12" stroke="white" fill="none" stroke-width="2"/><path d="M3 18 Q8 14 15 16" stroke="white" fill="none" stroke-width="2"/><circle cx="19" cy="5" r="1.5" fill="white"/><circle cx="17" cy="12" r="1.5" fill="white"/><circle cx="15" cy="16" r="1.5" fill="white"/></svg></div>
+    <span class="nav-logo-text">INFRA<span>CONNECT</span></span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="/" data-i18n="nav_home">Home</a></li>
+    <li><a href="/#about" data-i18n="nav_about">About</a></li>
+    <li><a href="/#services" data-i18n="nav_services">Services</a></li>
+    <li><a href="/store" data-i18n="nav_store">Store</a></li>
+    <li><a href="/#projects" data-i18n="nav_projects">Projects</a></li>
+    <li><a href="/#contact" data-i18n="nav_contact">Contact</a></li>
+  </ul>
+  <div class="nav-right">
+    <a href="/account" id="navAccountBtn" class="cart-btn" title="My Account"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></a><a href="/cart" class="cart-btn">
+      <svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+      <span class="cart-badge" id="cartBadge">0</span>
+    </a>
+    <a href="/request-service" class="btn btn-outline-nav nav-cta-wrap" style="border:2px solid var(--blue);color:var(--blue);background:transparent;padding:9px 22px;border-radius:6px;font-size:14px;font-weight:600;text-decoration:none;transition:all .18s;" data-i18n="nav_request_service">Request Service</a>
+    <a href="/#contact" class="btn btn-primary nav-cta-wrap" data-i18n="nav_get_in_touch">Get in Touch</a>
+    <button id="ic-lang-switch-slot" type="button" class="ic-nav-lang-btn"></button>
+    <button class="hamburger" onclick="document.querySelector('.mobile-nav').classList.toggle('open')">
+      <svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+  </div>
+</nav>
+<div class="mobile-nav">
+  <a href="/" data-i18n="nav_home">Home</a><a href="/#about" data-i18n="nav_about">About</a><a href="/#services" data-i18n="nav_services">Services</a>
+  <a href="/store" data-i18n="nav_store">Store</a><a href="/#projects" data-i18n="nav_projects">Projects</a><a href="/#contact" data-i18n="nav_contact">Contact</a>
+  <a href="/request-service" data-i18n="nav_request_service">Request Service</a>
+</div>
+
+<div class="page-hero">
+  <div class="page-hero-inner">
+    <div class="breadcrumb"><a href="/" data-i18n="nav_home">Home</a><span>›</span><span>Request a Service</span></div>
+    <h1>Request a Service</h1>
+    <p>Tell us what you need and we'll put together the right solution for your business.</p>
+  </div>
+</div>
+
+<div class="page-content">
+  <div class="rs-layout">
+
+    <!-- FORM -->
+    <div>
+      <div class="rs-form-card" id="formCard">
+        <h2>Service Request Form</h2>
+        <p>Fill in the details below and our team will contact you within 24 hours with a tailored proposal.</p>
+
+        <!-- Services -->
+        <span class="section-label">Which services are you interested in? (Select all that apply)</span>
+        <div class="service-selector" id="serviceSelector">
+          <label class="srv-opt"><input type="checkbox" value="Infrastructure & Networking" onchange="toggleSrv(this)"/><span class="srv-opt-label">Infrastructure &amp; Networking</span></label>
+          <label class="srv-opt"><input type="checkbox" value="Cloud Services" onchange="toggleSrv(this)"/><span class="srv-opt-label">Cloud Services</span></label>
+          <label class="srv-opt"><input type="checkbox" value="Cybersecurity" onchange="toggleSrv(this)"/><span class="srv-opt-label">Cybersecurity</span></label>
+          <label class="srv-opt"><input type="checkbox" value="Managed IT Support" onchange="toggleSrv(this)"/><span class="srv-opt-label">Managed IT Support</span></label>
+          <label class="srv-opt"><input type="checkbox" value="IT Consulting" onchange="toggleSrv(this)"/><span class="srv-opt-label">IT Consulting</span></label>
+          <label class="srv-opt"><input type="checkbox" value="IT Procurement" onchange="toggleSrv(this)"/><span class="srv-opt-label">IT Procurement</span></label>
+          <label class="srv-opt"><input type="checkbox" value="Backup & Disaster Recovery" onchange="toggleSrv(this)"/><span class="srv-opt-label">Backup &amp; Disaster Recovery</span></label>
+          <label class="srv-opt"><input type="checkbox" value="Other" onchange="toggleSrv(this)"/><span class="srv-opt-label">Other / Custom</span></label>
+        </div>
+
+        <!-- Priority -->
+        <span class="section-label">Request Priority</span>
+        <div class="rs-priority" style="margin-bottom:22px;">
+          <button class="rs-priority-btn low active" id="prio-low" onclick="setPrio('low')">🟢 Low<br/><span style="font-weight:400;font-size:11px;">Flexible timeline</span></button>
+          <button class="rs-priority-btn med" id="prio-med" onclick="setPrio('med')">🟡 Medium<br/><span style="font-weight:400;font-size:11px;">Within 2 weeks</span></button>
+          <button class="rs-priority-btn high" id="prio-high" onclick="setPrio('high')">🔴 Urgent<br/><span style="font-weight:400;font-size:11px;">ASAP</span></button>
+        </div>
+
+        <!-- Contact details -->
+        <span class="section-label">Your Contact Information</span>
+        <div class="grid-2">
+          <div class="form-group"><label>First Name *</label><input id="rs-fname" placeholder="Ahmed"/></div>
+          <div class="form-group"><label>Last Name</label><input id="rs-lname" placeholder="Hassan"/></div>
+        </div>
+        <div class="grid-2">
+          <div class="form-group"><label>Email Address *</label><input type="email" id="rs-email" placeholder="ahmed@company.com"/></div>
+          <div class="form-group"><label>Phone Number *</label><input type="tel" id="rs-phone" placeholder="+971 XX XXX XXXX"/></div>
+        </div>
+        <div class="grid-2">
+          <div class="form-group"><label>Company Name</label><input id="rs-company" placeholder="Your company"/></div>
+          <div class="form-group"><label>Company Size</label>
+            <select id="rs-size">
+              <option value="">Select...</option>
+              <option>1–10 employees</option>
+              <option>11–50 employees</option>
+              <option>51–200 employees</option>
+              <option>201–500 employees</option>
+              <option>500+ employees</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group"><label>Location / Country</label><input id="rs-location" placeholder="Cairo, Egypt"/></div>
+
+        <!-- Project details -->
+        <span class="section-label" style="margin-top:6px;">Project Details</span>
+        <div class="form-group"><label>Describe your needs or challenge *</label>
+          <textarea id="rs-message" rows="5" placeholder="Tell us about your current IT setup, what you're trying to achieve, any specific requirements or challenges..."></textarea>
+        </div>
+        <div class="form-group"><label>Budget Range (optional)</label>
+          <select id="rs-budget">
+            <option value="">Prefer not to say</option>
+            <option>Under $5,000</option>
+            <option>$5,000 – $15,000</option>
+            <option>$15,000 – $50,000</option>
+            <option>$50,000 – $100,000</option>
+            <option>$100,000+</option>
+            <option>To be discussed</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Preferred Contact Method</label>
+          <select id="rs-contactpref">
+            <option>Email</option>
+            <option>Phone call</option>
+            <option>WhatsApp</option>
+            <option>Video call (Teams/Zoom)</option>
+          </select>
+        </div>
+
+        <button class="btn btn-primary btn-full btn-lg" onclick="submitRequest()" style="font-size:15px;margin-top:8px;">
+          Submit Request →
+        </button>
+        <p style="text-align:center;font-size:12px;color:var(--gray-400);margin-top:10px;">
+          We respond within 24 hours. Your information is kept strictly confidential.
+        </p>
+      </div>
+
+      <!-- SUCCESS STATE -->
+      <div class="rs-form-card rs-success" id="successCard">
+        <div class="rs-success-icon"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <h3>Request Submitted!</h3>
+        <p>Thank you! We've received your service request and our team will be in touch within <strong>24 hours</strong> with a tailored proposal.</p>
+        <div style="background:var(--blue-light);border-radius:12px;padding:18px;margin:20px 0;text-align:left;">
+          <p style="font-size:13px;font-weight:700;color:var(--gray-800);margin-bottom:10px;">Need to reach us directly?</p>
+          <p style="font-size:13px;color:var(--gray-600);">📧 <a href="mailto:info@infraconnect24-7.com" style="color:var(--blue)">info@infraconnect24-7.com</a></p>
+          <p style="font-size:13px;color:var(--gray-600);margin-top:6px;">📞 <a href="tel:+201020803988" style="color:var(--blue)">+20 102 080 3988</a> &nbsp;|&nbsp; <a href="tel:+971552755976" style="color:var(--blue)">+971 55 275 5976</a></p>
+        </div>
+        <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+          <a href="/" class="btn btn-primary">Back to Home</a>
+          <a href="/store" class="btn btn-ghost">Browse Products</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- SIDEBAR -->
+    <div class="rs-sidebar">
+
+      <div class="rs-info-card">
+        <h4>What happens next?</h4>
+        <div class="rs-timeline">
+          <div class="rs-step">
+            <div class="rs-step-dot">1</div>
+            <div class="rs-step-body"><h5>We review your request</h5><p>Our engineers analyse your requirements and identify the best solution</p></div>
+          </div>
+          <div class="rs-step">
+            <div class="rs-step-dot">2</div>
+            <div class="rs-step-body"><h5>We reach out within 24h</h5><p>A dedicated account manager contacts you via your preferred method</p></div>
+          </div>
+          <div class="rs-step">
+            <div class="rs-step-dot">3</div>
+            <div class="rs-step-body"><h5>Tailored proposal</h5><p>We send a detailed proposal with pricing, timeline and scope</p></div>
+          </div>
+          <div class="rs-step">
+            <div class="rs-step-dot">4</div>
+            <div class="rs-step-body"><h5>Project kickoff</h5><p>Once approved, our certified engineers get to work</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="rs-info-card">
+        <h4>Contact Us Directly</h4>
+        <div class="rs-contact-item">
+          <div class="rs-contact-icon"><svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
+          <div><div class="rs-contact-label">Email</div><div class="rs-contact-value"><a href="mailto:info@infraconnect24-7.com">info@infraconnect24-7.com</a></div></div>
+        </div>
+        <div class="rs-contact-item">
+          <div class="rs-contact-icon"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.42 2 2 0 0 1 3.6 1.25h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.82a16 16 0 0 0 6 6l.91-1.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.73 15z"/></svg></div>
+          <div><div class="rs-contact-label">Egypt</div><div class="rs-contact-value"><a href="tel:+201020803988">+20 102 080 3988</a></div></div>
+        </div>
+        <div class="rs-contact-item">
+          <div class="rs-contact-icon"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.42 2 2 0 0 1 3.6 1.25h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.82a16 16 0 0 0 6 6l.91-1.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.73 15z"/></svg></div>
+          <div><div class="rs-contact-label">UAE</div><div class="rs-contact-value"><a href="tel:+971552755976">+971 55 275 5976</a></div></div>
+        </div>
+        <div class="rs-contact-item">
+          <div class="rs-contact-icon"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+          <div><div class="rs-contact-label">Headquarters</div><div class="rs-contact-value">Cairo, Egypt</div></div>
+        </div>
+      </div>
+
+      <div class="rs-info-card" style="background:var(--navy);border-color:var(--navy);">
+        <h4 style="color:white;">Why InfraConnect?</h4>
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:10px;margin-top:4px;">
+          <li style="display:flex;align-items:center;gap:9px;font-size:13px;color:rgba(255,255,255,0.7);"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#60a5fa" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>24/7 support with defined SLAs</li>
+          <li style="display:flex;align-items:center;gap:9px;font-size:13px;color:rgba(255,255,255,0.7);"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#60a5fa" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Certified engineers with field experience</li>
+          <li style="display:flex;align-items:center;gap:9px;font-size:13px;color:rgba(255,255,255,0.7);"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#60a5fa" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Vendor-neutral recommendations</li>
+          <li style="display:flex;align-items:center;gap:9px;font-size:13px;color:rgba(255,255,255,0.7);"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#60a5fa" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Scalable for startups & enterprises</li>
+          <li style="display:flex;align-items:center;gap:9px;font-size:13px;color:rgba(255,255,255,0.7);"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#60a5fa" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Middle East region expertise</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="footer-grid">
+    <div class="footer-brand"><a href="/" class="nav-logo" style="margin-bottom:12px;display:inline-flex;"><div class="nav-logo-icon"><svg viewBox="0 0 24 24"><path d="M3 18 Q3 4 19 5" stroke="white" fill="none" stroke-width="2"/><path d="M3 18 Q5 10 17 12" stroke="white" fill="none" stroke-width="2"/><path d="M3 18 Q8 14 15 16" stroke="white" fill="none" stroke-width="2"/><circle cx="19" cy="5" r="1.5" fill="white"/></svg></div><span class="nav-logo-text" style="color:white">INFRA<span style="color:#93c5fd">CONNECT</span></span></a><p>High-performance IT infrastructure and managed services for the Middle East.</p></div>
+    <div class="footer-col"><h5>Company</h5><ul><li><a href="/#about">About Us</a></li><li><a href="/#services" data-i18n="nav_services">Services</a></li><li><a href="/#projects" data-i18n="nav_projects">Projects</a></li><li><a href="/#contact" data-i18n="nav_contact">Contact</a></li></ul></div>
+    <div class="footer-col"><h5>Services</h5><ul><li><a href="/request-service">Request a Service</a></li><li><a href="/store">IT Store</a></li><li><a href="/#contact">Get a Quote</a></li></ul></div>
+    <div class="footer-col"><h5>Contact</h5><ul><li><a href="mailto:info@infraconnect24-7.com">info@infraconnect24-7.com</a></li><li><a href="tel:+201020803988">+20 102 080 3988</a></li><li><a href="tel:+971552755976">+971 55 275 5976</a></li></ul></div>
+  </div>
+  <div class="footer-bottom"><p>&copy; 2025 InfraConnect. All rights reserved.</p><p>Cairo, Egypt — infraconnect24-7.com</p><p class="footer-legal-links"><a href="/terms.html">Terms of Service</a> &middot; <a href="/privacy.html">Privacy Policy</a></p></div>
+</footer>
+
+<script src="/js/cart.js"></script>
+<script src="/js/api.js"></script>
+<script>
+let selectedPriority = 'low';
+
+function toggleSrv(cb) {
+  cb.closest('.srv-opt').classList.toggle('selected', cb.checked);
+}
+
+function setPrio(level) {
+  selectedPriority = level;
+  ['low','med','high'].forEach(l => {
+    const btn = document.getElementById('prio-' + l);
+    btn.className = 'rs-priority-btn ' + l + (l === level ? ' active' : '');
+  });
+}
+
+async function submitRequest() {
+  const fname   = document.getElementById('rs-fname').value.trim();
+  const email   = document.getElementById('rs-email').value.trim();
+  const phone   = document.getElementById('rs-phone').value.trim();
+  const message = document.getElementById('rs-message').value.trim();
+
+  // Validate required fields
+  const required = [
+    { el: document.getElementById('rs-fname'), val: fname, label: 'First name' },
+    { el: document.getElementById('rs-email'), val: email, label: 'Email' },
+    { el: document.getElementById('rs-phone'), val: phone, label: 'Phone' },
+    { el: document.getElementById('rs-message'), val: message, label: 'Project description' },
+  ];
+  for (const r of required) {
+    if (!r.val) {
+      r.el.style.borderColor = '#dc2626';
+      r.el.focus();
+      r.el.addEventListener('input', () => r.el.style.borderColor = '', { once: true });
+      toast(`Please fill in: ${r.label}`, 'error');
+      return;
+    }
+  }
+
+  // Gather selected services
+  const services = [...document.querySelectorAll('#serviceSelector input:checked')].map(cb => cb.value);
+
+  const body = {
+    first_name:    fname,
+    last_name:     document.getElementById('rs-lname').value,
+    email,
+    phone,
+    company:       document.getElementById('rs-company').value,
+    service:       services.join(', ') || 'General',
+    product_names: services.join(', '),
+    message: `
+PRIORITY: ${selectedPriority.toUpperCase()}
+SERVICES: ${services.join(', ') || 'Not specified'}
+COMPANY SIZE: ${document.getElementById('rs-size').value || 'Not specified'}
+LOCATION: ${document.getElementById('rs-location').value || 'Not specified'}
+BUDGET: ${document.getElementById('rs-budget').value || 'Not specified'}
+PREFERRED CONTACT: ${document.getElementById('rs-contactpref').value}
+
+PROJECT DETAILS:
+${message}`.trim()
+  };
+
+  try {
+    const res = await fetch('/api/contact/quote', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    });
+    const data = await res.json();
+    if (!res.ok) { toast(data.error || 'Something went wrong. Please try again.', 'error'); return; }
+  } catch(e) {
+    // Still show success even if backend offline
+    console.warn('API error:', e);
+  }
+
+  // Show success
+  document.getElementById('formCard').style.display = 'none';
+  document.getElementById('successCard').style.display = 'block';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function toast(msg, type = 'info') {
+  let c = document.getElementById('toast-container');
+  if (!c) { c = document.createElement('div'); c.id = 'toast-container'; document.body.appendChild(c); }
+  const t = document.createElement('div');
+  t.className = `toast ${type}`; t.textContent = msg; c.appendChild(t);
+  setTimeout(() => t.remove(), 3500);
+}
+</script>
+
+<!-- ─── FLOATING REQUEST SERVICE BUTTON ───────────────────────────────────────
+     Appears on every page. Opens the request service page on click.
+     On index.html this turns white over the dark hero via adaptFloatBtn().
+     On all other pages it stays blue (light background).
+     ─────────────────────────────────────────────────────────────────────────── -->
+<div class="float-btn" id="floatBtn">
+  <button class="float-main-btn" id="floatMainBtn"
+    onclick="window.location.href='/request-service'"
+    title="Request a Service">
+    <div class="float-pulse"></div>
+    <div class="float-main-btn-text">Request<br/>Service</div>
+  </button>
+</div>
+
+  <script src="/js/i18n.js"></script>
+<script src="/js/chat-widget.js"></script>
+<script src="/js/account-dropdown.js"></script>
+</body>
+</html>

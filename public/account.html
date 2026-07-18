@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27%3E%3Crect width=%27100%27 height=%27100%27 rx=%2718%27 fill=%27%231a56db%27/%3E%3Ctext x=%2750%27 y=%2766%27 font-size=%2748%27 font-family=%27Arial,sans-serif%27 font-weight=%27bold%27 fill=%27white%27 text-anchor=%27middle%27%3EIC%3C/text%3E%3C/svg%3E">
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>My Account — InfraConnect</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="/css/main.css"/>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<style>
+/* Navbar CSS duplicated inline here as a safety net — this exact block
+   was added to /css/main.css too, but since that fix somehow isn't taking
+   effect even after a hard refresh AND a fresh incognito load (ruling out
+   every caching layer), it's inlined directly so this page renders
+   correctly regardless of whatever is going on with the external
+   stylesheet. */
+.navbar-logo { display:flex; align-items:center; gap:10px; text-decoration:none; }
+.navbar-logo-icon { width:36px; height:36px; background:var(--blue); border-radius:9px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.navbar-logo-icon svg { width:20px; height:20px; }
+.navbar-logo-text { font-family:var(--font-head); font-size:18px; font-weight:800; color:var(--gray-900); white-space:nowrap; }
+.navbar-logo-text span { color:var(--blue); }
+.navbar-links { display:flex; align-items:center; gap:6px; list-style:none; margin:0; padding:0; }
+.navbar-links li { list-style:none; }
+.navbar-links a { color:var(--gray-600); text-decoration:none; font-size:14px; font-weight:500; padding:7px 12px; border-radius:8px; transition:all 0.15s; }
+.navbar-links a:hover { background:var(--blue-light); color:var(--blue); }
+.navbar-actions { display:flex; align-items:center; gap:12px; }
+.btn-nav { display:inline-flex; align-items:center; justify-content:center; padding:9px 22px; border-radius:6px; font-size:14px; font-weight:600; cursor:pointer; text-decoration:none; border:2px solid var(--blue); background:var(--blue); color:#fff; transition:all 0.18s; white-space:nowrap; }
+.btn-nav:hover { background:#1544b0; border-color:#1544b0; }
+@media (max-width:768px) { .navbar-links,.navbar-actions .btn-outline-nav,.navbar-actions .btn-nav{display:none !important;} }
+</style>
+<style>
+.acct-wrap{max-width:820px;margin:0 auto;padding:110px 5% 60px;}
+.acct-tabs{display:flex;gap:8px;margin-bottom:24px;justify-content:center;}
+.acct-tab{padding:9px 20px;border-radius:20px;border:1.5px solid var(--gray-200);background:#fff;font-size:13px;font-weight:600;cursor:pointer;color:var(--gray-600);}
+.acct-tab.active{background:var(--blue);border-color:var(--blue);color:#fff;}
+.acct-card{background:#fff;border:1px solid var(--gray-200);border-radius:14px;padding:32px;max-width:420px;margin:0 auto;box-shadow:0 1px 3px rgba(0,0,0,.04);}
+.acct-card h2{font-family:var(--font-head);font-size:20px;margin-bottom:6px;}
+.acct-card p.sub{font-size:13px;color:var(--gray-500);margin-bottom:22px;}
+.acct-fg{margin-bottom:14px;}
+.acct-fg label{display:block;font-size:12px;font-weight:600;color:var(--gray-700);margin-bottom:5px;}
+.acct-fg input{width:100%;padding:10px 12px;border:1.5px solid var(--gray-200);border-radius:8px;font-size:14px;box-sizing:border-box;}
+.acct-err{background:#fef2f2;border:1px solid #fecaca;color:#b91c1c;padding:9px 12px;border-radius:8px;font-size:13px;margin-bottom:14px;display:none;}
+.acct-divider{display:flex;align-items:center;gap:12px;margin-bottom:16px;color:var(--gray-400);font-size:12px;}
+.acct-divider::before,.acct-divider::after{content:'';flex:1;height:1px;background:var(--gray-200);}
+.acct-dash-tabs{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap;}
+.acct-side{background:#fff;border:1px solid var(--gray-200);border-radius:12px;padding:24px;margin:0 auto;}
+.acct-side-name{font-weight:700;font-size:15px;margin-bottom:2px;}
+.acct-side-email{font-size:12px;color:var(--gray-400);margin-bottom:18px;}
+.order-card{background:#fff;border:1px solid var(--gray-200);border-radius:12px;padding:18px 20px;margin-bottom:12px;}
+.order-card-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;}
+.order-status-bdg{font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;text-transform:capitalize;}
+.os-pending{background:#fef3c7;color:#92400e;}
+.os-processing{background:#dbeafe;color:#1e40af;}
+.os-completed{background:#d1fae5;color:#065f46;}
+.os-cancelled{background:#fee2e2;color:#991b1b;}
+.track-bar{display:flex;align-items:center;margin:14px 0;}
+.track-step{flex:1;text-align:center;position:relative;}
+.track-dot{width:22px;height:22px;border-radius:50%;background:var(--gray-200);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;margin:0 auto 6px;position:relative;z-index:2;}
+.track-step.done .track-dot{background:var(--blue);}
+.track-step.cancelled .track-dot{background:#dc2626;}
+.track-line{position:absolute;top:11px;left:-50%;width:100%;height:2px;background:var(--gray-200);z-index:1;}
+.track-step:first-child .track-line{display:none;}
+.track-step.done .track-line{background:var(--blue);}
+.track-label{font-size:10px;color:var(--gray-500);text-transform:uppercase;letter-spacing:.5px;}
+.track-map{width:100%;height:180px;border-radius:8px;margin:10px 0;background:var(--gray-100);}
+.refund-box{margin-top:12px;padding:10px 12px;background:var(--gray-50);border-radius:8px;font-size:12px;}
+.refund-status-pending{color:#92400e;}
+.refund-status-approved{color:#065f46;}
+.refund-status-rejected{color:#991b1b;}
+</style>
+</head>
+<body>
+<nav class="navbar" id="navbar">
+  <a href="/" class="navbar-logo">
+    <div class="navbar-logo-icon">
+      <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M10 30 Q10 10 28 12" stroke="#60a5fa" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        <path d="M10 30 Q12 18 26 20" stroke="#93c5fd" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        <path d="M10 30 Q14 24 24 26" stroke="#bfdbfe" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        <circle cx="28" cy="12" r="3" fill="#60a5fa"/><circle cx="26" cy="20" r="3" fill="#93c5fd"/><circle cx="24" cy="26" r="3" fill="#bfdbfe"/>
+      </svg>
+    </div>
+    <span class="navbar-logo-text">INFRA<span>CONNECT</span></span>
+  </a>
+  <ul class="navbar-links">
+    <li><a href="/" data-i18n="nav_home">Home</a></li>
+    <li><a href="/about.html" data-i18n="nav_about">About</a></li>
+    <li><a href="/services.html" data-i18n="nav_services">Services</a></li>
+    <li><a href="/store.html" data-i18n="nav_store">Store</a></li>
+    <li><a href="/projects.html" data-i18n="nav_projects">Projects</a></li>
+    <li><a href="/contact.html" data-i18n="nav_contact">Contact</a></li>
+  </ul>
+  <div class="navbar-actions">
+    <a href="/account.html" id="navAccountBtn" class="cart-btn" title="My Account"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></a>
+    <a href="/cart.html" class="cart-btn" title="Cart"><svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg><span class="cart-badge">0</span></a>
+    <a href="/request-service" class="btn-outline-nav" data-i18n="nav_request_service">Request Service</a>
+    <a href="/contact.html" class="btn-nav" data-i18n="nav_get_in_touch">Get in Touch</a>
+    <button id="ic-lang-switch-slot" type="button" class="ic-nav-lang-btn"></button>
+    <button class="hamburger" onclick="document.querySelector('.mobile-nav').classList.toggle('open')"><svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
+  </div>
+</nav>
+<div class="mobile-nav">
+  <a href="/" data-i18n="nav_home">Home</a>
+  <a href="/about.html" data-i18n="nav_about">About</a>
+  <a href="/services.html" data-i18n="nav_services">Services</a>
+  <a href="/store.html" data-i18n="nav_store">Store</a>
+  <a href="/contact.html" data-i18n="nav_contact">Contact</a>
+  <a href="/cart.html">🛒 Cart</a>
+</div>
+
+<div class="acct-wrap">
+  <!-- LOGGED OUT: login / register -->
+  <div id="acctAuthView" style="display:none;">
+    <div class="acct-tabs">
+      <button class="acct-tab active" id="tabLogin" onclick="switchAuthTab('login')">Sign In</button>
+      <button class="acct-tab" id="tabRegister" onclick="switchAuthTab('register')">Create Account</button>
+    </div>
+    <div class="acct-card" id="loginPanel">
+      <h2>Welcome back</h2>
+      <p class="sub" id="loginSubtext">Sign in to view your order history and manage your account.</p>
+      <div class="acct-err" id="loginErrBox"></div>
+      <div id="googleBtnLogin" style="display:flex;justify-content:center;margin-bottom:6px;"></div>
+      <div id="googleStatusLogin" style="text-align:center;font-size:11px;color:var(--gray-400);margin-bottom:16px;"></div>
+      <div class="acct-divider"><span>or</span></div>
+      <div class="acct-fg"><label>Email</label><input type="email" id="li-email"/></div>
+      <div class="acct-fg"><label>Password</label><input type="password" id="li-pwd" onkeydown="if(event.key==='Enter')custLogin()"/></div>
+      <button class="btn btn-primary btn-full" onclick="custLogin()">Sign In</button>
+    </div>
+    <div class="acct-card" id="registerPanel" style="display:none;">
+      <h2>Create your account</h2>
+      <p class="sub">Save your details for faster checkout and track every order in one place.</p>
+      <div class="acct-err" id="registerErrBox"></div>
+      <div id="googleBtnRegister" style="display:flex;justify-content:center;margin-bottom:6px;"></div>
+      <div id="googleStatusRegister" style="text-align:center;font-size:11px;color:var(--gray-400);margin-bottom:16px;"></div>
+      <div class="acct-divider"><span>or</span></div>
+      <div class="acct-fg"><label>Full Name *</label><input id="rg-name"/></div>
+      <div class="acct-fg"><label>Email *</label><input type="email" id="rg-email"/></div>
+      <div class="acct-fg"><label>Phone</label><input id="rg-phone"/></div>
+      <div class="acct-fg"><label>Company</label><input id="rg-company"/></div>
+      <div class="acct-fg"><label>Password * (min 8 characters)</label><input type="password" id="rg-pwd" onkeydown="if(event.key==='Enter')custRegister()"/></div>
+      <button class="btn btn-primary btn-full" onclick="custRegister()">Create Account</button>
+    </div>
+  </div>
+
+  <!-- LOGGED IN: dashboard -->
+  <div id="acctDashView" style="display:none;">
+    <div class="acct-dash-tabs">
+      <button class="acct-tab active" id="dashTabProfile" onclick="switchDashTab('profile')">👤 Profile</button>
+      <button class="acct-tab" id="dashTabOrders" onclick="switchDashTab('orders')">📦 Orders</button>
+      <button class="acct-tab" id="dashTabTracking" onclick="switchDashTab('tracking')">🚚 Order Tracking</button>
+      <button class="acct-tab" id="dashTabRefunds" onclick="switchDashTab('refunds')">↩️ Refund Requests</button>
+    </div>
+
+    <div id="profile" class="acct-side" style="max-width:420px;">
+      <div class="acct-side-name" id="dashName">-</div>
+      <div class="acct-side-email" id="dashEmail">-</div>
+      <div class="acct-fg"><label>Full Name</label><input id="ed-name"/></div>
+      <div class="acct-fg"><label>Phone</label><input id="ed-phone"/></div>
+      <div class="acct-fg"><label>Company</label><input id="ed-company"/></div>
+      <div class="acct-fg"><label>Address</label><input id="ed-address"/></div>
+      <button class="btn btn-outline btn-full" style="margin-bottom:8px;" onclick="saveProfile()">Save Changes</button>
+      <button class="btn btn-ghost btn-full" onclick="custLogout()">Sign Out</button>
+    </div>
+
+    <div id="orders" style="display:none;">
+      <h2 style="font-size:18px;margin-bottom:14px;">Order History</h2>
+      <div id="orderHistoryList"><p style="color:var(--gray-400);font-size:13px;">Loading...</p></div>
+    </div>
+
+    <div id="tracking" style="display:none;">
+      <h2 style="font-size:18px;margin-bottom:6px;">Order Tracking</h2>
+      <p style="font-size:13px;color:var(--gray-500);margin-bottom:14px;">Orders currently being prepared, dispatched, or on their way to you.</p>
+      <div id="trackingList"><p style="color:var(--gray-400);font-size:13px;">Loading...</p></div>
+    </div>
+
+    <div id="refunds" style="display:none;">
+      <h2 style="font-size:18px;margin-bottom:6px;">Refund Requests</h2>
+      <p style="font-size:13px;color:var(--gray-500);margin-bottom:14px;">Every refund request you've submitted, and its current status.</p>
+      <div id="refundsList"><p style="color:var(--gray-400);font-size:13px;">Loading...</p></div>
+    </div>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="footer-logo-text">INFRA<span>CONNECT</span></div>
+        <p>High-performance IT infrastructure and managed services for businesses that want to operate efficiently, scale confidently, and adopt modern technology reliably.</p>
+      </div>
+      <div class="footer-col"><h5 data-i18n="footer_company">Company</h5><ul>
+        <li><a href="/about.html" data-i18n="footer_about_us">About Us</a></li>
+        <li><a href="/services.html" data-i18n="nav_services">Services</a></li>
+        <li><a href="/contact.html" data-i18n="nav_contact">Contact</a></li>
+      </ul></div>
+      <div class="footer-col"><h5 data-i18n="footer_store">Store</h5><ul>
+        <li><a href="/store.html" data-i18n="footer_all_products">All Products</a></li>
+      </ul></div>
+      <div class="footer-col"><h5>Legal</h5><ul>
+        <li><a href="/terms.html">Terms of Service</a></li>
+        <li><a href="/privacy.html">Privacy Policy</a></li>
+      </ul></div>
+    </div>
+    <div class="footer-bottom">
+      <p data-i18n="footer_copyright">© 2025 InfraConnect. All rights reserved.</p>
+      <p>infraconnect24-7.com</p>
+    </div>
+  </div>
+</footer>
+<script src="/js/cart.js"></script>
+<script src="/js/api.js"></script>
+<script src="/js/i18n.js"></script>
+<script src="/js/chat-widget.js"></script>
+<script src="/js/account-dropdown.js"></script>
+<script>
+const CUST_TOKEN_KEY = 'ic_customer_token';
+const CUST_DATA_KEY = 'ic_customer_data';
+
+function switchAuthTab(tab) {
+  document.getElementById('tabLogin').classList.toggle('active', tab === 'login');
+  document.getElementById('tabRegister').classList.toggle('active', tab === 'register');
+  document.getElementById('loginPanel').style.display = tab === 'login' ? 'block' : 'none';
+  document.getElementById('registerPanel').style.display = tab === 'register' ? 'block' : 'none';
+}
+
+// ── GOOGLE SIGN-IN ───────────────────────────────────────────────────────────
+// One button handles both sign-in and sign-up — the backend endpoint
+// creates a new account automatically the first time a given Google
+// account is used, so there's no separate "register with Google" flow to
+// build or explain to the user.
+async function initGoogleSignIn() {
+  setGoogleStatus('Loading Google Sign-In...');
+  try {
+    const r = await fetch('/api/config/google-client-id');
+    if (!r.ok) {
+      setGoogleStatus('Google Sign-In: server error checking configuration (status ' + r.status + ')');
+      return;
+    }
+    const d = await r.json();
+    if (!d.clientId) {
+      setGoogleStatus('Google Sign-In not yet configured — see Admin → API Console or GOOGLE_CLIENT_ID.');
+      return;
+    }
+
+    // The Google script tag uses async, which loads independently of and
+    // races against DOMContentLoaded — there's no guarantee it's finished
+    // by the time this runs. A single check-and-bail here was the actual
+    // earlier bug: on any connection where Google's script was even
+    // slightly slower than usual, this gave up permanently and never
+    // checked again, even though the script went on to finish loading
+    // moments later. Polling briefly instead of checking once fixes this.
+    const google = await waitForGoogleSDK();
+    if (!google) {
+      setGoogleStatus('Google\'s sign-in script did not load — check your internet connection or ad-blocker, then refresh.');
+      return;
+    }
+
+    google.accounts.id.initialize({ client_id: d.clientId, callback: handleGoogleCredential, ux_mode: 'popup' });
+    let rendered = false;
+    ['googleBtnLogin', 'googleBtnRegister'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) { google.accounts.id.renderButton(el, { theme: 'outline', size: 'large', width: 320, text: 'continue_with' }); rendered = true; }
+    });
+    setGoogleStatus(rendered ? '' : 'Google Sign-In button container not found on this page.');
+  } catch (e) {
+    // A malformed Client ID or an unauthorized origin (the domain isn't
+    // listed in Google Cloud Console → Credentials → Authorized JavaScript
+    // origins) are the two most common causes of a failure landing here.
+    setGoogleStatus('Google Sign-In failed to load: ' + e.message);
+    console.error('[Google Sign-In] Failed to initialize:', e);
+  }
+}
+
+function setGoogleStatus(text) {
+  ['googleStatusLogin', 'googleStatusRegister'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = text;
+  });
+}
+
+function waitForGoogleSDK(timeoutMs = 5000, intervalMs = 100) {
+  return new Promise((resolve) => {
+    const start = Date.now();
+    const check = () => {
+      if (typeof google !== 'undefined' && google.accounts) return resolve(google);
+      if (Date.now() - start >= timeoutMs) return resolve(null);
+      setTimeout(check, intervalMs);
+    };
+    check();
+  });
+}
+
+async function handleGoogleCredential(response) {
+  // Immediate feedback the instant Google hands back a credential — before
+  // this, there was no visible change at all between "picked an account"
+  // and the backend responding, which is exactly what looked like being
+  // stuck even in cases where it was actually just working normally.
+  setGoogleStatus('Signing you in...');
+  try {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 15000);
+    const r = await fetch('/api/customers/google-auth', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ credential: response.credential }),
+      signal: controller.signal
+    });
+    clearTimeout(timeout);
+    const d = await r.json();
+    if (!r.ok || d.error) {
+      setGoogleStatus('');
+      const errBox = document.getElementById('loginErrBox');
+      if (errBox) { errBox.textContent = d?.error || 'Could not sign in with Google.'; errBox.style.display = 'block'; }
+      return;
+    }
+    localStorage.setItem(CUST_TOKEN_KEY, d.token);
+    localStorage.setItem(CUST_DATA_KEY, JSON.stringify(d.customer));
+    redirectAfterAuth();
+  } catch (e) {
+    // Covers both a genuine timeout (server hung — e.g. verifying the
+    // token with Google took too long) and any network failure — either
+    // way, this guarantees a visible result instead of an indefinite wait.
+    setGoogleStatus('');
+    const errBox = document.getElementById('loginErrBox');
+    const msg = e.name === 'AbortError' ? 'Sign-in timed out — please try again.' : 'Could not reach the server — check your connection and try again.';
+    if (errBox) { errBox.textContent = msg; errBox.style.display = 'block'; }
+  }
+}
+
+async function custLogin() {
+  const email = document.getElementById('li-email').value.trim();
+  const password = document.getElementById('li-pwd').value;
+  const errBox = document.getElementById('loginErrBox');
+  errBox.style.display = 'none';
+  if (!email || !password) { errBox.textContent = 'Enter your email and password.'; errBox.style.display = 'block'; return; }
+  const d = await apiPost('/api/customers/login', { email, password });
+  if (!d || d.error) { errBox.textContent = d?.error || 'Could not sign in.'; errBox.style.display = 'block'; return; }
+  localStorage.setItem(CUST_TOKEN_KEY, d.token);
+  localStorage.setItem(CUST_DATA_KEY, JSON.stringify(d.customer));
+  redirectAfterAuth();
+}
+
+async function custRegister() {
+  const name = document.getElementById('rg-name').value.trim();
+  const email = document.getElementById('rg-email').value.trim();
+  const phone = document.getElementById('rg-phone').value.trim();
+  const company = document.getElementById('rg-company').value.trim();
+  const password = document.getElementById('rg-pwd').value;
+  const errBox = document.getElementById('registerErrBox');
+  errBox.style.display = 'none';
+  if (!name || !email || !password) { errBox.textContent = 'Fill in the required fields.'; errBox.style.display = 'block'; return; }
+  const d = await apiPost('/api/customers/register', { name, email, password, phone, company });
+  if (!d || d.error) { errBox.textContent = d?.error || 'Could not create account.'; errBox.style.display = 'block'; return; }
+  localStorage.setItem(CUST_TOKEN_KEY, d.token);
+  localStorage.setItem(CUST_DATA_KEY, JSON.stringify(d.customer));
+  redirectAfterAuth();
+}
+
+// Checkout sends customers here with ?redirect=checkout when they're not
+// signed in yet — this is what sends them back once they are, instead of
+// just dropping them on the account dashboard and losing their cart flow.
+function redirectAfterAuth() {
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('redirect') === 'checkout') {
+    window.location.href = '/checkout';
+  } else {
+    showDashboard();
+  }
+}
+
+function custLogout() {
+  if (trackingPollTimer) { clearInterval(trackingPollTimer); trackingPollTimer = null; }
+  localStorage.removeItem(CUST_TOKEN_KEY);
+  localStorage.removeItem(CUST_DATA_KEY);
+  document.getElementById('acctDashView').style.display = 'none';
+  document.getElementById('acctAuthView').style.display = 'block';
+}
+
+async function custApiAuth(method, url, body) {
+  const token = localStorage.getItem(CUST_TOKEN_KEY);
+  const r = await fetch(url, {
+    method, headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+    body: body ? JSON.stringify(body) : undefined
+  });
+  if (r.status === 401) { custLogout(); return null; }
+  return r.json();
+}
+
+async function showDashboard() {
+  // Reveal the dashboard immediately using whatever was cached from the
+  // last login/visit — no flash of the login screen while this loads.
+  // If the token turns out to be invalid, custApiAuth's 401 handling
+  // (via custLogout) swaps back to the login view at that point instead.
+  const cached = JSON.parse(localStorage.getItem(CUST_DATA_KEY) || '{}');
+  document.getElementById('acctAuthView').style.display = 'none';
+  document.getElementById('acctDashView').style.display = 'block';
+  document.getElementById('dashName').textContent = cached.name || '';
+  document.getElementById('dashEmail').textContent = cached.email || '';
+  document.getElementById('ed-name').value = cached.name || '';
+  document.getElementById('ed-phone').value = cached.phone || '';
+  document.getElementById('ed-company').value = cached.company || '';
+  document.getElementById('ed-address').value = cached.address || '';
+  switchDashTab(tabFromHash());
+
+  const d = await custApiAuth('GET', '/api/customers/me');
+  if (!d || d.error) { custLogout(); return; } // token was actually invalid — now we fall back
+  localStorage.setItem(CUST_DATA_KEY, JSON.stringify(d.customer)); // refresh the cache for next time
+  document.getElementById('dashName').textContent = d.customer.name;
+  document.getElementById('dashEmail').textContent = d.customer.email;
+  document.getElementById('ed-name').value = d.customer.name || '';
+  document.getElementById('ed-phone').value = d.customer.phone || '';
+  document.getElementById('ed-company').value = d.customer.company || '';
+  document.getElementById('ed-address').value = d.customer.address || '';
+}
+
+function tabFromHash() {
+  const h = window.location.hash.replace('#', '');
+  return ['orders', 'tracking', 'refunds'].includes(h) ? h : 'profile';
+}
+
+const loadedTabs = new Set(); // lazy-load each tab's data once, on first visit
+function switchDashTab(tab) {
+  ['profile', 'orders', 'tracking', 'refunds'].forEach(t => {
+    document.getElementById('dashTab' + t.charAt(0).toUpperCase() + t.slice(1)).classList.toggle('active', tab === t);
+    document.getElementById(t).style.display = tab === t ? 'block' : 'none';
+  });
+  if (tab === 'orders' && !loadedTabs.has('orders')) { loadedTabs.add('orders'); loadOrdersTab(); }
+  if (tab === 'tracking' && !loadedTabs.has('tracking')) { loadedTabs.add('tracking'); loadTrackingTab(); }
+  if (tab === 'refunds' && !loadedTabs.has('refunds')) { loadedTabs.add('refunds'); loadRefundsTab(); }
+}
+
+async function saveProfile() {
+  const d = await custApiAuth('PUT', '/api/customers/me', {
+    name: document.getElementById('ed-name').value.trim(),
+    phone: document.getElementById('ed-phone').value.trim(),
+    company: document.getElementById('ed-company').value.trim(),
+    address: document.getElementById('ed-address').value.trim(),
+  });
+  if (!d || d.error) { showToast(d?.error || 'Could not save changes.', 'error'); return; }
+  localStorage.setItem(CUST_DATA_KEY, JSON.stringify(d.customer));
+  document.getElementById('dashName').textContent = d.customer.name;
+  showToast('Profile updated!', 'success');
+}
+
+// ── TAB: ORDERS — plain order history, no tracking/refund clutter ──────────
+let cachedOrders = null;
+async function loadOrdersTab() {
+  const d = await custApiAuth('GET', '/api/customers/me/orders');
+  cachedOrders = d?.orders || [];
+  const list = document.getElementById('orderHistoryList');
+  if (!cachedOrders.length) {
+    list.innerHTML = '<p style="color:var(--gray-400);font-size:13px;">No orders yet — <a href="/store.html" style="color:var(--blue);">browse the store</a> to place your first one.</p>';
+    return;
+  }
+  list.innerHTML = cachedOrders.map(o => `
+    <div class="order-card">
+      <div class="order-card-top">
+        <div><strong>${o.order_number}</strong><div style="font-size:12px;color:var(--gray-400);">${new Date(o.created_at).toLocaleDateString()}</div></div>
+        <span class="order-status-bdg os-${o.status}">${o.status}</span>
+      </div>
+      <div style="font-size:13px;color:var(--gray-600);margin:10px 0;">${escHtml(o.items || '')}</div>
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <strong style="color:var(--blue);">${escHtml(o.total_label || 'TBD')}</strong>
+        <div style="display:flex;gap:14px;align-items:center;">
+          <a href="#" onclick="downloadOwnInvoice(${o.id});return false;" style="font-size:12px;color:var(--blue);text-decoration:underline;">📄 Invoice</a>
+          <a href="/contact.html" style="font-size:12px;color:var(--blue);text-decoration:underline;">💬 Get Help</a>
+          ${['processing', 'completed'].includes(o.status) ? `<a href="#" onclick="openRefundRequest(${o.id});return false;" style="font-size:12px;color:#dc2626;text-decoration:underline;">Request Refund</a>` : ''}
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+// ── TAB: ORDER TRACKING — only orders actually in the delivery pipeline ────
+async function loadTrackingTab() {
+  const d = cachedOrders ? { orders: cachedOrders } : await custApiAuth('GET', '/api/customers/me/orders');
+  const trackable = (d?.orders || []).filter(o => o.delivery_stage || o.status === 'cancelled');
+  const list = document.getElementById('trackingList');
+  if (!trackable.length) {
+    list.innerHTML = '<p style="color:var(--gray-400);font-size:13px;">Nothing being tracked right now — orders show up here once they\'re confirmed for delivery.</p>';
+    return;
+  }
+  list.innerHTML = trackable.map(o => `
+    <div class="order-card">
+      <div class="order-card-top">
+        <div><strong>${o.order_number}</strong></div>
+        <span class="order-status-bdg os-${o.status}">${o.status}</span>
+      </div>
+      ${renderTrackingBar(o)}
+      ${o.delivery_stage === 'delivering' ? `<div id="map-${o.id}" class="track-map"></div>` : ''}
+    </div>`).join('');
+
+  // Live map only for orders actually out for delivery — loaded lazily so
+  // orders that never reach this stage never pay the cost of the Maps SDK.
+  const deliveringOrders = trackable.filter(o => o.delivery_stage === 'delivering' && o.courier_lat != null);
+  if (deliveringOrders.length) initTrackingMaps(deliveringOrders);
+}
+
+// A cancelled order gets its own short, dead-end track. Everything else
+// follows the real delivery pipeline (Confirmed → Dispatched →
+// Delivering → Delivered) driven by delivery_stage, not the coarser
+// order.status — an order can be "processing" for a while before a
+// courier is even assigned, so delivery_stage is what's actually accurate
+// here, not payment/fulfillment status.
+function renderTrackingBar(order) {
+  if (order.status === 'cancelled') {
+    return `<div class="track-bar"><div class="track-step done cancelled"><div class="track-dot">✕</div><div class="track-label">Cancelled</div></div></div>`;
+  }
+  const steps = [
+    { key: 'confirmed', label: 'Confirmed' },
+    { key: 'dispatched', label: 'Dispatched' },
+    { key: 'delivering', label: 'Delivering' },
+    { key: 'delivered', label: 'Delivered' },
+  ];
+  const order_ = ['confirmed', 'dispatched', 'delivering', 'delivered'];
+  const currentIdx = order.delivery_stage ? order_.indexOf(order.delivery_stage) : -1;
+  return `<div class="track-bar">${steps.map((s, i) => `
+    <div class="track-step ${i <= currentIdx ? 'done' : ''}">
+      <div class="track-line"></div>
+      <div class="track-dot">${i <= currentIdx ? '✓' : ''}</div>
+      <div class="track-label">${s.label}</div>
+    </div>`).join('')}${currentIdx === -1 ? '<div style="text-align:center;width:100%;font-size:11px;color:var(--gray-400);margin-top:4px;">Preparing your order</div>' : ''}</div>`;
+}
+
+// ── LIVE TRACKING MAP (Google Maps) ─────────────────────────────────────────
+let mapsApiLoaded = false;
+let mapsApiLoading = null;
+let activeTrackingMaps = {}; // orderId -> { map, marker }
+let trackingPollTimer = null;
+
+async function loadGoogleMapsApi() {
+  if (mapsApiLoaded) return true;
+  if (mapsApiLoading) return mapsApiLoading;
+  mapsApiLoading = (async () => {
+    const d = await apiGet('/api/config/maps-key');
+    if (!d || !d.key) return false; // no key configured — maps just won't render, tracker steps still work
+    await new Promise((resolve, reject) => {
+      const script = document.createElement('script');
+      script.src = `https://maps.googleapis.com/maps/api/js?key=${d.key}`;
+      script.onload = resolve;
+      script.onerror = reject;
+      document.head.appendChild(script);
+    });
+    mapsApiLoaded = true;
+    return true;
+  })();
+  return mapsApiLoading;
+}
+
+async function initTrackingMaps(deliveringOrders) {
+  const ok = await loadGoogleMapsApi();
+  if (!ok || typeof google === 'undefined') {
+    // No Maps key configured yet (Admin -> API Console -> Service:
+    // "Google Maps", Key Label: "API Key") — show a plain-text fallback
+    // instead of a blank box so the feature degrades gracefully.
+    deliveringOrders.forEach(o => {
+      const el = document.getElementById('map-' + o.id);
+      if (el) el.innerHTML = `<div style="padding:14px;text-align:center;font-size:12px;color:var(--gray-400);background:var(--gray-50);border-radius:8px;">Live map unavailable right now — your order is still out for delivery.</div>`;
+    });
+    return;
+  }
+  deliveringOrders.forEach(o => {
+    const el = document.getElementById('map-' + o.id);
+    if (!el) return;
+    const pos = { lat: o.courier_lat, lng: o.courier_lng };
+    const map = new google.maps.Map(el, { center: pos, zoom: 14, disableDefaultUI: true, zoomControl: true });
+    const marker = new google.maps.Marker({ position: pos, map, title: 'Your delivery' });
+    activeTrackingMaps[o.id] = { map, marker };
+  });
+  startTrackingPoll(deliveringOrders.map(o => o.id));
+}
+
+function startTrackingPoll(orderIds) {
+  if (trackingPollTimer) clearInterval(trackingPollTimer);
+  trackingPollTimer = setInterval(async () => {
+    for (const orderId of orderIds) {
+      const d = await custApiAuth('GET', '/api/orders/' + orderId + '/tracking');
+      if (!d || !d.courier_location || !activeTrackingMaps[orderId]) continue;
+      const pos = { lat: d.courier_location.lat, lng: d.courier_location.lng };
+      activeTrackingMaps[orderId].marker.setPosition(pos);
+      activeTrackingMaps[orderId].map.panTo(pos);
+    }
+  }, 15000);
+}
+
+// ── TAB: REFUND REQUESTS — the customer's own request history ──────────────
+async function loadRefundsTab() {
+  const d = await custApiAuth('GET', '/api/refunds/mine');
+  const list = document.getElementById('refundsList');
+  const requests = d?.refund_requests || [];
+  if (!requests.length) {
+    list.innerHTML = '<p style="color:var(--gray-400);font-size:13px;">No refund requests — you can request one from the Orders tab on an eligible order.</p>';
+    return;
+  }
+  list.innerHTML = requests.map(r => `
+    <div class="order-card">
+      <div class="order-card-top">
+        <div><strong>Order #${r.order_id}</strong><div style="font-size:12px;color:var(--gray-400);">${new Date(r.created_at).toLocaleDateString()}</div></div>
+        <span class="refund-status-${r.status}" style="font-weight:700;font-size:12px;text-transform:capitalize;">${r.status}</span>
+      </div>
+      <div style="font-size:13px;color:var(--gray-600);margin-top:8px;"><strong>Reason:</strong> ${escHtml(r.reason)}</div>
+      ${r.admin_notes ? `<div style="font-size:12px;color:var(--gray-500);margin-top:6px;background:var(--gray-50);padding:8px 10px;border-radius:6px;"><strong>Response:</strong> ${escHtml(r.admin_notes)}</div>` : ''}
+    </div>`).join('');
+}
+
+function openRefundRequest(orderId) {
+  const reason = prompt('Briefly tell us why you\'d like a refund for this order:');
+  if (!reason || !reason.trim()) return;
+  submitRefundRequest(orderId, reason.trim());
+}
+
+async function submitRefundRequest(orderId, reason) {
+  const d = await custApiAuth('POST', '/api/refunds', { order_id: orderId, reason });
+  if (!d || d.error) { showToast(d?.error || 'Could not submit refund request.', 'error'); return; }
+  showToast('Refund request submitted — we\'ll review it shortly.', 'success');
+  loadedTabs.delete('refunds');
+  switchDashTab('refunds');
+}
+
+async function downloadOwnInvoice(orderId) {
+  const email = JSON.parse(localStorage.getItem(CUST_DATA_KEY) || '{}').email || '';
+  window.open(`/api/orders/${orderId}/invoice?email=${encodeURIComponent(email)}`, '_blank');
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  refreshCartUI();
+  if (new URLSearchParams(window.location.search).get('redirect') === 'checkout') {
+    const subtext = document.getElementById('loginSubtext');
+    if (subtext) subtext.textContent = "Sign in or create an account to complete your order — you'll come right back to checkout.";
+  }
+  if (localStorage.getItem(CUST_TOKEN_KEY)) {
+    showDashboard();
+  } else {
+    // This was missing entirely — acctAuthView is hidden by default (see
+    // the flash-of-login-screen fix earlier), and only showDashboard()
+    // was ever un-hiding anything. A signed-out visitor had no code path
+    // that revealed the login view at all, landing on a blank page with
+    // both views hidden.
+    document.getElementById('acctAuthView').style.display = 'block';
+    initGoogleSignIn();
+  }
+});
+
+// Clicking a dropdown link while already on /account only changes the
+// hash — it doesn't trigger a full page reload, so showDashboard() (which
+// only runs once on initial load) wouldn't otherwise notice the tab
+// should switch.
+window.addEventListener('hashchange', () => {
+  if (document.getElementById('acctDashView').style.display !== 'none') {
+    switchDashTab(tabFromHash());
+  }
+});
+</script>
+</body>
+</html>

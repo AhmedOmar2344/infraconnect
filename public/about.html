@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27%3E%3Crect width=%27100%27 height=%27100%27 rx=%2718%27 fill=%27%231a56db%27/%3E%3Ctext x=%2750%27 y=%2766%27 font-size=%2748%27 font-family=%27Arial,sans-serif%27 font-weight=%27bold%27 fill=%27white%27 text-anchor=%27middle%27%3EIC%3C/text%3E%3C/svg%3E">
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>About Us — InfraConnect</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="/css/main.css"/>
+</head>
+<body>
+<nav class="navbar" id="navbar">
+  <a href="/" class="navbar-logo">
+    <div class="navbar-logo-icon">
+      <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M10 30 Q10 10 28 12" stroke="#60a5fa" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        <path d="M10 30 Q12 18 26 20" stroke="#93c5fd" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        <path d="M10 30 Q14 24 24 26" stroke="#bfdbfe" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        <circle cx="28" cy="12" r="3" fill="#60a5fa"/>
+        <circle cx="26" cy="20" r="3" fill="#93c5fd"/>
+        <circle cx="24" cy="26" r="3" fill="#bfdbfe"/>
+      </svg>
+    </div>
+    <span class="navbar-logo-text">INFRA<span>CONNECT</span></span>
+  </a>
+  <ul class="navbar-links">
+    <li><a href="/" class="" data-i18n="nav_home">Home</a></li>
+    <li><a href="/about.html" class="active" data-i18n="nav_about">About</a></li>
+    <li><a href="/services.html" class="" data-i18n="nav_services">Services</a></li>
+    <li><a href="/store.html" class="" data-i18n="nav_store">Store</a></li>
+    <li><a href="/projects.html" class="" data-i18n="nav_projects">Projects</a></li>
+    <li><a href="/contact.html" class="" data-i18n="nav_contact">Contact</a></li>
+  </ul>
+  <div class="navbar-actions">
+    <a href="/account.html" id="navAccountBtn" class="cart-btn" title="My Account"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></a><a href="/cart.html" class="cart-btn" title="Cart">
+      <svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+      <span class="cart-badge">0</span>
+    </a>
+    <a href="/request-service" class="btn-outline-nav" data-i18n="nav_request_service">Request Service</a><a href="/contact.html" class="btn-nav" data-i18n="nav_get_in_touch">Get in Touch</a>
+    <button id="ic-lang-switch-slot" type="button" class="ic-nav-lang-btn"></button>
+    <button class="hamburger" onclick="document.querySelector('.mobile-nav').classList.toggle('open')">
+      <svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+  </div>
+</nav>
+<div class="mobile-nav">
+  <a href="/" data-i18n="nav_home">Home</a>
+  <a href="/about.html" data-i18n="nav_about">About</a>
+  <a href="/services.html" data-i18n="nav_services">Services</a>
+  <a href="/store.html" data-i18n="nav_store">Store</a>
+  <a href="/projects.html" data-i18n="nav_projects">Projects</a>
+  <a href="/contact.html" data-i18n="nav_contact">Contact</a>
+  <a href="/cart.html">🛒 Cart</a>
+</div>
+<style>
+/* Navbar CSS duplicated inline here as a safety net, mirroring the fix in
+   /css/main.css — see account.html for the full explanation of why. */
+.navbar-logo { display:flex; align-items:center; gap:10px; text-decoration:none; }
+.navbar-logo-icon { width:36px; height:36px; background:var(--blue); border-radius:9px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.navbar-logo-icon svg { width:20px; height:20px; }
+.navbar-logo-text { font-family:var(--font-head); font-size:18px; font-weight:800; color:var(--gray-900); white-space:nowrap; }
+.navbar-logo-text span { color:var(--blue); }
+.navbar-links { display:flex; align-items:center; gap:6px; list-style:none; margin:0; padding:0; }
+.navbar-links li { list-style:none; }
+.navbar-links a { color:var(--gray-600); text-decoration:none; font-size:14px; font-weight:500; padding:7px 12px; border-radius:8px; transition:all 0.15s; }
+.navbar-links a:hover { background:var(--blue-light); color:var(--blue); }
+.navbar-actions { display:flex; align-items:center; gap:12px; }
+.btn-nav { display:inline-flex; align-items:center; justify-content:center; padding:9px 22px; border-radius:6px; font-size:14px; font-weight:600; cursor:pointer; text-decoration:none; border:2px solid var(--blue); background:var(--blue); color:#fff; transition:all 0.18s; white-space:nowrap; }
+.btn-nav:hover { background:#1544b0; border-color:#1544b0; }
+@media (max-width:768px) { .navbar-links,.navbar-actions .btn-outline-nav,.navbar-actions .btn-nav{display:none !important;} }
+</style>
+<style>
+.about-hero { background:linear-gradient(135deg,var(--navy) 0%,#1e3a8a 100%); color:white; padding:100px 5% 80px; }
+.about-hero-inner { max-width:1280px; margin:0 auto; display:grid; grid-template-columns:1fr 1fr; gap:60px; align-items:center; }
+.about-hero h1 { font-family:var(--font-head); font-size:clamp(32px,4vw,52px); font-weight:800; letter-spacing:-1px; margin-bottom:20px; line-height:1.1; }
+.about-hero p { font-size:17px; color:#94a3b8; line-height:1.8; max-width:480px; }
+.about-hero-card { background:rgba(255,255,255,0.08); backdrop-filter:blur(12px); border:1px solid rgba(255,255,255,0.12); border-radius:20px; padding:28px; }
+.about-stat-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+.about-stat { background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:18px; text-align:center; }
+.about-stat-num { font-family:var(--font-head); font-size:28px; font-weight:800; color:white; }
+.about-stat-label { font-size:12px; color:#64748b; margin-top:4px; text-transform:uppercase; letter-spacing:0.5px; }
+.vm-grid { display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-top:48px; }
+.vm-card { border-radius:var(--radius-lg); padding:32px; border:1px solid var(--border); }
+.vm-card.vision { background:var(--blue-50); border-color:var(--blue-200); }
+.vm-card.mission { background:white; }
+.vm-icon { font-size:32px; margin-bottom:14px; }
+.vm-card h3 { font-family:var(--font-head); font-size:20px; font-weight:700; color:var(--gray-900); margin-bottom:12px; }
+.vm-card p { font-size:15px; color:var(--gray-600); line-height:1.8; }
+.team-grid { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-top:40px; }
+.team-card { background:white; border:1px solid var(--border); border-radius:var(--radius-lg); padding:28px; display:flex; gap:18px; align-items:flex-start; }
+.team-avatar { width:56px; height:56px; border-radius:14px; background:var(--accent); color:white; display:flex; align-items:center; justify-content:center; font-family:var(--font-head); font-size:22px; font-weight:800; flex-shrink:0; }
+.team-name { font-family:var(--font-head); font-size:16px; font-weight:700; color:var(--gray-900); margin-bottom:4px; }
+.team-title { font-size:13px; color:var(--accent); font-weight:600; margin-bottom:8px; }
+.team-contact a { font-size:13px; color:var(--gray-600); display:block; margin-bottom:3px; transition:color 0.15s; }
+.team-contact a:hover { color:var(--accent); }
+@media(max-width:900px){ .about-hero-inner,.vm-grid,.team-grid{grid-template-columns:1fr} .about-hero-card{display:none} }
+
+.btn-outline-nav {
+  display:inline-flex; align-items:center; justify-content:center;
+  padding:9px 22px; border-radius:6px; font-size:14px; font-weight:600;
+  font-family:var(--font-body); cursor:pointer; text-decoration:none;
+  border:2px solid var(--blue); color:var(--blue); background:transparent;
+  transition:all 0.18s; white-space:nowrap;
+}
+.btn-outline-nav:hover { background:var(--blue); color:white; }
+</style>
+
+<section class="about-hero">
+  <div class="about-hero-inner">
+    <div>
+      <span style="display:inline-block;background:rgba(96,165,250,0.15);border:1px solid rgba(96,165,250,0.3);color:#93c5fd;font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:6px 14px;border-radius:20px;margin-bottom:20px;" data-i18n="about_hero_tag2">About InfraConnect</span>
+      <h1 data-i18n-html="about_hero_title_html">Built to Power <br>the Next Generation</h1>
+      <p data-i18n="about_hero_p">Founded in 2023 in Cairo, Egypt, InfraConnect provides high-performance IT infrastructure and managed services to businesses across the Middle East.</p>
+      <div style="display:flex;gap:14px;flex-wrap:wrap;margin-top:32px;">
+        <a href="/contact.html" class="btn btn-white btn-lg" data-i18n="btn_work_with_us">Work With Us</a>
+        <a href="/services.html" class="btn btn-lg" style="background:rgba(255,255,255,0.1);color:white;border:1.5px solid rgba(255,255,255,0.2);" data-i18n="btn_our_services">Our Services</a>
+      </div>
+    </div>
+    <div class="about-hero-card">
+      <div style="font-size:13px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:1px;margin-bottom:16px;" data-i18n="company_overview_label">Company Overview</div>
+      <div class="about-stat-grid">
+        <div class="about-stat"><div class="about-stat-num">2023</div><div class="about-stat-label" data-i18n="about_stat_founded">Founded</div></div>
+        <div class="about-stat"><div class="about-stat-num">Cairo</div><div class="about-stat-label" data-i18n="about_stat_hq">Headquarters</div></div>
+        <div class="about-stat"><div class="about-stat-num">3+</div><div class="about-stat-label" data-i18n="about_stat_projects">Projects</div></div>
+        <div class="about-stat"><div class="about-stat-num">ME</div><div class="about-stat-label" data-i18n="about_stat_region">Region</div></div>
+      </div>
+      <div style="margin-top:16px;padding-top:16px;border-top:1px solid rgba(255,255,255,0.08);font-size:13px;color:#64748b;" data-i18n="serving_egypt_uae">🌍 Serving Egypt, UAE & Middle East</div>
+    </div>
+  </div>
+</section>
+
+<section class="section" style="background:white;">
+  <div class="section-inner">
+    <span class="section-tag" data-i18n="about_story_tag">Who We Are</span>
+    <h2 class="section-title" data-i18n="about_story_title">Our Story</h2>
+    <div style="max-width:760px;">
+      <p style="font-size:16px;color:var(--gray-600);line-height:1.9;margin-bottom:18px;" data-i18n="about_story_p1">InfraConnect was founded with a clear purpose: to bridge the gap between businesses and enterprise-grade technology in the Middle East. We help businesses operate efficiently, scale confidently, and adopt modern technology reliably.</p>
+      <p style="font-size:16px;color:var(--gray-600);line-height:1.9;" data-i18n="about_story_p2">Our partnerships focus on designing, implementing, and supporting secure, future-ready IT environments — with a long-term commitment to our clients' success.</p>
+    </div>
+    <div class="vm-grid">
+      <div class="vm-card vision"><div class="vm-icon">🎯</div><h3 data-i18n="vision_label">Our Vision</h3><p data-i18n="vision_card_text">To establish ourselves as a premier and trusted IT partner in the Middle East, providing innovative technology solutions that drive business growth and facilitate digital transformation.</p></div>
+      <div class="vm-card mission"><div class="vm-icon">🚀</div><h3 data-i18n="mission_label">Our Mission</h3><p data-i18n="mission_card_text">To empower businesses by delivering reliable IT infrastructure, expert support, and high-quality technology services — with a priority on optimal performance, strong security, and exceptional quality.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" style="background:var(--gray-50);">
+  <div class="section-inner">
+    <span class="section-tag" data-i18n="team_tag">Our Team</span>
+    <h2 class="section-title" data-i18n="team_title">Meet the Team</h2>
+    <div class="team-grid">
+      <div class="team-card"><div class="team-avatar">MY</div><div><div class="team-name">Mohamed Yehia</div><div class="team-title" data-i18n="team_role_tech">Co-Founder & Technical Lead</div><div class="team-contact"><a href="mailto:Mohamed.Yehia@infraconnect24-7.com">✉ Mohamed.Yehia@infraconnect24-7.com</a><a href="tel:+201020803988">📞 +20 102 080 3988</a></div></div></div>
+      <div class="team-card"><div class="team-avatar" style="background:var(--blue-700);">AO</div><div><div class="team-name">Ahmed Omar</div><div class="team-title" data-i18n="team_role_biz">Co-Founder & Business Development</div><div class="team-contact"><a href="mailto:Ahmed.Omar@infraconnect24-7.com">✉ Ahmed.Omar@infraconnect24-7.com</a><a href="tel:+971552755976">📞 +971 55 275 5976</a></div></div></div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="footer-logo-text">INFRA<span>CONNECT</span></div>
+        <p data-i18n="footer_tagline_about">High-performance IT infrastructure and managed services for businesses that want to operate efficiently, scale confidently, and adopt modern technology reliably.</p>
+        <div style="display:flex;gap:10px;">
+          <a href="mailto:Mohamed.Yehia@infraconnect24-7.com" style="display:inline-flex;width:36px;height:36px;background:rgba(255,255,255,0.08);border-radius:8px;align-items:center;justify-content:center;color:#94a3b8;transition:all 0.15s;" onmouseover="this.style.background='rgba(96,165,250,0.2)';this.style.color='#60a5fa'" onmouseout="this.style.background='rgba(255,255,255,0.08)';this.style.color='#94a3b8'">✉</a>
+          <a href="tel:+971552755976" style="display:inline-flex;width:36px;height:36px;background:rgba(255,255,255,0.08);border-radius:8px;align-items:center;justify-content:center;color:#94a3b8;transition:all 0.15s;" onmouseover="this.style.background='rgba(96,165,250,0.2)';this.style.color='#60a5fa'" onmouseout="this.style.background='rgba(255,255,255,0.08)';this.style.color='#94a3b8'">📞</a>
+        </div>
+      </div>
+      <div class="footer-col"><h5 data-i18n="footer_company">Company</h5><ul>
+        <li><a href="/about.html" data-i18n="footer_about_us">About Us</a></li>
+        <li><a href="/services.html" data-i18n="nav_services">Services</a></li>
+        <li><a href="/projects.html" data-i18n="footer_key_projects">Key Projects</a></li>
+        <li><a href="/contact.html" data-i18n="nav_contact">Contact</a></li>
+      </ul></div>
+      <div class="footer-col"><h5 data-i18n="footer_store">Store</h5><ul>
+        <li><a href="/store.html" data-i18n="footer_all_products">All Products</a></li>
+        <li><a href="/store.html?cat=servers">Servers &amp; Storage</a></li>
+        <li><a href="/store.html?cat=networking">Networking</a></li>
+        <li><a href="/store.html?cat=security">Security</a></li>
+        <li><a href="/store.html?cat=wireless" data-i18n="cat_wireless">Wireless</a></li>
+        <li><a href="/store.html?cat=cloud">Cloud &amp; Software</a></li>
+        <li><a href="/store.html?cat=endpoints" data-i18n="cat_endpoints">Endpoints</a></li>
+        <li><a href="/store.html?cat=power" data-i18n-html="cat_power">UPS &amp; Power</a></li>
+      </ul></div>
+      <div class="footer-col"><h5 data-i18n="footer_contact_col">Contact</h5><ul>
+        <li><a href="mailto:Mohamed.Yehia@infraconnect24-7.com">Mohamed Yehia</a></li>
+        <li><a href="mailto:Ahmed.Omar@infraconnect24-7.com">Ahmed Omar</a></li>
+        <li><a href="tel:+201020803988">+20 102 080 3988</a></li>
+        <li><a href="tel:+971552755976">+971 55 275 5976</a></li>
+        <li><a href="#" data-i18n="cairo_egypt">Cairo, Egypt</a></li>
+      </ul></div>
+    </div>
+    <div class="footer-bottom">
+      <p data-i18n="footer_copyright">© 2025 InfraConnect. All rights reserved.</p>
+      <p>infraconnect24-7.com</p>
+      <p class="footer-legal-links"><a href="/terms.html">Terms of Service</a> &middot; <a href="/privacy.html">Privacy Policy</a></p>
+    </div>
+  </div>
+</footer>
+<script src="/js/cart.js"></script>
+<script src="/js/app.js"></script>
+
+  <script src="/js/i18n.js"></script>
+<script src="/js/chat-widget.js"></script>
+<script src="/js/account-dropdown.js"></script>
+</body>
+</html>
