@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27%3E%3Crect width=%27100%27 height=%27100%27 rx=%2718%27 fill=%27%231a56db%27/%3E%3Ctext x=%2750%27 y=%2766%27 font-size=%2748%27 font-family=%27Arial,sans-serif%27 font-weight=%27bold%27 fill=%27white%27 text-anchor=%27middle%27%3EIC%3C/text%3E%3C/svg%3E">
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Key Projects — InfraConnect</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="/css/main.css"/>
+</head>
+<body>
+<nav class="navbar" id="navbar">
+  <a href="/" class="navbar-logo">
+    <div class="navbar-logo-icon">
+      <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M10 30 Q10 10 28 12" stroke="#60a5fa" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        <path d="M10 30 Q12 18 26 20" stroke="#93c5fd" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        <path d="M10 30 Q14 24 24 26" stroke="#bfdbfe" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        <circle cx="28" cy="12" r="3" fill="#60a5fa"/>
+        <circle cx="26" cy="20" r="3" fill="#93c5fd"/>
+        <circle cx="24" cy="26" r="3" fill="#bfdbfe"/>
+      </svg>
+    </div>
+    <span class="navbar-logo-text">INFRA<span>CONNECT</span></span>
+  </a>
+  <ul class="navbar-links">
+    <li><a href="/" class="" data-i18n="nav_home">Home</a></li>
+    <li><a href="/about.html" class="" data-i18n="nav_about">About</a></li>
+    <li><a href="/services.html" class="" data-i18n="nav_services">Services</a></li>
+    <li><a href="/store.html" class="" data-i18n="nav_store">Store</a></li>
+    <li><a href="/projects.html" class="active" data-i18n="nav_projects">Projects</a></li>
+    <li><a href="/contact.html" class="" data-i18n="nav_contact">Contact</a></li>
+  </ul>
+  <div class="navbar-actions">
+    <a href="/account.html" id="navAccountBtn" class="cart-btn" title="My Account"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></a><a href="/cart.html" class="cart-btn" title="Cart">
+      <svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+      <span class="cart-badge">0</span>
+    </a>
+    <a href="/request-service" class="btn-outline-nav" data-i18n="nav_request_service">Request Service</a><a href="/contact.html" class="btn-nav" data-i18n="nav_get_in_touch">Get in Touch</a>
+    <button id="ic-lang-switch-slot" type="button" class="ic-nav-lang-btn"></button>
+    <button class="hamburger" onclick="document.querySelector('.mobile-nav').classList.toggle('open')">
+      <svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+  </div>
+</nav>
+<div class="mobile-nav">
+  <a href="/" data-i18n="nav_home">Home</a>
+  <a href="/about.html" data-i18n="nav_about">About</a>
+  <a href="/services.html" data-i18n="nav_services">Services</a>
+  <a href="/store.html" data-i18n="nav_store">Store</a>
+  <a href="/projects.html" data-i18n="nav_projects">Projects</a>
+  <a href="/contact.html" data-i18n="nav_contact">Contact</a>
+  <a href="/cart.html">🛒 Cart</a>
+</div>
+<style>
+/* Navbar CSS duplicated inline here as a safety net, mirroring the fix in
+   /css/main.css — see account.html for the full explanation of why. */
+.navbar-logo { display:flex; align-items:center; gap:10px; text-decoration:none; }
+.navbar-logo-icon { width:36px; height:36px; background:var(--blue); border-radius:9px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.navbar-logo-icon svg { width:20px; height:20px; }
+.navbar-logo-text { font-family:var(--font-head); font-size:18px; font-weight:800; color:var(--gray-900); white-space:nowrap; }
+.navbar-logo-text span { color:var(--blue); }
+.navbar-links { display:flex; align-items:center; gap:6px; list-style:none; margin:0; padding:0; }
+.navbar-links li { list-style:none; }
+.navbar-links a { color:var(--gray-600); text-decoration:none; font-size:14px; font-weight:500; padding:7px 12px; border-radius:8px; transition:all 0.15s; }
+.navbar-links a:hover { background:var(--blue-light); color:var(--blue); }
+.navbar-actions { display:flex; align-items:center; gap:12px; }
+.btn-nav { display:inline-flex; align-items:center; justify-content:center; padding:9px 22px; border-radius:6px; font-size:14px; font-weight:600; cursor:pointer; text-decoration:none; border:2px solid var(--blue); background:var(--blue); color:#fff; transition:all 0.18s; white-space:nowrap; }
+.btn-nav:hover { background:#1544b0; border-color:#1544b0; }
+@media (max-width:768px) { .navbar-links,.navbar-actions .btn-outline-nav,.navbar-actions .btn-nav{display:none !important;} }
+</style>
+<style>
+.projects-hero { background:linear-gradient(135deg,var(--navy) 0%,#1e3a8a 100%); color:white; padding:100px 5% 80px; text-align:center; }
+.projects-hero h1 { font-family:var(--font-head); font-size:clamp(32px,4vw,52px); font-weight:800; letter-spacing:-1px; margin-bottom:16px; }
+.projects-hero p { font-size:17px; color:#94a3b8; max-width:520px; margin:0 auto; line-height:1.8; }
+.timeline { position:relative; max-width:860px; margin:0 auto; }
+.timeline::before { content:''; position:absolute; left:28px; top:0; bottom:0; width:2px; background:linear-gradient(to bottom,var(--accent),var(--blue-200)); }
+.timeline-item { display:grid; grid-template-columns:56px 1fr; gap:24px; margin-bottom:36px; position:relative; }
+.timeline-dot { width:56px; height:56px; border-radius:50%; background:white; border:3px solid var(--accent); display:flex; align-items:center; justify-content:center; font-family:var(--font-head); font-size:13px; font-weight:700; color:var(--accent); flex-shrink:0; box-shadow:var(--shadow); position:relative; z-index:1; }
+.timeline-card { background:white; border:1px solid var(--border); border-radius:var(--radius-lg); padding:28px; }
+.timeline-card h3 { font-family:var(--font-head); font-size:19px; font-weight:700; color:var(--gray-900); margin-bottom:14px; }
+.timeline-card ul { list-style:none; display:flex; flex-direction:column; gap:8px; }
+.timeline-card ul li { display:flex; align-items:flex-start; gap:10px; font-size:14px; color:var(--gray-600); }
+.timeline-card ul li::before { content:'→'; color:var(--accent); flex-shrink:0; font-weight:700; }
+
+.btn-outline-nav {
+  display:inline-flex; align-items:center; justify-content:center;
+  padding:9px 22px; border-radius:6px; font-size:14px; font-weight:600;
+  font-family:var(--font-body); cursor:pointer; text-decoration:none;
+  border:2px solid var(--blue); color:var(--blue); background:transparent;
+  transition:all 0.18s; white-space:nowrap;
+}
+.btn-outline-nav:hover { background:var(--blue); color:white; }
+</style>
+<section class="projects-hero">
+  <span style="display:inline-block;background:rgba(96,165,250,0.15);border:1px solid rgba(96,165,250,0.3);color:#93c5fd;font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:6px 14px;border-radius:20px;margin-bottom:20px;">Our Track Record</span>
+  <h1>Key Projects</h1>
+  <p>Real results for real clients — from data center modernizations to zero-downtime cloud migrations.</p>
+</section>
+<section class="section" style="background:var(--gray-50);">
+  <div class="section-inner">
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="timeline-dot">2023</div>
+        <div class="timeline-card">
+          <h3>Money Fellows — Data Center Modernization</h3>
+          <ul>
+            <li>Modernized the full data center: servers, CCTV, network infrastructure, UPS and redundancy systems</li>
+            <li>Migrated Google Workspace to Microsoft 365 with zero downtime and zero data loss</li>
+            <li>Developed an internal ticketing system and customer support platform</li>
+          </ul>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot">2024</div>
+        <div class="timeline-card">
+          <h3>CoreTech — Network Infrastructure Upgrade</h3>
+          <ul>
+            <li>Upgraded network infrastructure for significantly improved data center performance</li>
+            <li>Enhanced security with updated CCTV systems and power protection</li>
+            <li>Improved redundancy systems and UPS units for reliable, uninterrupted operations</li>
+          </ul>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot">2025</div>
+        <div class="timeline-card">
+          <h3>Carofi — Full IT Infrastructure Deployment</h3>
+          <ul>
+            <li>Designed and deployed complete IT infrastructure for a startup: user devices, servers and networking</li>
+            <li>Secured vendor partnerships leading to a long-term managed support contract</li>
+            <li>Maintained consistent client satisfaction through dedicated ongoing IT support</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="footer-logo-text">INFRA<span>CONNECT</span></div>
+        <p>High-performance IT infrastructure and managed services for businesses that want to operate efficiently, scale confidently, and adopt modern technology reliably.</p>
+        <div style="display:flex;gap:10px;">
+          <a href="mailto:Mohamed.Yehia@infraconnect24-7.com" style="display:inline-flex;width:36px;height:36px;background:rgba(255,255,255,0.08);border-radius:8px;align-items:center;justify-content:center;color:#94a3b8;transition:all 0.15s;" onmouseover="this.style.background='rgba(96,165,250,0.2)';this.style.color='#60a5fa'" onmouseout="this.style.background='rgba(255,255,255,0.08)';this.style.color='#94a3b8'">✉</a>
+          <a href="tel:+971552755976" style="display:inline-flex;width:36px;height:36px;background:rgba(255,255,255,0.08);border-radius:8px;align-items:center;justify-content:center;color:#94a3b8;transition:all 0.15s;" onmouseover="this.style.background='rgba(96,165,250,0.2)';this.style.color='#60a5fa'" onmouseout="this.style.background='rgba(255,255,255,0.08)';this.style.color='#94a3b8'">📞</a>
+        </div>
+      </div>
+      <div class="footer-col"><h5>Company</h5><ul>
+        <li><a href="/about.html">About Us</a></li>
+        <li><a href="/services.html" data-i18n="nav_services">Services</a></li>
+        <li><a href="/projects.html">Key Projects</a></li>
+        <li><a href="/contact.html" data-i18n="nav_contact">Contact</a></li>
+      </ul></div>
+      <div class="footer-col"><h5>Store</h5><ul>
+        <li><a href="/store.html">All Products</a></li>
+        <li><a href="/store.html?cat=servers">Servers &amp; Storage</a></li>
+        <li><a href="/store.html?cat=networking">Networking</a></li>
+        <li><a href="/store.html?cat=security">Security</a></li>
+        <li><a href="/store.html?cat=wireless">Wireless</a></li>
+        <li><a href="/store.html?cat=cloud">Cloud &amp; Software</a></li>
+        <li><a href="/store.html?cat=endpoints">Endpoints</a></li>
+        <li><a href="/store.html?cat=power">UPS &amp; Power</a></li>
+      </ul></div>
+      <div class="footer-col"><h5>Contact</h5><ul>
+        <li><a href="mailto:Mohamed.Yehia@infraconnect24-7.com">Mohamed Yehia</a></li>
+        <li><a href="mailto:Ahmed.Omar@infraconnect24-7.com">Ahmed Omar</a></li>
+        <li><a href="tel:+201020803988">+20 102 080 3988</a></li>
+        <li><a href="tel:+971552755976">+971 55 275 5976</a></li>
+        <li><a href="#">Cairo, Egypt</a></li>
+      </ul></div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 InfraConnect. All rights reserved.</p>
+      <p>infraconnect24-7.com</p>
+      <p class="footer-legal-links"><a href="/terms.html">Terms of Service</a> &middot; <a href="/privacy.html">Privacy Policy</a></p>
+    </div>
+  </div>
+</footer>
+<script src="/js/cart.js"></script>
+<script src="/js/app.js"></script>
+
+  <script src="/js/i18n.js"></script>
+<script src="/js/chat-widget.js"></script>
+<script src="/js/account-dropdown.js"></script>
+</body>
+</html>

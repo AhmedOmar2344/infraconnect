@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27%3E%3Crect width=%27100%27 height=%27100%27 rx=%2718%27 fill=%27%231a56db%27/%3E%3Ctext x=%2750%27 y=%2766%27 font-size=%2748%27 font-family=%27Arial,sans-serif%27 font-weight=%27bold%27 fill=%27white%27 text-anchor=%27middle%27%3EIC%3C/text%3E%3C/svg%3E">
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Order Confirmed &mdash; InfraConnect</title>
+<meta name="description" content="InfraConnect — IT Infrastructure, Cloud &amp; Managed Services in Egypt and the Middle East."/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Inter:wght@300;400;500;600;700&family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="/css/main.css"/>
+
+</head>
+<body>
+<div id="toast-container"></div>  <nav class="navbar">
+    <a href="/" class="nav-logo">
+      <div class="nav-logo-icon"><svg viewBox="0 0 24 24"><path d="M3 18 Q3 4 19 5"/><path d="M3 18 Q5 10 17 12"/><path d="M3 18 Q8 14 15 16"/><circle cx="19" cy="5" r="1.5" fill="white" stroke="none"/><circle cx="17" cy="12" r="1.5" fill="white" stroke="none"/><circle cx="15" cy="16" r="1.5" fill="white" stroke="none"/></svg></div>
+      <span class="nav-logo-text">INFRA<span>CONNECT</span></span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/" id="nav-home" data-i18n="nav_home">Home</a></li>
+      <li><a href="/#about" id="nav-about" data-i18n="nav_about">About</a></li>
+      <li><a href="/#services" id="nav-services" data-i18n="nav_services">Services</a></li>
+      <li><a href="/store" id="nav-store" data-i18n="nav_store">Store</a></li>
+      <li><a href="/#projects" id="nav-projects" data-i18n="nav_projects">Projects</a></li>
+      <li><a href="/#contact" id="nav-contact" data-i18n="nav_contact">Contact</a></li>
+    </ul>
+    <div class="nav-right">
+      <a href="/account" id="navAccountBtn" class="cart-btn" title="My Account"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></a><a href="/cart" class="cart-btn">
+        <svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+        <span class="cart-badge" id="cartBadge">0</span>
+      </a>
+      <a href="/request-service" class="btn-outline-nav" data-i18n="nav_request_service">Request Service</a>
+      <a href="/#contact" class="btn btn-primary nav-cta-wrap" data-i18n="nav_get_in_touch">Get in Touch</a>
+      <button id="ic-lang-switch-slot" type="button" class="ic-nav-lang-btn"></button>
+    <button class="hamburger" onclick="document.querySelector('.mobile-nav').classList.toggle('open')">
+        <svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+    </div>
+  </nav>
+  <div class="mobile-nav">
+    <a href="/" data-i18n="nav_home">Home</a><a href="/#about" data-i18n="nav_about">About</a><a href="/#services" data-i18n="nav_services">Services</a>
+    <a href="/store" data-i18n="nav_store">Store</a><a href="/#projects" data-i18n="nav_projects">Projects</a><a href="/#contact" data-i18n="nav_contact">Contact</a>
+    <a href="/cart">Cart</a>
+  </div>
+<style>
+.conf-wrap{max-width:680px;margin:60px auto;text-align:center;padding:0 20px;}
+.conf-icon{width:88px;height:88px;border-radius:50%;background:#dcfce7;border:2px solid #86efac;display:flex;align-items:center;justify-content:center;margin:0 auto 28px;animation:popIn 0.5s ease;}
+@keyframes popIn{0%{transform:scale(0);opacity:0}70%{transform:scale(1.1)}100%{transform:scale(1);opacity:1}}
+.conf-icon svg{width:40px;height:40px;stroke:var(--success);fill:none;stroke-width:2.5;}
+.conf-title{font-size:clamp(26px,4vw,40px);margin-bottom:14px;}
+.conf-sub{font-size:16px;color:var(--gray-500);line-height:1.8;margin-bottom:36px;}
+.conf-card{background:white;border:1px solid var(--gray-200);border-radius:var(--radius-lg);padding:28px;text-align:left;margin-bottom:28px;box-shadow:var(--shadow-sm);}
+.conf-row{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--gray-100);font-size:14px;gap:12px;}
+.conf-row:last-child{border-bottom:none;}
+.conf-row-label{color:var(--gray-400);}
+.conf-row-val{color:var(--gray-800);font-weight:600;text-align:right;max-width:60%;}
+.next-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:28px;}
+.next-card{background:white;border:1px solid var(--gray-200);border-radius:var(--radius);padding:20px;text-align:center;box-shadow:var(--shadow-sm);}
+.next-num{font-size:26px;font-weight:800;color:var(--blue);margin-bottom:7px;}
+.next-card h4{font-size:13px;font-weight:700;margin-bottom:5px;}
+.next-card p{font-size:12px;color:var(--gray-400);line-height:1.6;}
+@media(max-width:600px){.next-grid{grid-template-columns:1fr;}}
+</style>
+<div style="padding-top:80px;">
+<div class="page-content">
+  <div class="conf-wrap">
+    <div class="conf-icon"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+    <h1 class="conf-title">Order Request Submitted!</h1>
+    <p class="conf-sub">Thank you! Your order has been received. Our team will review it and send you a detailed quote within <strong>24 hours</strong>.</p>
+    <div class="conf-card">
+      <div style="font-size:15px;font-weight:700;margin-bottom:16px;">&#128203; Order Details</div>
+      <div class="conf-row" id="confOrderNumRow" style="display:none;"><span class="conf-row-label">Order #</span><span class="conf-row-val" id="confOrderNum">-</span></div>
+      <div class="conf-row"><span class="conf-row-label">Name</span><span class="conf-row-val" id="confName">-</span></div>
+      <div class="conf-row"><span class="conf-row-label">Email</span><span class="conf-row-val" id="confEmail">-</span></div>
+      <div class="conf-row"><span class="conf-row-label">Phone</span><span class="conf-row-val" id="confPhone">-</span></div>
+      <div class="conf-row"><span class="conf-row-label">Company</span><span class="conf-row-val" id="confCompany">-</span></div>
+      <div style="margin-top:14px;"><div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--gray-400);margin-bottom:10px;">Items</div><div id="confItems"></div></div>
+      <div id="confInvoiceRow" style="display:none;margin-top:16px;text-align:center;">
+        <a href="#" id="confInvoiceLink" class="btn btn-outline" style="display:inline-flex;align-items:center;gap:6px;">📄 Download Invoice (PDF)</a>
+      </div>
+    </div>
+    <h3 style="font-size:18px;margin-bottom:18px;">What Happens Next?</h3>
+    <div class="next-grid">
+      <div class="next-card"><div class="next-num">1</div><h4>Review</h4><p>Our team reviews your order and checks vendor availability</p></div>
+      <div class="next-card"><div class="next-num">2</div><h4>Quote</h4><p>Detailed pricing proposal sent within 24 hours</p></div>
+      <div class="next-card"><div class="next-num">3</div><h4>Deliver</h4><p>Procure, configure and deliver to your site</p></div>
+    </div>
+    <div style="background:var(--blue-light);border-radius:var(--radius);padding:18px 22px;margin-bottom:28px;text-align:left;">
+      <p style="font-size:14px;font-weight:600;color:var(--gray-800);margin-bottom:8px;">Need to speak with us directly?</p>
+      <p style="font-size:13px;color:var(--gray-600);">&#128222; Mohamed: <a href="tel:+201020803988" style="color:var(--blue);">+20 102 080 3988</a></p>
+      <p style="font-size:13px;color:var(--gray-600);margin-top:4px;">&#128222; Ahmed: <a href="tel:+971552755976" style="color:var(--blue);">+971 55 275 5976</a></p>
+    </div>
+    <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;">
+      <a href="/store" class="btn btn-primary btn-lg">Continue Shopping</a>
+      <a href="/" class="btn btn-ghost btn-lg">Back to Home</a>
+    </div>
+  </div>
+</div>
+</div>
+  <footer class="footer">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="/" class="nav-logo"><div class="nav-logo-icon"><svg viewBox="0 0 24 24"><path d="M3 18 Q3 4 19 5"/><path d="M3 18 Q5 10 17 12"/><path d="M3 18 Q8 14 15 16"/><circle cx="19" cy="5" r="1.5" fill="white" stroke="none"/><circle cx="17" cy="12" r="1.5" fill="white" stroke="none"/><circle cx="15" cy="16" r="1.5" fill="white" stroke="none"/></svg></div><span class="nav-logo-text" style="color:white">INFRA<span style="color:#93c5fd">CONNECT</span></span></a>
+        <p>High-performance IT infrastructure and managed services for businesses in Egypt and the Middle East.</p>
+      </div>
+      <div class="footer-col"><h5>Company</h5><ul><li><a href="/#about">About Us</a></li><li><a href="/#services" data-i18n="nav_services">Services</a></li><li><a href="/#projects" data-i18n="nav_projects">Projects</a></li><li><a href="/#contact" data-i18n="nav_contact">Contact</a></li></ul></div>
+      <div class="footer-col"><h5>Store</h5><ul><li><a href="/store">All Products</a></li><li><a href="/store?cat=servers-storage">Servers &amp; Storage</a></li><li><a href="/store?cat=networking">Networking</a></li><li><a href="/store?cat=security">Security</a></li><li><a href="/store?cat=cloud-software">Cloud &amp; Software</a></li></ul></div>
+      <div class="footer-col"><h5>Contact</h5><ul><li><a href="mailto:info@infraconnect24-7.com">Mohamed Yehia</a></li><li><a href="mailto:info@infraconnect24-7.com">Ahmed Omar</a></li><li><a href="tel:+201020803988">+20 102 080 3988</a></li><li><a href="tel:+971552755976">+971 55 275 5976</a></li></ul></div>
+    </div>
+    <div class="footer-bottom"><p>&copy; 2025 InfraConnect. All rights reserved.</p><p>Cairo, Egypt &mdash; infraconnect24-7.com</p><p class="footer-legal-links"><a href="/terms.html">Terms of Service</a> &middot; <a href="/privacy.html">Privacy Policy</a></p></div>
+  </footer><script src="/js/cart.js"></script>
+<script src="/js/api.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded',()=>{
+  refreshCartUI();
+  const o=JSON.parse(localStorage.getItem('ic_last_order')||'null');
+  if(o){
+    document.getElementById('confName').textContent=o.client_name||'-';
+    document.getElementById('confEmail').textContent=o.client_email||'-';
+    document.getElementById('confPhone').textContent=o.client_phone||'-';
+    document.getElementById('confCompany').textContent=o.client_company||'-';
+    if(o.cart&&o.cart.length){document.getElementById('confItems').innerHTML=o.cart.map(i=>`<div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--gray-100);font-size:13px;color:var(--gray-700);">${i.name}<span style="color:var(--gray-400);">&times;${i.qty}</span></div>`).join('');}
+    // Invoice download — only available once we have the server-assigned
+    // order ID (won't exist if the order submission itself failed, or for
+    // an old confirmation page load from before this field was added).
+    if (o.order_id && o.order_number) {
+      document.getElementById('confOrderNumRow').style.display = 'flex';
+      document.getElementById('confOrderNum').textContent = o.order_number;
+      document.getElementById('confInvoiceRow').style.display = 'block';
+      document.getElementById('confInvoiceLink').href = `/api/orders/${o.order_id}/invoice?email=${encodeURIComponent(o.client_email || '')}`;
+    }
+  }
+});
+</script>
+
+<!-- ─── FLOATING REQUEST SERVICE BUTTON ───────────────────────────────────────
+     Appears on every page. Opens the request service page on click.
+     On index.html this turns white over the dark hero via adaptFloatBtn().
+     On all other pages it stays blue (light background).
+     ─────────────────────────────────────────────────────────────────────────── -->
+<div class="float-btn" id="floatBtn">
+  <button class="float-main-btn" id="floatMainBtn"
+    onclick="window.location.href='/request-service'"
+    title="Request a Service">
+    <div class="float-pulse"></div>
+    <div class="float-main-btn-text">Request<br/>Service</div>
+  </button>
+</div>
+
+  <script src="/js/i18n.js"></script>
+<script src="/js/chat-widget.js"></script>
+<script src="/js/account-dropdown.js"></script>
+</body>
+</html>

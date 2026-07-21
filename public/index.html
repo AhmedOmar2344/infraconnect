@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27%3E%3Crect width=%27100%27 height=%27100%27 rx=%2718%27 fill=%27%231a56db%27/%3E%3Ctext x=%2750%27 y=%2766%27 font-size=%2748%27 font-family=%27Arial,sans-serif%27 font-weight=%27bold%27 fill=%27white%27 text-anchor=%27middle%27%3EIC%3C/text%3E%3C/svg%3E">
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Home &mdash; InfraConnect</title>
+<meta name="description" content="InfraConnect — IT Infrastructure, Cloud &amp; Managed Services in Egypt and the Middle East."/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Inter:wght@300;400;500;600;700&family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="/css/main.css"/>
+
+</head>
+<body>
+<div id="toast-container"></div>  <nav class="navbar">
+    <a href="/" class="nav-logo">
+      <div class="nav-logo-icon"><svg viewBox="0 0 24 24"><path d="M3 18 Q3 4 19 5"/><path d="M3 18 Q5 10 17 12"/><path d="M3 18 Q8 14 15 16"/><circle cx="19" cy="5" r="1.5" fill="white" stroke="none"/><circle cx="17" cy="12" r="1.5" fill="white" stroke="none"/><circle cx="15" cy="16" r="1.5" fill="white" stroke="none"/></svg></div>
+      <span class="nav-logo-text">INFRA<span>CONNECT</span></span>
+    </a>
+    <ul class="nav-links">
+      <!--
+        HOME PAGE NAV LINKS
+        - Home: reloads page (full href="/")
+        - Anchor links (About, Services, Projects, Contact): use onclick smoothScroll()
+          so they don't reload the page — just scroll smoothly to the section
+        - Store: full page navigation to /store
+      -->
+      <li><a href="/" id="nav-home" data-i18n="nav_home">Home</a></li>
+      <li><a href="#about"    id="nav-about"    onclick="smoothScroll(event,'about')" data-i18n="nav_about">About</a></li>
+      <li><a href="#services" id="nav-services" onclick="smoothScroll(event,'services')" data-i18n="nav_services">Services</a></li>
+      <li><a href="/store"    id="nav-store" data-i18n="nav_store">Store</a></li>
+      <li><a href="#projects" id="nav-projects" onclick="smoothScroll(event,'projects')" data-i18n="nav_projects">Projects</a></li>
+      <li><a href="#contact"  id="nav-contact"  onclick="smoothScroll(event,'contact')" data-i18n="nav_contact">Contact</a></li>
+    </ul>
+    <div class="nav-right">
+      <a href="/account" id="navAccountBtn" class="cart-btn" title="My Account"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></a><a href="/cart" class="cart-btn">
+        <svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+        <span class="cart-badge" id="cartBadge">0</span>
+      </a>
+      <a href="/request-service" class="btn btn-outline-nav nav-cta-wrap" data-i18n="nav_request_service">Request Service</a>
+      <a href="#contact" class="btn btn-primary nav-cta-wrap" onclick="smoothScroll(event,'contact')" data-i18n="nav_get_in_touch">Get in Touch</a>
+      <button id="ic-lang-switch-slot" type="button" class="ic-nav-lang-btn"></button>
+    <button class="hamburger" onclick="document.querySelector('.mobile-nav').classList.toggle('open')">
+        <svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+    </div>
+  </nav>
+  <!--
+    MOBILE NAVIGATION DRAWER
+    Opens/closes via the hamburger button.
+    Anchor links close the drawer AND smooth-scroll to the section.
+  -->
+  <div class="mobile-nav">
+    <a href="/" data-i18n="nav_home">Home</a>
+    <a href="#about"    onclick="closeMobileNav();smoothScroll(event,'about')" data-i18n="nav_about">About</a>
+    <a href="#services" onclick="closeMobileNav();smoothScroll(event,'services')" data-i18n="nav_services">Services</a>
+    <a href="/store" data-i18n="nav_store">Store</a>
+    <a href="#projects" onclick="closeMobileNav();smoothScroll(event,'projects')" data-i18n="nav_projects">Projects</a>
+    <a href="#contact"  onclick="closeMobileNav();smoothScroll(event,'contact')" data-i18n="nav_contact">Contact</a>
+    <a href="/cart">Cart</a>
+    <a href="/request-service" data-i18n="nav_request_service">Request Service</a>
+  </div>
+<style>
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   NAVBAR IMPROVEMENTS
+   - Larger logo area
+   - Active nav link indicator (blue underline on hover/active)
+   - Smoother transitions
+   - Better button spacing
+   ═══════════════════════════════════════════════════════════════════════════════ */
+.navbar {
+  height: 70px;
+}
+/* Nav link hover — slide-up underline effect */
+.nav-links a {
+  position: relative;
+  font-size: 14px;
+  font-weight: 500;
+  color: #475569;
+  text-decoration: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  transition: color 0.2s;
+}
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: 2px;
+  left: 14px;
+  right: 14px;
+  height: 2px;
+  background: var(--blue, #1a56db);
+  border-radius: 2px;
+  transform: scaleX(0);
+  transition: transform 0.2s ease;
+}
+.nav-links a:hover {
+  color: var(--blue, #1a56db);
+  background: transparent;
+}
+.nav-links a:hover::after,
+.nav-links a.active::after {
+  transform: scaleX(1);
+}
+.nav-links a.active {
+  color: var(--blue, #1a56db);
+  font-weight: 600;
+}
+/* Better logo */
+.nav-logo-text {
+  font-size: 19px;
+  letter-spacing: -0.3px;
+}
+/* Nav right spacing */
+.nav-right {
+  gap: 10px;
+}
+/* Request Service outlined button */
+.btn-outline-nav {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 9px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: var(--font-body, 'Inter', sans-serif);
+  cursor: pointer;
+  text-decoration: none;
+  border: 2px solid var(--blue, #1a56db);
+  color: var(--blue, #1a56db);
+  background: transparent;
+  transition: all 0.18s;
+  white-space: nowrap;
+}
+.btn-outline-nav:hover {
+  background: var(--blue, #1a56db);
+  color: white;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(26,86,219,0.25);
+}
+/* Get in Touch solid button */
+.btn-primary.nav-cta-wrap {
+  padding: 9px 20px;
+  font-size: 14px;
+}
+.hero{background:linear-gradient(135deg,#0f172a 0%,#1e3a5f 60%,#1a56db 100%);min-height:100vh;display:flex;align-items:center;padding:80px 5% 60px;position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 70% 50%,rgba(26,86,219,0.2) 0%,transparent 60%);pointer-events:none;}
+.hero-grid{max-width:1280px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center;width:100%;position:relative;z-index:1;}
+.hero-tag{display:inline-flex;align-items:center;gap:8px;background:rgba(26,86,219,0.2);border:1px solid rgba(26,86,219,0.4);color:#93c5fd;font-size:12px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;padding:7px 16px;border-radius:20px;margin-bottom:22px;white-space:nowrap;}
+.hero-tag .hero-tag-dot{width:6px;height:6px;flex-shrink:0;border-radius:50%;background:#60a5fa;animation:pulse 2s infinite;}
+.hero h1{font-size:clamp(36px,5vw,62px);color:white;line-height:1.08;margin-bottom:22px;}
+.hero h1 em{font-style:normal;color:#60a5fa;}
+.hero-sub{font-size:17px;color:rgba(255,255,255,0.65);line-height:1.8;margin-bottom:36px;max-width:480px;}
+.hero-btns{display:flex;gap:14px;flex-wrap:wrap;}
+.hero-stats{display:flex;gap:36px;margin-top:48px;padding-top:32px;border-top:1px solid rgba(255,255,255,0.1);}
+.hero-stat-num{font-family:'Plus Jakarta Sans',sans-serif;font-size:30px;font-weight:800;color:white;}
+.hero-stat-label{font-size:12px;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:0.8px;margin-top:2px;}
+.hero-visual{display:flex;align-items:center;justify-content:center;}
+.hero-diagram{width:100%;max-width:420px;aspect-ratio:1;position:relative;}
+.diagram-bg{width:100%;height:100%;border-radius:24px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;backdrop-filter:blur(8px);}
+.diagram-inner{width:82%;height:82%;border-radius:18px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);display:flex;align-items:center;justify-content:center;position:relative;}
+.diagram-core{width:100px;height:100px;border-radius:50%;background:linear-gradient(135deg,#1a56db,#3b82f6);display:flex;align-items:center;justify-content:center;box-shadow:0 0 60px rgba(59,130,246,0.4);}
+.diagram-core svg{width:40px;height:40px;stroke:white;fill:none;stroke-width:1.5;}
+.orbit-item{position:absolute;display:flex;flex-direction:column;align-items:center;gap:6px;}
+.orbit-icon{width:44px;height:44px;border-radius:12px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);display:flex;align-items:center;justify-content:center;}
+.orbit-icon svg{width:20px;height:20px;stroke:#93c5fd;fill:none;stroke-width:1.8;}
+.orbit-label{font-size:10px;color:rgba(255,255,255,0.5);font-weight:600;white-space:nowrap;}
+.orbit-1{top:8%;left:50%;transform:translateX(-50%);}
+.orbit-2{right:5%;top:50%;transform:translateY(-50%);}
+.orbit-3{bottom:8%;left:50%;transform:translateX(-50%);}
+.orbit-4{left:5%;top:50%;transform:translateY(-50%);}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
+section.main{padding:96px 5%;}
+.section-inner{max-width:1280px;margin:0 auto;}
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;}
+.about-cards{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.about-card{background:white;border:1px solid var(--gray-200);border-radius:var(--radius);padding:22px;box-shadow:var(--shadow-sm);}
+.about-card-icon{width:42px;height:42px;border-radius:10px;background:var(--blue-light);display:flex;align-items:center;justify-content:center;margin-bottom:12px;}
+.about-card-icon svg{width:20px;height:20px;stroke:var(--blue);fill:none;stroke-width:1.8;}
+.about-card h4{font-size:14px;font-weight:700;color:var(--gray-900);margin-bottom:5px;}
+.about-card p{font-size:12px;color:var(--gray-500);line-height:1.6;}
+.vm-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:24px;}
+.vm-box{padding:20px;border-radius:var(--radius);border:1px solid var(--gray-200);background:white;}
+.vm-box h5{font-size:12px;text-transform:uppercase;letter-spacing:1px;color:var(--blue);font-weight:700;margin-bottom:6px;}
+.vm-box p{font-size:13px;color:var(--gray-600);line-height:1.65;}
+.services-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:48px;}
+.service-card{background:white;border:1px solid var(--gray-200);border-radius:var(--radius-lg);padding:32px;box-shadow:var(--shadow-sm);transition:transform 0.2s,box-shadow 0.2s,border-color 0.2s;}
+.service-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-md);border-color:var(--blue);}
+.service-icon{width:52px;height:52px;border-radius:14px;background:var(--blue-light);display:flex;align-items:center;justify-content:center;margin-bottom:18px;}
+.service-icon svg{width:24px;height:24px;stroke:var(--blue);fill:none;stroke-width:1.7;}
+.service-card h3{font-size:17px;font-weight:700;margin-bottom:10px;color:var(--gray-900);}
+.service-card p{font-size:13px;color:var(--gray-500);line-height:1.75;margin-bottom:16px;}
+.service-tags{display:flex;flex-wrap:wrap;gap:6px;}
+.service-tag{background:var(--gray-100);color:var(--gray-600);font-size:11px;font-weight:600;padding:3px 9px;border-radius:6px;}
+.products-preview{background:var(--gray-50);}
+.products-cat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:40px;}
+.cat-card{background:white;border:1px solid var(--gray-200);border-radius:var(--radius-lg);padding:24px;text-decoration:none;text-align:center;transition:transform 0.2s,box-shadow 0.2s,border-color 0.2s;}
+.cat-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-md);border-color:var(--blue);}
+.cat-card-icon{width:52px;height:52px;border-radius:14px;background:var(--blue-light);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;}
+.cat-card-icon svg{width:24px;height:24px;stroke:var(--blue);fill:none;stroke-width:1.7;}
+.cat-card h4{font-size:14px;font-weight:700;color:var(--gray-900);margin-bottom:4px;}
+.cat-card p{font-size:12px;color:var(--gray-400);}
+.cat-card span{display:inline-block;margin-top:10px;font-size:12px;color:var(--blue);font-weight:600;}
+.projects-tl{position:relative;padding-left:32px;}
+.projects-tl::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:linear-gradient(to bottom,var(--blue),rgba(26,86,219,0.1));}
+.project-item{position:relative;margin-bottom:36px;}
+.project-dot{position:absolute;left:-39px;width:16px;height:16px;border-radius:50%;background:var(--blue);border:3px solid white;box-shadow:0 0 0 2px var(--blue);}
+.project-card{background:white;border:1px solid var(--gray-200);border-radius:var(--radius);padding:24px;box-shadow:var(--shadow-sm);}
+.project-year{display:inline-block;background:var(--blue-light);color:var(--blue);font-size:12px;font-weight:700;padding:3px 10px;border-radius:6px;margin-bottom:8px;}
+.project-card h3{font-size:16px;font-weight:700;margin-bottom:10px;color:var(--gray-900);}
+.project-card ul{list-style:none;display:flex;flex-direction:column;gap:7px;}
+.project-card ul li{font-size:13px;color:var(--gray-600);display:flex;gap:8px;align-items:flex-start;}
+.project-card ul li::before{content:'→';color:var(--blue);flex-shrink:0;}
+.adv-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:16px;margin-top:40px;}
+.adv-card{background:white;border:1px solid var(--gray-200);border-radius:var(--radius);padding:24px;text-align:center;box-shadow:var(--shadow-sm);}
+.adv-num{font-family:'Plus Jakarta Sans',sans-serif;font-size:32px;font-weight:800;color:var(--blue);margin-bottom:8px;}
+.adv-card p{font-size:13px;color:var(--gray-500);line-height:1.6;}
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:start;}
+.contact-info{display:flex;flex-direction:column;gap:16px;}
+.contact-item{display:flex;gap:14px;align-items:flex-start;background:white;border:1px solid var(--gray-200);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow-sm);}
+.contact-item-icon{width:40px;height:40px;border-radius:10px;background:var(--blue-light);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.contact-item-icon svg{width:18px;height:18px;stroke:var(--blue);fill:none;stroke-width:1.8;}
+.contact-item h4{font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--gray-400);font-weight:700;margin-bottom:3px;}
+.contact-item p{font-size:14px;color:var(--gray-800);font-weight:600;}
+.contact-item small{font-size:12px;color:var(--gray-400);}
+.contact-form-card{background:white;border:1px solid var(--gray-200);border-radius:var(--radius-lg);padding:36px;box-shadow:var(--shadow-md);}
+.contact-form-card h3{font-size:20px;font-weight:700;margin-bottom:24px;}
+@media(max-width:900px){.hero-grid,.about-grid,.contact-grid{grid-template-columns:1fr;gap:40px;}.hero-visual{display:none;}.services-grid{grid-template-columns:1fr;}.products-cat-grid{grid-template-columns:repeat(2,1fr);}.adv-grid{grid-template-columns:repeat(2,1fr);}.about-cards{grid-template-columns:1fr;}.hero{padding-bottom:110px;}.hero-stats{flex-wrap:wrap;row-gap:24px;column-gap:28px;}.hero-stats>div{flex:0 0 calc(50% - 14px);}}
+
+/* ── REQUEST SERVICE BUTTON & POPUP ─────────────────────────────────────────── */
+.btn-outline-nav{display:inline-flex;align-items:center;justify-content:center;padding:9px 22px;border-radius:6px;font-size:14px;font-weight:600;font-family:var(--font-body);cursor:pointer;text-decoration:none;border:2px solid var(--blue);color:var(--blue);background:transparent;transition:all .18s;white-space:nowrap;}
+.btn-outline-nav:hover{background:var(--blue);color:var(--white);}
+.float-btn{position:fixed;bottom:32px;right:32px;z-index:999;display:flex;flex-direction:column;align-items:flex-end;gap:10px;}
+.float-main-btn{width:64px;height:64px;border-radius:50%;background:var(--blue);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 18px rgba(26,86,219,.5);transition:transform .22s,box-shadow .22s,background .22s;position:relative;}
+.float-main-btn:hover{transform:scale(1.08);box-shadow:0 6px 26px rgba(26,86,219,.6);background:var(--blue-dark);}
+.float-main-btn-text{color:white;font-size:9px;font-weight:800;text-align:center;line-height:1.25;text-transform:uppercase;letter-spacing:.5px;font-family:var(--font-head);}
+.float-pulse{position:absolute;inset:-5px;border-radius:50%;border:2px solid rgba(26,86,219,.35);animation:floatPulse 2.5s infinite;pointer-events:none;}
+@keyframes floatPulse{0%,100%{transform:scale(1);opacity:.8}60%{transform:scale(1.3);opacity:0;}}
+.float-label{background:#0f172a;color:white;font-size:12px;font-weight:600;padding:7px 14px;border-radius:20px;white-space:nowrap;box-shadow:0 2px 12px rgba(0,0,0,.18);pointer-events:none;}
+.srv-popup-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1000;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .25s;backdrop-filter:blur(4px);}
+.srv-popup-overlay.open{opacity:1;pointer-events:all;}
+.srv-popup{background:white;border-radius:20px;width:100%;max-width:520px;max-height:90vh;overflow-y:auto;box-shadow:0 25px 60px rgba(0,0,0,.2);transform:scale(.92) translateY(20px);transition:transform .25s;}
+.srv-popup-overlay.open .srv-popup{transform:scale(1) translateY(0);}
+.srv-popup-header{background:linear-gradient(135deg,#0f172a,#1e3a5f);border-radius:20px 20px 0 0;padding:28px 28px 24px;position:relative;overflow:hidden;}
+.srv-popup-header h3{font-family:var(--font-head);font-size:22px;font-weight:700;color:white;margin-bottom:6px;position:relative;z-index:1;}
+.srv-popup-header p{font-size:13px;color:rgba(255,255,255,.6);position:relative;z-index:1;}
+.srv-popup-close{position:absolute;top:16px;right:16px;z-index:2;width:32px;height:32px;border-radius:50%;border:none;background:rgba(255,255,255,.15);cursor:pointer;color:white;display:flex;align-items:center;justify-content:center;font-size:18px;line-height:1;transition:background .15s;}
+.srv-popup-close:hover{background:rgba(255,255,255,.25);}
+.srv-popup-body{padding:24px 28px;}
+.srv-type-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:20px;}
+.srv-chip{padding:10px 14px;border:2px solid #e2e8f0;border-radius:10px;background:#f8fafc;cursor:pointer;text-align:left;transition:all .15s;display:flex;align-items:center;gap:8px;font-family:var(--font-body);width:100%;}
+.srv-chip:hover,.srv-chip.selected{border-color:var(--blue);background:#e8f0fe;}
+.srv-chip svg{width:16px;height:16px;stroke:var(--blue);fill:none;stroke-width:1.8;flex-shrink:0;}
+.srv-chip-label{font-size:12px;font-weight:600;color:#334155;line-height:1.3;}
+.srv-chip.selected .srv-chip-label{color:var(--blue);}
+.srv-popup-body .form-group{margin-bottom:14px;}
+.srv-popup-body .form-group label{display:block;font-size:12px;font-weight:600;color:#334155;margin-bottom:5px;}
+.srv-popup-body .form-group input,.srv-popup-body .form-group textarea{width:100%;padding:9px 12px;background:white;border:1.5px solid #e2e8f0;border-radius:8px;color:#1e293b;font-size:13px;font-family:var(--font-body);outline:none;transition:border-color .2s;}
+.srv-popup-body .form-group input:focus,.srv-popup-body .form-group textarea:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(26,86,219,.1);}
+.srv-popup-body .form-group textarea{resize:vertical;min-height:70px;}
+.popup-success{text-align:center;padding:20px 0;}
+.popup-success-icon{width:64px;height:64px;border-radius:50%;background:#dcfce7;border:2px solid #86efac;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;}
+.popup-success-icon svg{width:28px;height:28px;stroke:#16a34a;fill:none;stroke-width:2.5;}
+.popup-success h4{font-family:var(--font-head);font-size:20px;font-weight:700;color:#0f172a;margin-bottom:8px;}
+.popup-success p{font-size:14px;color:#64748b;line-height:1.7;}
+@media(max-width:480px){.srv-type-grid{grid-template-columns:1fr;}.float-btn{bottom:20px;right:20px;}.srv-popup-body{padding:18px;}}
+</style>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-grid">
+    <div>
+      <div class="hero-tag"><span class="hero-tag-dot"></span><span data-i18n="home_hero_tag">IT Infrastructure Experts &mdash; Cairo, Egypt</span></div>
+      <h1 data-i18n-html="home_hero_title_html">Building <em>Future-Ready</em> IT Infrastructure</h1>
+      <p class="hero-sub" data-i18n="home_hero_sub">InfraConnect delivers high-performance IT infrastructure, cloud services, and managed IT support for businesses that refuse to stand still.</p>
+      <div class="hero-btns">
+        <a href="/store" class="btn btn-white btn-lg" data-i18n="btn_browse_products">Browse Products</a>
+        <a href="#contact" class="btn btn-lg" style="background:rgba(255,255,255,0.1);color:white;border:1px solid rgba(255,255,255,0.25);" onclick="smoothScroll(event,'contact')" data-i18n="nav_get_in_touch">Get in Touch</a>
+      </div>
+      <div class="hero-stats">
+        <div><div class="hero-stat-num">2023</div><div class="hero-stat-label" data-i18n="stat_founded">Founded</div></div>
+        <div><div class="hero-stat-num">3+</div><div class="hero-stat-label" data-i18n="stat_key_projects">Key Projects</div></div>
+        <div><div class="hero-stat-num">24/7</div><div class="hero-stat-label" data-i18n="stat_it_support">IT Support</div></div>
+        <div><div class="hero-stat-num">ME</div><div class="hero-stat-label" data-i18n="stat_region_focus">Region Focus</div></div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="hero-diagram">
+        <div class="diagram-bg">
+          <div class="diagram-inner">
+            <div class="orbit-item orbit-1"><div class="orbit-icon"><svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/></svg></div><span class="orbit-label" data-i18n="orbit_servers">Servers</span></div>
+            <div class="orbit-item orbit-2"><div class="orbit-icon"><svg viewBox="0 0 24 24"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg></div><span class="orbit-label" data-i18n="orbit_cloud">Cloud</span></div>
+            <div class="orbit-item orbit-3"><div class="orbit-icon"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><span class="orbit-label" data-i18n="orbit_security">Security</span></div>
+            <div class="orbit-item orbit-4"><div class="orbit-icon"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg></div><span class="orbit-label" data-i18n="orbit_network">Network</span></div>
+            <div class="diagram-core"><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="main" id="about" style="background:white;">
+  <div class="section-inner">
+    <div class="about-grid">
+      <div>
+        <span class="section-tag" data-i18n="about_tag">Who We Are</span>
+        <h2 class="section-title" data-i18n="about_title2">Trusted IT Partner for the Middle East</h2>
+        <div class="divider"></div>
+        <p style="color:var(--gray-600);font-size:15px;line-height:1.85;margin-bottom:18px;" data-i18n="about_p1">Founded in 2023 in Cairo, Egypt, InfraConnect provides high-performance IT infrastructure and managed services. We help businesses operate efficiently, scale confidently, and adopt modern technology reliably.</p>
+        <p style="color:var(--gray-600);font-size:15px;line-height:1.85;" data-i18n="about_p2">Our vision is to become the premier IT partner in the Middle East — delivering innovative solutions that drive business growth and digital transformation.</p>
+        <div class="vm-row">
+          <div class="vm-box"><h5 data-i18n="vision_label">Our Vision</h5><p data-i18n="vision_text">Premier trusted IT partner in the Middle East, driving digital transformation.</p></div>
+          <div class="vm-box"><h5 data-i18n="mission_label">Our Mission</h5><p data-i18n="mission_text">Empower businesses with reliable infrastructure, expert support and exceptional quality.</p></div>
+        </div>
+      </div>
+      <div class="about-cards">
+        <div class="about-card"><div class="about-card-icon"><svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/></svg></div><h4 data-i18n="about_card1_title">Infrastructure</h4><p data-i18n="about_card1_desc">Servers, storage, virtualization and structured cabling built for scale.</p></div>
+        <div class="about-card"><div class="about-card-icon"><svg viewBox="0 0 24 24"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg></div><h4 data-i18n="about_card2_title">Cloud Services</h4><p data-i18n="about_card2_desc">Azure, AWS &amp; Oracle deployments with hybrid environment support.</p></div>
+        <div class="about-card"><div class="about-card-icon"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><h4 data-i18n="about_card3_title">Cybersecurity</h4><p data-i18n="about_card3_desc">Firewalls, endpoint protection, IAM and MDR solutions.</p></div>
+        <div class="about-card"><div class="about-card-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><h4 data-i18n="about_card4_title">24/7 Support</h4><p data-i18n="about_card4_desc">Round-the-clock managed IT with defined SLAs, onsite &amp; remote.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="main" id="services">
+  <div class="section-inner">
+    <span class="section-tag" data-i18n="services_tag">What We Do</span>
+    <h2 class="section-title" data-i18n="services_title">Our Services</h2>
+    <div class="divider"></div>
+    <p class="section-sub" data-i18n="services_sub">Three core pillars covering your full IT needs — from physical infrastructure to cloud and continuous operations.</p>
+    <div class="services-grid">
+      <div class="service-card">
+        <div class="service-icon"><svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg></div>
+        <h3 data-i18n="svc1_title">Infrastructure, Cloud &amp; Networks</h3>
+        <p data-i18n="svc1_desc">End-to-end design and deployment of your physical and virtual IT backbone. Servers, storage, structured cabling, LAN/WAN, Wi-Fi, VPN, SD-WAN and cloud migration.</p>
+        <div class="service-tags"><span class="service-tag">Servers</span><span class="service-tag">Storage</span><span class="service-tag">LAN/WAN</span><span class="service-tag">SD-WAN</span><span class="service-tag">Azure</span><span class="service-tag">AWS</span><span class="service-tag">Oracle</span></div>
+      </div>
+      <div class="service-card">
+        <div class="service-icon"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg></div>
+        <h3 data-i18n="svc2_title">Cloud Integration &amp; Cyber Resilience</h3>
+        <p data-i18n="svc2_desc">Protect your business with enterprise-grade security. 24/7 managed IT, system monitoring, cybersecurity firewalls, endpoint protection, IAM, email security and MDR.</p>
+        <div class="service-tags"><span class="service-tag">24/7 Support</span><span class="service-tag">Monitoring</span><span class="service-tag">Firewalls</span><span class="service-tag">IAM</span><span class="service-tag">MDR</span></div>
+      </div>
+      <div class="service-card">
+        <div class="service-icon"><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+        <h3 data-i18n="svc3_title">Managed Services &amp; Operations</h3>
+        <p data-i18n="svc3_desc">Keep your business running with proactive support. Backup &amp; disaster recovery, business continuity, IT consulting, infrastructure modernization and authorized IT procurement.</p>
+        <div class="service-tags"><span class="service-tag">Backup &amp; DR</span><span class="service-tag">Consulting</span><span class="service-tag">Procurement</span><span class="service-tag">Modernization</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRODUCTS PREVIEW -->
+<section class="main products-preview" id="products">
+  <div class="section-inner">
+    <div style="display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-bottom:8px;">
+      <div><span class="section-tag" data-i18n="store_preview_tag">Tech Store</span><h2 class="section-title" data-i18n="store_preview_title">Authorized IT Products</h2><div class="divider"></div><p class="section-sub" data-i18n="store_preview_sub">Enterprise hardware and software from leading vendors — competitive pricing, fast delivery and full deployment support.</p></div>
+      <a href="/store" class="btn btn-primary" data-i18n="browse_all_products">Browse All Products &rarr;</a>
+    </div>
+    <div class="products-cat-grid" id="homeCatGrid">
+      <div style="grid-column:span 4;text-align:center;padding:40px;color:var(--gray-400);" data-i18n="loading_categories">Loading categories...</div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section class="main" id="projects" style="background:white;">
+  <div class="section-inner">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start;">
+      <div>
+        <span class="section-tag" data-i18n="projects_tag">Track Record</span>
+        <h2 class="section-title" data-i18n="projects_title">Key Projects</h2>
+        <div class="divider"></div>
+        <p class="section-sub" data-i18n="projects_sub">Real results for real clients — data center modernizations to zero-downtime cloud migrations.</p>
+      </div>
+      <div class="projects-tl">
+        <div class="project-item"><div class="project-dot"></div><div class="project-card"><span class="project-year">2023</span><h3 data-i18n="proj1_title">Money Fellows &mdash; Data Center Modernization</h3><ul><li data-i18n="proj1_li1">Modernized full data center: servers, CCTV, network, UPS &amp; redundancy</li><li data-i18n="proj1_li2">Migrated Google Workspace to Microsoft 365 — zero downtime, zero data loss</li><li data-i18n="proj1_li3">Developed internal ticketing system and customer support platform</li></ul></div></div>
+        <div class="project-item"><div class="project-dot"></div><div class="project-card"><span class="project-year">2024</span><h3 data-i18n="proj2_title">CoreTech &mdash; Network Infrastructure Upgrade</h3><ul><li data-i18n="proj2_li1">Upgraded network infrastructure for improved data center performance</li><li data-i18n="proj2_li2">Enhanced security with updated CCTV and power protection systems</li><li data-i18n="proj2_li3">Improved redundancy systems and UPS units for reliable operations</li></ul></div></div>
+        <div class="project-item"><div class="project-dot"></div><div class="project-card"><span class="project-year">2025</span><h3 data-i18n="proj3_title">Carofi &mdash; Startup IT Deployment</h3><ul><li data-i18n="proj3_li1">Designed and deployed full IT infrastructure including user devices and servers</li><li data-i18n="proj3_li2">Secured partnerships leading to a long-term support contract</li><li data-i18n="proj3_li3">Ensured client satisfaction with consistent IT support</li></ul></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ADVANTAGE -->
+<section class="main" id="advantage">
+  <div class="section-inner" style="text-align:center;">
+    <span class="section-tag" data-i18n="advantage_tag">Why InfraConnect</span>
+    <h2 class="section-title" data-i18n="advantage_title">Our Competitive Advantage</h2>
+    <div class="divider" style="margin-left:auto;margin-right:auto;"></div>
+    <div class="adv-grid">
+      <div class="adv-card"><div class="adv-num">SLA</div><p data-i18n="adv1">Quick response times with well-defined service level agreements</p></div>
+      <div class="adv-card"><div class="adv-num">&#8734;</div><p data-i18n="adv2">Scalable solutions for startups and large enterprises</p></div>
+      <div class="adv-card"><div class="adv-num">&#10003;</div><p data-i18n="adv3">Certified engineers with hands-on field experience</p></div>
+      <div class="adv-card"><div class="adv-num">&#61;</div><p data-i18n="adv4">Vendor-neutral recommendations prioritizing your value</p></div>
+      <div class="adv-card"><div class="adv-num">&#8594;</div><p data-i18n="adv5">Clear communication and comprehensive reporting</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="main" id="contact" style="background:white;">
+  <div class="section-inner">
+    <div class="contact-grid">
+      <div>
+        <span class="section-tag" data-i18n="contact_tag">Get in Touch</span>
+        <h2 class="section-title" data-i18n="contact_title">Let's Build Your IT Future</h2>
+        <div class="divider"></div>
+        <p style="color:var(--gray-500);margin-bottom:32px;line-height:1.8;" data-i18n="contact_intro">Ready to modernize your infrastructure, migrate to the cloud, or strengthen your cybersecurity? Our team is ready.</p>
+        <div class="contact-info">
+          <div class="contact-item"><div class="contact-item-icon"><svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div><div><h4 data-i18n="contact_email_us">Email Us</h4><p>info@infraconnect24-7.com</p><small data-i18n="contact_respond_24h">We respond within 24 hours</small></div></div>
+          <div class="contact-item"><div class="contact-item-icon"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.42 2 2 0 0 1 3.6 1.25h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.82a16 16 0 0 0 6 6l.91-1.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.73 15z"/></svg></div><div><h4 data-i18n="contact_call_us">Call Us</h4><p>+20 102 080 3988</p><small>+971 55 275 5976</small></div></div>
+          <div class="contact-item"><div class="contact-item-icon"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div><div><h4 data-i18n="contact_hq">Headquarters</h4><p>Cairo, Egypt</p><small data-i18n="contact_region">Serving the Middle East region</small></div></div>
+        </div>
+      </div>
+      <div class="contact-form-card">
+        <h3 data-i18n="form_send_us_message">Send Us a Message</h3>
+        <div class="grid-2">
+          <div class="form-group"><label data-i18n="form_first_name">First Name</label><input id="cf-fname" placeholder="Ahmed"/></div>
+          <div class="form-group"><label data-i18n="form_last_name">Last Name</label><input id="cf-lname" placeholder="Hassan"/></div>
+        </div>
+        <div class="form-group"><label data-i18n="form_email">Email</label><input type="email" id="cf-email" placeholder="you@company.com"/></div>
+        <div class="form-group"><label data-i18n="form_phone">Phone</label><input type="tel" id="cf-phone" placeholder="+971 XX XXX XXXX"/></div>
+        <div class="form-group"><label data-i18n="form_service_needed">Service Needed</label><select id="cf-service"><option value="">Select...</option><option>Infrastructure &amp; Networking</option><option>Cloud Deployment</option><option>Cybersecurity</option><option>Managed IT Services</option><option>IT Procurement</option><option>Consulting</option></select></div>
+        <div class="form-group"><label data-i18n="form_message">Message</label><textarea id="cf-msg" placeholder="Tell us about your project..."></textarea></div>
+        <button class="btn btn-primary btn-full" onclick="submitContact()" data-i18n="btn_send_message">Send Message &rarr;</button>
+      </div>
+    </div>
+  </div>
+</section>
+  <footer class="footer">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="/" class="nav-logo"><div class="nav-logo-icon"><svg viewBox="0 0 24 24"><path d="M3 18 Q3 4 19 5"/><path d="M3 18 Q5 10 17 12"/><path d="M3 18 Q8 14 15 16"/><circle cx="19" cy="5" r="1.5" fill="white" stroke="none"/><circle cx="17" cy="12" r="1.5" fill="white" stroke="none"/><circle cx="15" cy="16" r="1.5" fill="white" stroke="none"/></svg></div><span class="nav-logo-text" style="color:white">INFRA<span style="color:#93c5fd">CONNECT</span></span></a>
+        <p data-i18n="footer_tagline_home">High-performance IT infrastructure and managed services for businesses in Egypt and the Middle East.</p>
+      </div>
+      <div class="footer-col"><h5 data-i18n="footer_company">Company</h5><ul><li><a href="/#about" data-i18n="footer_about_us">About Us</a></li><li><a href="/#services" data-i18n="nav_services">Services</a></li><li><a href="/#projects" data-i18n="nav_projects">Projects</a></li><li><a href="#contact" onclick="document.querySelector('.mobile-nav').classList.remove('open');document.getElementById('contact').scrollIntoView({behavior:'smooth'})" data-i18n="nav_contact">Contact</a></li></ul></div>
+      <div class="footer-col"><h5 data-i18n="footer_store">Store</h5><ul><li><a href="/store" data-i18n="footer_all_products">All Products</a></li><li><a href="/store?cat=servers-storage">Servers &amp; Storage</a></li><li><a href="/store?cat=networking">Networking</a></li><li><a href="/store?cat=security">Security</a></li><li><a href="/store?cat=cloud-software">Cloud &amp; Software</a></li></ul></div>
+      <div class="footer-col"><h5 data-i18n="footer_contact_col">Contact</h5><ul><li><a href="mailto:info@infraconnect24-7.com">info@infraconnect24-7.com</a></li><li><a href="tel:+201020803988">+20 102 080 3988</a></li><li><a href="tel:+971552755976">+971 55 275 5976</a></li></ul></div>
+    </div>
+    <div class="footer-bottom"><p data-i18n="footer_copyright">&copy; 2025 InfraConnect. All rights reserved.</p><p data-i18n="footer_location">Cairo, Egypt &mdash; infraconnect24-7.com</p><p class="footer-legal-links"><a href="/terms.html">Terms of Service</a> &middot; <a href="/privacy.html">Privacy Policy</a></p></div>
+  </footer><script src="/js/cart.js"></script>
+<script src="/js/api.js"></script>
+
+<script>
+// Load categories for home page
+async function loadHomeCategories() {
+  const data = await apiGet('/api/products/categories');
+  const icons = {
+    'servers-storage':'<rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/>',
+    'networking':'<rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/>',
+    'security':'<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>',
+    'wireless':'<polyline points="5 12.55 5 5 12 2 19 5 19 12.55"/>',
+    'cloud-software':'<path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/>',
+    'endpoints':'<rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/>',
+    'ups-power':'<path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>',
+    // Everything below this line was silently falling back to a blank
+    // icon — this map only ever covered the original 6 enterprise
+    // categories, so Laptops, Gaming, and every other consumer category
+    // (plus all 9 categories added when Accessories was split apart)
+    // never had one at all, not just the newest additions.
+    'laptops':'<rect x="3" y="4" width="18" height="12" rx="1"/><line x1="2" y1="20" x2="22" y2="20"/>',
+    'desktops':'<rect x="4" y="3" width="16" height="12" rx="1"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>',
+    'monitors':'<rect x="3" y="4" width="18" height="12" rx="1"/><line x1="8" y1="20" x2="16" y2="20"/><line x1="12" y1="16" x2="12" y2="20"/>',
+    'tvs':'<rect x="3" y="5" width="18" height="13" rx="1"/><polyline points="8 21 12 18 16 21"/>',
+    'televisions':'<rect x="3" y="5" width="18" height="13" rx="1"/><polyline points="8 21 12 18 16 21"/>',
+    'gaming':'<rect x="2" y="7" width="20" height="10" rx="4"/><circle cx="7" cy="12" r="1"/><circle cx="17" cy="10.5" r="1"/><circle cx="18.5" cy="12" r="1"/><circle cx="17" cy="13.5" r="1"/>',
+    'accessories':'<path d="M20.59 13.41L13.42 20.58a2 2 0 0 1-2.83 0L2.59 12.58V2h10.58l7.42 7.42a2 2 0 0 1 0 2.83z"/><circle cx="7" cy="7" r="1.5"/>',
+    'printers':'<polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/>',
+    'phones-tablets':'<rect x="7" y="2" width="10" height="20" rx="2"/><line x1="11" y1="18" x2="13" y2="18"/>',
+    'air-conditioners':'<rect x="2" y="6" width="20" height="8" rx="2"/><line x1="6" y1="18" x2="6" y2="20"/><line x1="10" y1="18" x2="10" y2="20"/><line x1="14" y1="18" x2="14" y2="20"/><line x1="18" y1="18" x2="18" y2="20"/>',
+    'smart-watches':'<rect x="7" y="7" width="10" height="10" rx="2"/><path d="M9 3h6M9 21h6"/><path d="M12 10v3l2 1"/>',
+    'home-appliances':'<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>',
+    'headphones-audio':'<path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/>',
+    'pc-components':'<rect x="6" y="6" width="12" height="12" rx="1"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="14" x2="23" y2="14"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/>',
+    'computer-peripherals':'<rect x="7" y="3" width="10" height="18" rx="5"/><line x1="12" y1="7" x2="12" y2="11"/>',
+    'mobile-accessories':'<path d="M4 9V5a2 2 0 0 1 2-2h2m10 0h2a2 2 0 0 1 2 2v4M4 15v4a2 2 0 0 0 2 2h2m10 0h2a2 2 0 0 0 2-2v-4"/><line x1="8" y1="12" x2="16" y2="12"/>',
+    'bags-sleeves':'<path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/>',
+  };
+  const grid = document.getElementById('homeCatGrid');
+  if (!data.categories || !data.categories.length) { grid.innerHTML=''; return; }
+  grid.innerHTML = data.categories.map(c => `
+    <a href="/store?cat=${c.slug}" class="cat-card">
+      <div class="cat-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="1.7">${icons[c.slug]||''}</svg></div>
+      <h4>${c.name}</h4><p>${c.description||''}</p>
+      <span>${c.product_count} products &rarr;</span>
+    </a>`).join('');
+}
+loadHomeCategories();
+async function submitContact() {
+  const body = { first_name:document.getElementById('cf-fname').value.trim(), last_name:document.getElementById('cf-lname').value.trim(), email:document.getElementById('cf-email').value.trim(), phone:document.getElementById('cf-phone').value, service:document.getElementById('cf-service').value, message:document.getElementById('cf-msg').value.trim() };
+  if (!body.first_name || !body.email || !body.message) { toast('Please fill in Name, Email and Message.','error'); return; }
+  const r = await apiPost('/api/contact/contact', body);
+  if (r.message) { toast(r.message,'success'); document.querySelectorAll('#contact input,#contact textarea,#contact select').forEach(e=>e.value=''); }
+  else toast(r.error||'Something went wrong.','error');
+}
+</script>
+
+<!-- ── FLOATING SERVICE REQUEST BUTTON ──────────────────────────────────────── -->
+<div class="float-btn" id="floatBtn">
+  <div class="float-label" id="floatLabel" data-i18n="request_a_service">Request a Service</div>
+  <button class="float-main-btn" id="floatMainBtn" onclick="openSrvPopup()" title="Request a Service">
+    <div class="float-pulse"></div>
+    <div class="float-main-btn-text" data-i18n-html="request_service_html">Request<br/>Service</div>
+  </button>
+</div>
+
+<!-- ── SERVICE REQUEST POPUP ─────────────────────────────────────────────────── -->
+<div class="srv-popup-overlay" id="srvPopupOverlay" onclick="if(event.target===this)closeSrvPopup()">
+  <div class="srv-popup">
+    <div class="srv-popup-header">
+      <button class="srv-popup-close" onclick="closeSrvPopup()">×</button>
+      <h3>Request a Service</h3>
+      <p>Tell us what you need — we'll get back to you within 24 hours</p>
+    </div>
+    <div class="srv-popup-body" id="srvPopupBody">
+      <!-- Step 1: Service Selection -->
+      <div id="srvStep1">
+        <p style="font-size:13px;font-weight:600;color:var(--gray-600);margin-bottom:12px;">What service are you interested in?</p>
+        <div class="srv-type-grid">
+          <button class="srv-chip" onclick="selectSrv(this,'Infrastructure & Networking')">
+            <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/></svg>
+            <span class="srv-chip-label">Infrastructure &amp; Networking</span>
+          </button>
+          <button class="srv-chip" onclick="selectSrv(this,'Cloud Services')">
+            <svg viewBox="0 0 24 24"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg>
+            <span class="srv-chip-label">Cloud Services</span>
+          </button>
+          <button class="srv-chip" onclick="selectSrv(this,'Cybersecurity')">
+            <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            <span class="srv-chip-label">Cybersecurity</span>
+          </button>
+          <button class="srv-chip" onclick="selectSrv(this,'Managed IT Support')">
+            <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+            <span class="srv-chip-label">Managed IT Support</span>
+          </button>
+          <button class="srv-chip" onclick="selectSrv(this,'IT Consulting')">
+            <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+            <span class="srv-chip-label">IT Consulting</span>
+          </button>
+          <button class="srv-chip" onclick="selectSrv(this,'IT Procurement')">
+            <svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+            <span class="srv-chip-label">IT Procurement</span>
+          </button>
+          <button class="srv-chip" onclick="selectSrv(this,'Backup & Disaster Recovery')">
+            <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            <span class="srv-chip-label">Backup &amp; DR</span>
+          </button>
+          <button class="srv-chip" onclick="selectSrv(this,'Other')">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            <span class="srv-chip-label">Other / Custom</span>
+          </button>
+        </div>
+        <div style="height:1px;background:var(--gray-200);margin:18px 0;"></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;">
+          <div class="form-group" style="margin:0;"><label>First Name *</label><input id="sp-fname" placeholder="Ahmed"/></div>
+          <div class="form-group" style="margin:0;"><label>Last Name</label><input id="sp-lname" placeholder="Hassan"/></div>
+        </div>
+        <div class="form-group" style="margin-bottom:12px;"><label>Email *</label><input type="email" id="sp-email" placeholder="you@company.com"/></div>
+        <div class="form-group" style="margin-bottom:12px;"><label>Phone</label><input type="tel" id="sp-phone" placeholder="+971 XX XXX XXXX"/></div>
+        <div class="form-group" style="margin-bottom:12px;"><label>Company Name</label><input id="sp-company" placeholder="Your company"/></div>
+        <div class="form-group" style="margin-bottom:18px;"><label>Tell us more about your needs</label><textarea id="sp-msg" rows="3" placeholder="Describe your IT challenge or project..."></textarea></div>
+        <button class="btn btn-primary btn-full btn-lg" onclick="submitSrvRequest()" style="font-size:14px;">
+          Send Request &rarr;
+        </button>
+        <p style="text-align:center;font-size:11px;color:var(--gray-400);margin-top:10px;">We respond within 24 hours. No spam, ever.</p>
+      </div>
+      <!-- Step 2: Success -->
+      <div id="srvStep2" style="display:none;" class="popup-success">
+        <div class="popup-success-icon"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <h4>Request Sent!</h4>
+        <p>Thank you! Our team will review your request and reach out within <strong>24 hours</strong>.</p>
+        <div style="background:var(--blue-light);border-radius:10px;padding:14px;margin:16px 0;font-size:13px;color:var(--gray-600);">
+          📞 Need to speak immediately?<br/>
+          <a href="tel:+201020803988" style="color:var(--blue);font-weight:600;">+20 102 080 3988</a> &nbsp;|&nbsp;
+          <a href="tel:+971552755976" style="color:var(--blue);font-weight:600;">+971 55 275 5976</a>
+        </div>
+        <button class="btn btn-primary" onclick="closeSrvPopup()" style="margin-top:6px;">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── FLOATING BUTTON ──────────────────────────────────────────────────────────
+let selectedService = '';
+let floatLabelTimer;
+
+// Hide label after 4 seconds
+setTimeout(() => {
+  const lbl = document.getElementById('floatLabel');
+  if (lbl) { lbl.style.opacity = '0'; lbl.style.transition = 'opacity 0.5s'; setTimeout(() => lbl.style.display = 'none', 500); }
+}, 4000);
+
+/**
+ * adaptFloatBtn()
+ * Switches the floating Request Service button between:
+ *   - WHITE style  → when on the dark hero section (so it's visible)
+ *   - BLUE style   → when scrolled past the hero onto white/light sections
+ *
+ * Called on page scroll and on load.
+ */
+function adaptFloatBtn() {
+  const btn   = document.getElementById('floatMainBtn');
+  const pulse = btn?.querySelector('.float-pulse');
+  if (!btn) return;
+
+  // Hero section is approximately the first viewport height
+  const heroHeight = window.innerHeight;
+  const inHero = window.scrollY < heroHeight * 0.85;
+
+  if (inHero) {
+    // White button on dark hero background
+    btn.style.background      = 'rgba(255,255,255,0.95)';
+    btn.style.boxShadow       = '0 4px 18px rgba(0,0,0,0.25)';
+    btn.querySelector('.float-main-btn-text').style.color = '#1a56db';
+    if (pulse) pulse.style.borderColor = 'rgba(255,255,255,0.4)';
+  } else {
+    // Blue button on light page background
+    btn.style.background      = '#1a56db';
+    btn.style.boxShadow       = '0 4px 18px rgba(26,86,219,0.5)';
+    btn.querySelector('.float-main-btn-text').style.color = 'white';
+    if (pulse) pulse.style.borderColor = 'rgba(26,86,219,0.35)';
+  }
+}
+
+// Run on scroll and on load
+window.addEventListener('scroll', adaptFloatBtn, { passive: true });
+document.addEventListener('DOMContentLoaded', adaptFloatBtn);
+
+function openSrvPopup(preselect) {
+  selectedService = preselect || '';
+  // Pre-select chip if service passed
+  if (preselect) {
+    document.querySelectorAll('.srv-chip').forEach(ch => {
+      ch.classList.remove('selected');
+      if (ch.querySelector('.srv-chip-label').textContent.trim().replace(/&amp;/g,'&') === preselect.replace(/&amp;/g,'&')) {
+        ch.classList.add('selected');
+      }
+    });
+  }
+  document.getElementById('srvStep1').style.display = 'block';
+  document.getElementById('srvStep2').style.display = 'none';
+  document.getElementById('srvPopupOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  document.getElementById('floatMainBtn').classList.add('open');
+}
+
+function closeSrvPopup() {
+  document.getElementById('srvPopupOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+  document.getElementById('floatMainBtn').classList.remove('open');
+}
+
+function selectSrv(el, name) {
+  document.querySelectorAll('.srv-chip').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedService = name;
+}
+
+async function submitSrvRequest() {
+  const fname = document.getElementById('sp-fname').value.trim();
+  const email  = document.getElementById('sp-email').value.trim();
+  if (!fname || !email) {
+    const inp = !fname ? document.getElementById('sp-fname') : document.getElementById('sp-email');
+    inp.style.borderColor = '#dc2626';
+    inp.focus();
+    setTimeout(() => inp.style.borderColor = '', 2000);
+    return;
+  }
+  const body = {
+    first_name:  fname,
+    last_name:   document.getElementById('sp-lname').value,
+    email,
+    phone:       document.getElementById('sp-phone').value,
+    company:     document.getElementById('sp-company').value,
+    service:     selectedService || 'General Inquiry',
+    message:     document.getElementById('sp-msg').value,
+    product_names: selectedService || ''
+  };
+  try {
+    await fetch('/api/contact/quote', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+  } catch(e) { console.log('API error:', e); }
+  // Show success
+  document.getElementById('srvStep1').style.display = 'none';
+  document.getElementById('srvStep2').style.display = 'block';
+  // Clear form
+  ['sp-fname','sp-lname','sp-email','sp-phone','sp-company','sp-msg'].forEach(id => document.getElementById(id).value = '');
+  document.querySelectorAll('.srv-chip').forEach(c => c.classList.remove('selected'));
+  selectedService = '';
+}
+
+// Close on Escape
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeSrvPopup(); });
+
+/**
+ * smoothScroll(event, sectionId)
+ * Prevents default anchor navigation and smoothly scrolls to a section by ID.
+ * Used by all navbar and hero anchor links on the homepage.
+ *
+ * @param {Event}  event     - The click event (to prevent page reload)
+ * @param {string} sectionId - The HTML id of the target section (e.g. 'contact')
+ */
+function smoothScroll(event, sectionId) {
+  event.preventDefault();
+  const el = document.getElementById(sectionId);
+  if (el) {
+    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    // Update URL hash without triggering navigation
+    history.pushState(null, '', '#' + sectionId);
+    // Mark active nav link
+    document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+    const activeLink = document.querySelector(`#nav-${sectionId}`);
+    if (activeLink) activeLink.classList.add('active');
+  }
+}
+
+/**
+ * closeMobileNav()
+ * Closes the mobile navigation drawer.
+ * Called before smooth-scrolling from mobile nav links.
+ */
+function closeMobileNav() {
+  document.querySelector('.mobile-nav')?.classList.remove('open');
+}
+
+/**
+ * initNavHighlight()
+ * -  On page load: marks "Home" as active (we are at the top).
+ * -  On scroll: uses IntersectionObserver to switch the active link
+ *    to whichever section is currently visible in the viewport.
+ * -  When scrolled back to the very top (above the About section)
+ *    the Home link becomes active again.
+ */
+function initNavHighlight() {
+  // Start with Home active — user just loaded the page
+  document.getElementById('nav-home')?.classList.add('active');
+
+  // Map section IDs to their matching nav link IDs
+  // 'home' is treated specially — it activates when near the top
+  const sectionNavMap = {
+    'about':     'nav-about',
+    'services':  'nav-services',
+    'products':  'nav-store',      // products preview → highlight Store
+    'projects':  'nav-projects',
+    'advantage': 'nav-projects',   // advantage is near projects, keep projects active
+    'contact':   'nav-contact',
+  };
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      const navId = sectionNavMap[entry.target.id];
+      if (!navId) return;
+
+      // Remove active from all links
+      document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+      // Add active to the matching link
+      document.getElementById(navId)?.classList.add('active');
+    });
+  }, {
+    // Trigger when section enters the middle 40% of the viewport
+    threshold: 0,
+    rootMargin: '-20% 0px -60% 0px'
+  });
+
+  // Observe every mapped section
+  Object.keys(sectionNavMap).forEach(id => {
+    const el = document.getElementById(id);
+    if (el) observer.observe(el);
+  });
+
+  // When near the very top of the page → re-activate Home
+  window.addEventListener('scroll', () => {
+    if (window.scrollY < 100) {
+      document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+      document.getElementById('nav-home')?.classList.add('active');
+    }
+  }, { passive: true });
+}
+
+document.addEventListener('DOMContentLoaded', initNavHighlight);
+</script>
+
+  <script src="/js/i18n.js"></script>
+<script src="/js/chat-widget.js"></script>
+<script src="/js/account-dropdown.js"></script>
+</body>
+</html>

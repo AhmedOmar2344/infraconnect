@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27%3E%3Crect width=%27100%27 height=%27100%27 rx=%2718%27 fill=%27%231a56db%27/%3E%3Ctext x=%2750%27 y=%2766%27 font-size=%2748%27 font-family=%27Arial,sans-serif%27 font-weight=%27bold%27 fill=%27white%27 text-anchor=%27middle%27%3EIC%3C/text%3E%3C/svg%3E">
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Courier Portal — InfraConnect</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;}
+body{margin:0;font-family:'Inter',sans-serif;background:#f8fafc;color:#0f172a;}
+.top{background:#1a56db;color:#fff;padding:16px 20px;display:flex;justify-content:space-between;align-items:center;}
+.top-brand{font-weight:800;font-size:16px;}
+.top-brand span{color:#93c5fd;}
+.wrap{max-width:480px;margin:0 auto;padding:24px 16px 60px;}
+.card{background:#fff;border:1px solid #e2e8f0;border-radius:14px;padding:24px;box-shadow:0 1px 3px rgba(0,0,0,.04);}
+.fg{margin-bottom:14px;}
+.fg label{display:block;font-size:12px;font-weight:600;color:#334155;margin-bottom:5px;}
+.fg input{width:100%;padding:10px 12px;border:1.5px solid #e2e8f0;border-radius:8px;font-size:14px;box-sizing:border-box;}
+.btn{display:block;width:100%;padding:11px;border-radius:8px;font-weight:700;font-size:14px;border:none;cursor:pointer;text-align:center;text-decoration:none;}
+.btn-primary{background:#1a56db;color:#fff;}
+.btn-outline{background:#fff;border:1.5px solid #e2e8f0;color:#334155;}
+.err{background:#fef2f2;border:1px solid #fecaca;color:#b91c1c;padding:9px 12px;border-radius:8px;font-size:13px;margin-bottom:14px;display:none;}
+.order-card{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:16px;margin-bottom:12px;}
+.order-num{font-weight:700;font-size:14px;}
+.order-addr{font-size:12px;color:#64748b;margin:6px 0 10px;}
+.stage-bdg{display:inline-block;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;text-transform:capitalize;margin-bottom:10px;}
+.stage-confirmed{background:#fef3c7;color:#92400e;}
+.stage-dispatched{background:#dbeafe;color:#1e40af;}
+.stage-delivering{background:#dcfce7;color:#166534;}
+.gps-note{font-size:11px;color:#059669;margin-top:8px;display:none;}
+.gps-note.active{display:block;}
+.top-user{font-size:12px;opacity:.85;}
+</style>
+</head>
+<body>
+<div class="top">
+  <div class="top-brand">INFRA<span>CONNECT</span> — Courier</div>
+  <div class="top-user" id="topUser"></div>
+</div>
+
+<div class="wrap">
+  <!-- LOGIN -->
+  <div id="loginView">
+    <div class="card">
+      <h2 style="margin-top:0;font-size:18px;">Courier Sign In</h2>
+      <div class="err" id="loginErr"></div>
+      <div class="fg"><label>Email</label><input type="email" id="c-email"/></div>
+      <div class="fg"><label>Password</label><input type="password" id="c-pwd" onkeydown="if(event.key==='Enter')courierLogin()"/></div>
+      <button class="btn btn-primary" onclick="courierLogin()">Sign In</button>
+    </div>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div id="dashView" style="display:none;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+      <h2 style="font-size:16px;margin:0;">My Deliveries</h2>
+      <button class="btn btn-outline" style="width:auto;padding:7px 14px;font-size:12px;" onclick="courierLogout()">Sign Out</button>
+    </div>
+    <div id="ordersList"><p style="color:#94a3b8;font-size:13px;">Loading...</p></div>
+  </div>
+</div>
+
+<script>
+const API = '/api';
+const TOKEN_KEY = 'ic_courier_token';
+const DATA_KEY = 'ic_courier_data';
+let watchId = null;
+
+async function apiC(method, url, body) {
+  const token = localStorage.getItem(TOKEN_KEY);
+  const r = await fetch(API + url, {
+    method, headers: { 'Content-Type': 'application/json', ...(token ? { 'Authorization': 'Bearer ' + token } : {}) },
+    body: body ? JSON.stringify(body) : undefined
+  });
+  if (r.status === 401) { courierLogout(); return null; }
+  return r.json();
+}
+
+async function courierLogin() {
+  const email = document.getElementById('c-email').value.trim();
+  const password = document.getElementById('c-pwd').value;
+  const err = document.getElementById('loginErr'); err.style.display = 'none';
+  if (!email || !password) { err.textContent = 'Enter your email and password.'; err.style.display = 'block'; return; }
+  const d = await apiC('POST', '/couriers/login', { email, password });
+  if (!d || d.error) { err.textContent = d?.error || 'Could not sign in.'; err.style.display = 'block'; return; }
+  localStorage.setItem(TOKEN_KEY, d.token);
+  localStorage.setItem(DATA_KEY, JSON.stringify(d.courier));
+  showDash();
+}
+
+function courierLogout() {
+  if (watchId !== null) { navigator.geolocation.clearWatch(watchId); watchId = null; }
+  localStorage.removeItem(TOKEN_KEY);
+  localStorage.removeItem(DATA_KEY);
+  document.getElementById('dashView').style.display = 'none';
+  document.getElementById('loginView').style.display = 'block';
+  document.getElementById('topUser').textContent = '';
+}
+
+function escapeHtml(s) { return String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+async function showDash() {
+  const data = JSON.parse(localStorage.getItem(DATA_KEY) || '{}');
+  document.getElementById('topUser').textContent = data.name || '';
+  document.getElementById('loginView').style.display = 'none';
+  document.getElementById('dashView').style.display = 'block';
+  loadOrders();
+}
+
+async function loadOrders() {
+  const d = await apiC('GET', '/couriers/me/orders');
+  const list = document.getElementById('ordersList');
+  if (!d || !d.orders || !d.orders.length) {
+    list.innerHTML = '<p style="color:#94a3b8;font-size:13px;">No deliveries assigned right now.</p>';
+    return;
+  }
+  list.innerHTML = d.orders.map(o => {
+    const stage = o.delivery_stage || 'confirmed';
+    const nextStage = { confirmed: 'dispatched', dispatched: 'delivering', delivering: 'delivered' }[stage];
+    const nextLabel = { dispatched: '📦 Mark as Dispatched', delivering: '🚚 Start Delivering', delivered: '✅ Mark as Delivered' }[nextStage];
+    return `
+    <div class="order-card">
+      <div class="order-num">${escapeHtml(o.order_number)}</div>
+      <div class="order-addr">${escapeHtml(o.client_name)} — ${escapeHtml(o.client_phone || '')}</div>
+      <span class="stage-bdg stage-${stage}">${stage}</span>
+      ${nextStage ? `<button class="btn btn-primary" onclick="advanceStage(${o.id},'${nextStage}')">${nextLabel}</button>` : ''}
+      <div class="gps-note ${stage === 'delivering' ? 'active' : ''}" id="gps-${o.id}">📍 Sharing your live location with the customer</div>
+    </div>`;
+  }).join('');
+
+  // If any order is already in "delivering", resume sharing location for
+  // it — matters if the courier closed the tab and reopened it mid-delivery.
+  const delivering = d.orders.find(o => o.delivery_stage === 'delivering');
+  if (delivering) startLocationSharing(delivering.id);
+}
+
+async function advanceStage(orderId, stage) {
+  const d = await apiC('PUT', '/couriers/me/orders/' + orderId + '/stage', { stage });
+  if (!d || d.error) { alert(d?.error || 'Could not update.'); return; }
+  if (stage === 'delivering') startLocationSharing(orderId);
+  if (stage === 'delivered' && watchId !== null) { navigator.geolocation.clearWatch(watchId); watchId = null; }
+  loadOrders();
+}
+
+function startLocationSharing(orderId) {
+  if (!navigator.geolocation) { alert('Location sharing is not supported on this device/browser.'); return; }
+  if (watchId !== null) navigator.geolocation.clearWatch(watchId);
+  watchId = navigator.geolocation.watchPosition(
+    (pos) => {
+      apiC('POST', '/couriers/me/orders/' + orderId + '/location', {
+        lat: pos.coords.latitude, lng: pos.coords.longitude
+      });
+    },
+    (err) => console.error('[Courier] Geolocation error:', err.message),
+    { enableHighAccuracy: true, maximumAge: 10000, timeout: 15000 }
+  );
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  if (localStorage.getItem(TOKEN_KEY)) showDash();
+});
+</script>
+</body>
+</html>

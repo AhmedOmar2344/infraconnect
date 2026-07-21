@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27%3E%3Crect width=%27100%27 height=%27100%27 rx=%2718%27 fill=%27%231a56db%27/%3E%3Ctext x=%2750%27 y=%2766%27 font-size=%2748%27 font-family=%27Arial,sans-serif%27 font-weight=%27bold%27 fill=%27white%27 text-anchor=%27middle%27%3EIC%3C/text%3E%3C/svg%3E">
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Cart — InfraConnect</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Inter:wght@300;400;500;600;700&family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="/css/main.css"/>
+<style>
+.cart-layout{display:grid;grid-template-columns:1fr 360px;gap:28px;align-items:start;}
+/* Cart item */
+.cart-item{display:grid;grid-template-columns:72px 1fr auto;gap:16px;align-items:start;background:white;border:1px solid #e2e8f0;border-radius:12px;padding:18px;margin-bottom:12px;box-shadow:0 1px 3px rgba(0,0,0,0.04);transition:border-color .2s;}
+.cart-item:hover{border-color:#1a56db;}
+.cart-item-img{width:72px;height:72px;border-radius:10px;background:#f8fafc;border:1px solid #f1f5f9;display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;}
+.cart-item-img img{width:100%;height:100%;object-fit:contain;padding:4px;}
+.cart-item-img svg{width:26px;height:26px;stroke:#1a56db;fill:none;stroke-width:1.5;opacity:0.4;}
+.cart-item-name{font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:14px;color:#0f172a;margin-bottom:2px;line-height:1.3;}
+.cart-item-cat{font-size:11px;color:#94a3b8;margin-bottom:6px;}
+.cart-item-price{font-size:15px;font-weight:700;color:#1a56db;}
+.cart-item-unit{font-size:12px;color:#64748b;margin-bottom:6px;}
+.cart-item-inst{font-size:11px;color:#16a34a;font-weight:600;margin-top:3px;}
+.qty-ctrl{display:flex;align-items:center;border:1.5px solid #e2e8f0;border-radius:8px;overflow:hidden;width:fit-content;margin-top:8px;}
+.qty-btn{width:30px;height:30px;background:#f8fafc;border:none;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;transition:background .12s;color:#334155;}
+.qty-btn:hover{background:#dbeafe;color:#1a56db;}
+.qty-num{width:38px;height:30px;background:none;border:none;border-left:1.5px solid #e2e8f0;border-right:1.5px solid #e2e8f0;text-align:center;font-size:13px;font-weight:600;outline:none;color:#0f172a;font-family:'Inter',sans-serif;}
+.remove-btn{background:none;border:none;cursor:pointer;color:#cbd5e1;font-size:20px;padding:4px;border-radius:6px;transition:all .15s;line-height:1;}
+.remove-btn:hover{color:#dc2626;background:#fee2e2;}
+/* Cart installment selector */
+.cart-inst-row{background:#eff6ff;border:1px solid #bfdbfe;border-radius:9px;padding:11px 14px;margin-top:10px;}
+.cart-inst-label{font-size:12px;font-weight:700;color:#1a56db;margin-bottom:8px;}
+.cart-inst-pills{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px;}
+.ci-pill{padding:6px 10px;border:1.5px solid #bfdbfe;border-radius:8px;background:white;cursor:pointer;font-size:11px;font-weight:600;color:#1a56db;text-align:center;line-height:1.4;transition:all .15s;font-family:'Inter',sans-serif;min-width:52px;}
+.ci-pill:hover{border-color:#1a56db;background:#dbeafe;}
+.ci-pill-active{border-color:#1a56db;background:#1a56db;color:white;}
+.ci-pill small{display:block;font-size:10px;font-weight:400;opacity:.85;}
+.cart-inst-chosen{font-size:12px;color:#1d4ed8;font-weight:500;margin-top:4px;}
+/* Summary card */
+.summary-card{background:white;border:1px solid #e2e8f0;border-radius:16px;padding:24px;box-shadow:0 4px 12px rgba(0,0,0,0.06);position:sticky;top:82px;}
+.summary-h{font-family:'Plus Jakarta Sans',sans-serif;font-size:17px;font-weight:700;margin-bottom:18px;color:#0f172a;}
+.summary-item-row{display:flex;justify-content:space-between;align-items:flex-start;padding:9px 0;border-bottom:1px solid #f1f5f9;font-size:13px;gap:10px;}
+.summary-item-row:last-of-type{border-bottom:none;}
+.summary-item-name{color:#475569;flex:1;line-height:1.4;}
+.summary-item-price{font-weight:600;color:#0f172a;white-space:nowrap;}
+.summary-divider{height:1px;background:#e2e8f0;margin:12px 0;}
+.summary-totals{}
+.summary-calc-row{display:flex;justify-content:space-between;font-size:13px;padding:5px 0;}
+.summary-calc-label{color:#64748b;}
+.summary-calc-val{font-weight:600;color:#334155;}
+.summary-total-row{display:flex;justify-content:space-between;align-items:center;padding:12px 0 16px;}
+.summary-total-label{font-family:'Plus Jakarta Sans',sans-serif;font-size:15px;font-weight:700;color:#0f172a;}
+.summary-total-val{font-family:'Plus Jakarta Sans',sans-serif;font-size:20px;font-weight:800;color:#1a56db;}
+.summary-note{background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:11px 14px;font-size:12px;color:#475569;margin-bottom:16px;line-height:1.6;}
+.summary-or-quote{background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:10px 14px;font-size:12px;color:#166534;margin-bottom:16px;}
+/* Trust badges */
+.trust-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px;padding-top:14px;border-top:1px solid #f1f5f9;}
+.trust-item{display:flex;align-items:center;gap:6px;font-size:11px;color:#64748b;}
+.trust-item svg{width:13px;height:13px;stroke:#16a34a;fill:none;stroke-width:2;flex-shrink:0;}
+/* Currency section header */
+.cur-header{display:flex;align-items:center;gap:8px;padding:8px 0 4px;margin-top:10px;}
+.cur-badge{background:#e0e7ff;color:#3730a3;font-size:10px;font-weight:700;padding:3px 8px;border-radius:6px;}
+@media(max-width:900px){.cart-layout{grid-template-columns:1fr;}.summary-card{position:static;}}
+@media(max-width:520px){.cart-item{grid-template-columns:56px 1fr;}.remove-btn{display:none;}}
+</style>
+</head>
+<body>
+<div id="toast-container"></div>
+
+<nav class="navbar">
+  <a href="/" class="nav-logo"><div class="nav-logo-icon"><svg viewBox="0 0 24 24"><path d="M3 18 Q3 4 19 5" stroke="white" fill="none" stroke-width="2"/><path d="M3 18 Q5 10 17 12" stroke="white" fill="none" stroke-width="2"/><path d="M3 18 Q8 14 15 16" stroke="white" fill="none" stroke-width="2"/><circle cx="19" cy="5" r="1.5" fill="white"/><circle cx="17" cy="12" r="1.5" fill="white"/><circle cx="15" cy="16" r="1.5" fill="white"/></svg></div><span class="nav-logo-text">INFRA<span>CONNECT</span></span></a>
+  <ul class="nav-links"><li><a href="/" data-i18n="nav_home">Home</a></li><li><a href="/store" data-i18n="nav_store">Store</a></li></ul>
+  <div class="nav-right">
+    <a href="/account" id="navAccountBtn" class="cart-btn" title="My Account"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></a><a href="/cart" class="cart-btn"><svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg><span class="cart-badge show" id="cartBadge">0</span></a>
+    <a href="/request-service" class="btn-outline-nav" data-i18n="nav_request_service">Request Service</a>
+    <a href="/#contact" class="btn btn-primary nav-cta-wrap" data-i18n="nav_get_in_touch">Get in Touch</a>
+    <button id="ic-lang-switch-slot" type="button" class="ic-nav-lang-btn"></button>
+    <button class="hamburger" onclick="document.querySelector('.mobile-nav').classList.toggle('open')"><svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
+  </div>
+</nav>
+<div class="mobile-nav"><a href="/" data-i18n="nav_home">Home</a><a href="/store" data-i18n="nav_store">Store</a><a href="/cart">Cart</a><a href="/request-service" data-i18n="nav_request_service">Request Service</a></div>
+
+<div class="page-hero"><div class="page-hero-inner">
+  <div class="breadcrumb"><a href="/" data-i18n="nav_home">Home</a><span>›</span><a href="/store" data-i18n="nav_store">Store</a><span>›</span><span>Cart</span></div>
+  <h1>Your Cart</h1><p id="cartHeroSub">Loading...</p>
+</div></div>
+
+<div class="page-content" id="cartContent"></div>
+
+<footer class="footer">
+  <div class="footer-grid" style="max-width:1280px;margin:0 auto;">
+    <div class="footer-brand"><p>InfraConnect — Your one-stop shop for IT and electronics.</p></div>
+    <div class="footer-col"><h5>Quick Links</h5><ul><li><a href="/store">Continue Shopping</a></li><li><a href="/#contact">Contact Us</a></li></ul></div>
+  </div>
+  <div class="footer-bottom"><p>&copy; 2025 InfraConnect.</p><p class="footer-legal-links"><a href="/terms.html">Terms of Service</a> &middot; <a href="/privacy.html">Privacy Policy</a></p></div>
+</footer>
+
+<script src="/js/cart.js"></script>
+<script src="/js/api.js"></script>
+<script>
+const ICONS = {
+  'Servers & Storage':'<rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/>',
+  'Networking':'<rect x="2" y="7" width="20" height="14" rx="2"/>',
+  'Security':'<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>',
+  'Wireless':'<polyline points="5 12.55 5 5 12 2 19 5 19 12.55"/>',
+  'Cloud & Software':'<path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/>',
+  'UPS & Power':'<path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>',
+  'Laptops':'<rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/>',
+  'Desktops & All-in-One':'<rect x="2" y="3" width="20" height="14" rx="2"/>',
+  'Monitors & Screens':'<rect x="2" y="3" width="20" height="14" rx="2"/>',
+  'TVs':'<rect x="2" y="7" width="20" height="15" rx="2"/>',
+  'Gaming':'<line x1="6" y1="11" x2="10" y2="11"/><line x1="8" y1="9" x2="8" y2="13"/>',
+  'Accessories':'<path d="M3 18v-6a9 9 0 0 1 18 0v6"/>',
+  'Printers & Scanners':'<polyline points="6 9 6 2 18 2 18 9"/>',
+  'Phones & Tablets':'<rect x="5" y="2" width="14" height="20" rx="2"/>',
+};
+
+function setInstPlan(id, months) {
+  const cart = getCart();
+  const item = cart.find(i => i.id === id);
+  if (!item) return;
+  item.chosen_months = parseInt(months) || 0;
+  saveCart(cart);
+  renderCart();
+}
+
+function renderCart() {
+  const cart = getCart();
+  const el = document.getElementById('cartContent');
+  const hero = document.getElementById('cartHeroSub');
+
+  if (!cart.length) {
+    hero.textContent = 'Your cart is empty';
+    el.innerHTML = `<div class="empty-state"><svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg><h3>Your cart is empty</h3><p>Discover our wide range of IT products and electronics.</p><a href="/store" class="btn btn-primary btn-lg">Browse Store</a></div>`;
+    return;
+  }
+
+  const totalItems = cart.reduce((s,i) => s + i.qty, 0);
+  hero.textContent = `${totalItems} item${totalItems>1?'s':''} in your cart`;
+
+  // Group priced items by currency
+  const byCurrency = {};
+  const requestItems = [];
+  cart.forEach(i => {
+    if (i.priceAmount > 0) {
+      const cur = i.currency || 'USD';
+      if (!byCurrency[cur]) byCurrency[cur] = [];
+      byCurrency[cur].push(i);
+    } else {
+      requestItems.push(i);
+    }
+  });
+
+  el.innerHTML = `
+  <div class="cart-layout">
+    <div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+        <h2 style="font-size:17px;font-weight:700;color:#0f172a;">${totalItems} Item${totalItems>1?'s':''}</h2>
+        <button class="btn btn-ghost btn-sm" onclick="if(confirm('Clear all items?')){clearCart();renderCart();}">Clear Cart</button>
+      </div>
+      ${cart.map(item => {
+        const unitFmt = item.priceAmount > 0 ? fmtPrice(item.priceAmount, item.currency) : null;
+        const lineFmt = item.priceAmount > 0 ? fmtPrice(item.priceAmount * item.qty, item.currency) : null;
+        // Installment selector
+        let instHint = '';
+        if (item.installments_enabled && item.priceAmount > 0 && item.installment_months) {
+          const months = item.installment_months === 'all' ? [6,12,18,24] : item.installment_months.split(',').map(Number).filter(Boolean);
+          if (months.length) {
+            const vr = getVAT(item.currency || 'USD');
+            const chosen = item.chosen_months || 0;
+            const pillsHtml = months.map(m => {
+              const monthly = (item.priceAmount * (1 + vr)) / m;
+              const active = chosen === m;
+              return `<button class="ci-pill${active?' ci-pill-active':''}" onclick="setInstPlan('${item.id}',${m})" title="${m} months">${m}mo<br><small>${fmtPrice(monthly,item.currency)}</small></button>`;
+            }).join('');
+            instHint = `
+            <div class="cart-inst-row">
+              <div class="cart-inst-label">💳 Pay in installments:</div>
+              <div class="cart-inst-pills">
+                <button class="ci-pill${chosen===0?' ci-pill-active':''}" onclick="setInstPlan('${item.id}',0)">Full<br><small>${fmtPrice(item.priceAmount,item.currency)}</small></button>
+                ${pillsHtml}
+              </div>
+              ${chosen > 0 ? `<div class="cart-inst-chosen">✓ ${chosen} monthly payments of <strong>${fmtPrice((item.priceAmount*(1+vr))/chosen, item.currency)}</strong></div>` : ''}
+            </div>`;
+          }
+        }
+        return `
+        <div class="cart-item">
+          <div class="cart-item-img">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">${ICONS[item.category]||ICONS['Laptops']}</svg>
+          </div>
+          <div>
+            <div class="cart-item-name">${item.name}</div>
+            <div class="cart-item-cat">${item.category||''}</div>
+            ${unitFmt ? `<div class="cart-item-unit">${unitFmt} each</div>` : `<div class="cart-item-unit" style="color:#94a3b8;font-style:italic;">Price on Request</div>`}
+            ${instHint}
+            <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:8px;">
+              <div class="qty-ctrl">
+                <button class="qty-btn" onclick="adj('${item.id}',-1)">−</button>
+                <input class="qty-num" type="number" value="${item.qty}" min="1" onchange="setQ('${item.id}',this.value)"/>
+                <button class="qty-btn" onclick="adj('${item.id}',1)">+</button>
+              </div>
+              ${lineFmt ? `<div class="cart-item-price">${lineFmt}</div>` : ''}
+            </div>
+          </div>
+          <button class="remove-btn" onclick="rm('${item.id}')" title="Remove">×</button>
+        </div>`;
+      }).join('')}
+    </div>
+
+    <!-- SUMMARY -->
+    <div class="summary-card">
+      <div class="summary-h">Order Summary</div>
+
+      <!-- Item list -->
+      <div>
+        ${cart.map(i => `
+        <div class="summary-item-row">
+          <span class="summary-item-name">${i.name.length>32?i.name.slice(0,32)+'…':i.name} ×${i.qty}</span>
+          <span class="summary-item-price">${i.priceAmount>0 ? fmtPrice(i.priceAmount*i.qty,i.currency) : '<span style="color:#94a3b8;font-size:11px;font-weight:400;">On Request</span>'}</span>
+        </div>`).join('')}
+      </div>
+
+      <!-- Totals per currency -->
+      ${Object.keys(byCurrency).length > 0 ? `
+      <div class="summary-divider"></div>
+      <div class="summary-totals">
+        ${Object.entries(byCurrency).map(([cur, items]) => {
+          const sub = items.reduce((s,i) => s + i.priceAmount*i.qty, 0);
+          const vr = getVAT(cur);
+          const vat = sub * vr;
+          const total = sub + vat;
+          return `
+          <div class="cur-header"><span class="cur-badge">${cur}</span></div>
+          <div class="summary-calc-row"><span class="summary-calc-label">Subtotal</span><span class="summary-calc-val">${fmtPrice(sub,cur)}</span></div>
+          <div class="summary-calc-row"><span class="summary-calc-label">${vatLabel(cur)}</span><span class="summary-calc-val">${fmtPrice(vat,cur)}</span></div>
+          <div class="summary-total-row"><span class="summary-total-label">Total (${cur})</span><span class="summary-total-val">${fmtPrice(total,cur)}</span></div>`;
+        }).join('<div style="height:4px;"></div>')}
+      </div>` : ''}
+
+      ${requestItems.length > 0 ? `
+      <div class="summary-or-quote">
+        📋 <strong>${requestItems.length} item${requestItems.length>1?'s':''}</strong> require a custom quote.<br/>
+        Our team will contact you with pricing within 24 hours.
+      </div>` : ''}
+
+      <div class="summary-note">
+        ⚡ Final pricing confirmed after checkout. VAT rates: EGP 14% · AED 5% · USD 15%
+      </div>
+
+      <a href="/checkout" class="btn btn-primary btn-full btn-lg" style="margin-bottom:10px;">Proceed to Checkout →</a>
+      <a href="/store" class="btn btn-ghost btn-full">Continue Shopping</a>
+
+      <div class="trust-grid">
+        <div class="trust-item"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>Secure checkout</div>
+        <div class="trust-item"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>24hr response</div>
+        <div class="trust-item"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Dedicated manager</div>
+        <div class="trust-item"><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Authorized vendor</div>
+      </div>
+    </div>
+  </div>`;
+}
+
+function adj(id, d) {
+  const c = getCart(), item = c.find(x => x.id === id);
+  if (!item) return;
+  item.qty = Math.max(1, item.qty + d);
+  saveCart(c); renderCart();
+}
+function setQ(id, v) {
+  const c = getCart(), item = c.find(x => x.id === id);
+  if (!item) return;
+  item.qty = Math.max(1, parseInt(v) || 1);
+  saveCart(c); renderCart();
+}
+function rm(id) { removeFromCart(id); renderCart(); }
+
+document.addEventListener('DOMContentLoaded', renderCart);
+</script>
+
+<!-- ─── FLOATING REQUEST SERVICE BUTTON ───────────────────────────────────────
+     Appears on every page. Opens the request service page on click.
+     On index.html this turns white over the dark hero via adaptFloatBtn().
+     On all other pages it stays blue (light background).
+     ─────────────────────────────────────────────────────────────────────────── -->
+<div class="float-btn" id="floatBtn">
+  <button class="float-main-btn" id="floatMainBtn"
+    onclick="window.location.href='/request-service'"
+    title="Request a Service">
+    <div class="float-pulse"></div>
+    <div class="float-main-btn-text">Request<br/>Service</div>
+  </button>
+</div>
+
+  <script src="/js/i18n.js"></script>
+<script src="/js/chat-widget.js"></script>
+<script src="/js/account-dropdown.js"></script>
+</body>
+</html>

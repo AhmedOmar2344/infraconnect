@@ -1,0 +1,19 @@
+{
+  "version": 2,
+  "builds": [
+    { "src": "server.js", "use": "@vercel/node" }
+  ],
+  "routes": [
+    { "src": "/(.*)", "dest": "server.js" }
+  ],
+  "crons": [
+    {
+      "path": "/api/analytics/monthly-report-cron",
+      "schedule": "5 0 1 * *"
+    },
+    {
+      "path": "/api/ai/auto-translate-cron",
+      "schedule": "*/30 * * * *"
+    }
+  ]
+}
